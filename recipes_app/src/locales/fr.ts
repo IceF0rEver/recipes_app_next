@@ -1,3 +1,3 @@
 export default {
-	test: 'ceci est un test',
-} as const
+	test: "ceci est un test",
+} as const;

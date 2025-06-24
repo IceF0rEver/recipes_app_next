@@ -10,7 +10,6 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"formatWithErrors": false,
 		"indentStyle": "tab",
 		"indentWidth": 4,
 		"lineWidth": 120
@@ -19,18 +18,16 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"a11y": {
-				"noSvgWithoutTitle": "off"
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error",
+				"useExhaustiveDependencies": "error"
 			}
 		}
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "single",
-			"jsxQuoteStyle": "double",
-			"semicolons": "asNeeded",
-			"arrowParentheses": "asNeeded",
-			"trailingCommas": "es5"
+			"quoteStyle": "double"
 		}
 	},
 	"assist": {

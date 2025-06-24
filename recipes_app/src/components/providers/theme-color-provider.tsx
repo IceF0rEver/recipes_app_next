@@ -1,44 +1,44 @@
-'use client'
-import { type ThemeProviderProps, useTheme } from 'next-themes'
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import setGlobalColorTheme from '@/lib/theme-colors'
-import type { ThemeColors, ThemeColorsStateParams } from '@/types/theme-types'
+"use client";
+import { type ThemeProviderProps, useTheme } from "next-themes";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import setGlobalColorTheme from "@/lib/theme-colors";
+import type { ThemeColors, ThemeColorsStateParams } from "@/types/theme-types";
 
-const ThemeContext = createContext<ThemeColorsStateParams>({} as ThemeColorsStateParams)
+const ThemeContext = createContext<ThemeColorsStateParams>({} as ThemeColorsStateParams);
 
 export default function ThemeColorProvider({ children }: ThemeProviderProps) {
 	const getSavedThemeColor = () => {
 		try {
-			return (localStorage.getItem('themeColor') as ThemeColors) || 'Default'
+			return (localStorage.getItem("themeColor") as ThemeColors) || "Default";
 		} catch (error) {
-			'Default' as ThemeColors
+			"Default" as ThemeColors;
 		}
-	}
+	};
 
-	const [themeColor, setThemeColor] = useState<ThemeColors>(getSavedThemeColor() as ThemeColors)
-	const [isMounted, setIsMounted] = useState(false)
-	const { theme, systemTheme } = useTheme()
+	const [themeColor, setThemeColor] = useState<ThemeColors>(getSavedThemeColor() as ThemeColors);
+	const [isMounted, setIsMounted] = useState(false);
+	const { theme, systemTheme } = useTheme();
 
 	useEffect(() => {
-		localStorage.setItem('themeColor', themeColor)
-		if (theme === 'system') {
-			setGlobalColorTheme(systemTheme as 'light' | 'dark', themeColor)
+		localStorage.setItem("themeColor", themeColor);
+		if (theme === "system") {
+			setGlobalColorTheme(systemTheme as "light" | "dark", themeColor);
 		} else {
-			setGlobalColorTheme(theme as 'light' | 'dark', themeColor)
+			setGlobalColorTheme(theme as "light" | "dark", themeColor);
 		}
 
 		if (!isMounted) {
-			setIsMounted(true)
+			setIsMounted(true);
 		}
-	}, [themeColor, theme])
+	}, [themeColor, theme]);
 
 	if (!isMounted) {
-		return null
+		return null;
 	}
 
-	return <ThemeContext.Provider value={{ themeColor, setThemeColor }}>{children}</ThemeContext.Provider>
+	return <ThemeContext.Provider value={{ themeColor, setThemeColor }}>{children}</ThemeContext.Provider>;
 }
 
 export function useThemeContext() {
-	return useContext(ThemeContext)
+	return useContext(ThemeContext);
 }
