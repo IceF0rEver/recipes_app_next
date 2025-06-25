@@ -1,6 +1,6 @@
 "use client";
 import { type ThemeProviderProps, useTheme } from "next-themes";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import setGlobalColorTheme from "@/lib/theme-colors";
 import type { ThemeColors, ThemeColorsStateParams } from "@/types/theme-types";
 
@@ -10,7 +10,7 @@ export default function ThemeColorProvider({ children }: ThemeProviderProps) {
 	const getSavedThemeColor = () => {
 		try {
 			return (localStorage.getItem("themeColor") as ThemeColors) || "Default";
-		} catch (error) {
+		} catch (_error) {
 			"Default" as ThemeColors;
 		}
 	};
@@ -30,7 +30,7 @@ export default function ThemeColorProvider({ children }: ThemeProviderProps) {
 		if (!isMounted) {
 			setIsMounted(true);
 		}
-	}, [themeColor, theme]);
+	}, [themeColor, theme, systemTheme, isMounted]);
 
 	if (!isMounted) {
 		return null;
