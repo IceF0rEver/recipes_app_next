@@ -30,7 +30,7 @@ export default function ThemeColorProvider({ children }: ThemeProviderProps) {
 		if (!isMounted) {
 			setIsMounted(true);
 		}
-	}, [themeColor, theme, systemTheme, isMounted]);
+	}, [themeColor, theme]);
 
 	if (!isMounted) {
 		return null;
