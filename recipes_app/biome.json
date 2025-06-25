@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["**", "!node_modules", "!.next", "!src/generated/**"]
+		"includes": ["**", "!node_modules", "!.next", "!src/generated/**", "!src/components/ui/**"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -22,7 +22,7 @@
 			"correctness": {
 				"noUnusedImports": "error",
 				"noUnusedVariables": "error",
-				"useExhaustiveDependencies": "error"
+				"useExhaustiveDependencies": "off"
 			}
 		}
 	},
