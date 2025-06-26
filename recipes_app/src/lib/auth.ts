@@ -7,6 +7,21 @@ import { resend } from "./resend";
 const prisma = new PrismaClient();
 
 export const auth = betterAuth({
+	databaseHooks: {
+		user: {
+			create: {
+				before: async (user) => {
+					return {
+						data: {
+							...user,
+							firstName: user.name.split(" ")[0],
+							lastName: user.name.split(" ")[1],
+						},
+					};
+				},
+			},
+		},
+	},
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
@@ -29,8 +44,8 @@ export const auth = betterAuth({
 	socialProviders: {
 		google: {
 			prompt: "select_account",
-			clientId: process.env.GOOGLE_CLIENT_ID!,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
 		},
 		// github: {
 		//     clientId: process.env.GITHUB_CLIENT_ID!,

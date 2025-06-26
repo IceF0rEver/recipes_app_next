@@ -1,0 +1,149 @@
+{
+	"button": {
+		"register": "Create an account",
+		"login": "Log in",
+		"google": "Google",
+		"github": "Github",
+		"send": "Send",
+		"update": "Update"
+	},
+	"heroPage": {
+		"title": {
+			"firstPart": "Manage your recipes with ",
+			"secondPart": "the help of AI"
+		},
+		"description": "Recipes Master is your personal dashboard to organize, plan, and talk cooking with an intelligent assistant.",
+		"badge": "Private app",
+		"features": {
+			"chatbot": "Built-in AI cooking chatbot",
+			"recipes": "Intuitive recipe management",
+			"pdf": "Easy PDF export"
+		}
+	},
+	"components": {
+		"utils": {
+			"selectLang": {
+				"fr": "French",
+				"en": "English",
+				"select": "Choose a language"
+			}
+		},
+		"auth": {
+			"form": {
+				"email": {
+					"label": "E-mail address",
+					"placeholder": "m@example.com"
+				},
+				"password": {
+					"label": "Password",
+					"placeholder": "password"
+				},
+				"image": {
+					"label": "Profile image (optional)"
+				},
+				"firstName": {
+					"label": "First name",
+					"placeholder": "Max"
+				},
+				"lastName": {
+					"label": "Last name",
+					"placeholder": "Smith"
+				},
+				"confirmPassword": {
+					"label": "Confirm the password",
+					"placeholder": "confirm the password"
+				},
+				"newPassword": {
+					"placeholder": "new Password",
+					"label": "New Password"
+				},
+				"confirmNewPassword": {
+					"label": "Confirm the new password",
+					"placeholder": "new Password"
+				}
+			},
+			"login": {
+				"title": "Log in",
+				"description": "Enter your information below to access your account.",
+				"orSocial": "OR CONTINUE WITH"
+			},
+			"link": {
+				"forgotPassword": "Forgot password?",
+				"login": "Password found? ",
+				"noAccount": "Don't have an account? ",
+				"haveAccount": "Already registered? "
+			},
+			"forgetPassword": {
+				"description": "Enter your email address and we will send you a link to reset your password.",
+				"title": "Forgot password?",
+				"toast": {
+					"success": "E-mail successfully send!"
+				}
+			},
+			"register": {
+				"title": "Create an account",
+				"description": "Enter your information to create your account."
+			},
+			"resetPassword": {
+				"title": "Modify your password",
+				"description": "Enter your information to change your password.",
+				"toast": {
+					"success": "Password modify successfully!"
+				}
+			}
+		}
+	},
+	"metaData": {
+		"defaultTitle": "Recipes Master",
+		"heroLayout": {
+			"description": "Recipes Master is an all-in-one web application to create, manage and save your personal cooking recipes. \nUse artificial intelligence to generate ideas, plan your meals, and export your recipes to PDF format.",
+			"keywords": {
+				"recipe": "recipe",
+				"cooking": "kitchen",
+				"dashboard": "Dashboard recipes",
+				"ai_assistant": "IA cooking assistant",
+				"pdf_export": "PDF export Recipes"
+			}
+		}
+	},
+	"zod": {
+		"min": {
+			"password": "The password must contain at least 6 characters.",
+			"firstName": "Compulsory first name!",
+			"lastName": "Compulsory name!"
+		},
+		"password": {
+			"mismatch": "Passwords do not match!"
+		},
+		"email": "No valid e-mail!",
+		"space": "No authorized space!"
+	},
+	"BASE_ERROR_CODES": {
+		"VALIDATION_ERROR": "Validation error.",
+		"USER_NOT_FOUND": "User not found.",
+		"FAILED_TO_CREATE_USER": "Failed to create user.",
+		"FAILED_TO_CREATE_SESSION": "Failed to create session.",
+		"FAILED_TO_UPDATE_USER": "Failed to update user.",
+		"FAILED_TO_GET_SESSION": "Failed to retrieve session.",
+		"INVALID_PASSWORD": "Invalid password.",
+		"INVALID_EMAIL": "Invalid email address.",
+		"INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password.",
+		"SOCIAL_ACCOUNT_ALREADY_LINKED": "This social account is already linked to a user.",
+		"PROVIDER_NOT_FOUND": "Provider not found.",
+		"INVALID_TOKEN": "Invalid token.",
+		"ID_TOKEN_NOT_SUPPORTED": "ID token not supported.",
+		"FAILED_TO_GET_USER_INFO": "Failed to retrieve user information.",
+		"USER_EMAIL_NOT_FOUND": "User email address not found.",
+		"EMAIL_NOT_VERIFIED": "Email address not verified.",
+		"PASSWORD_TOO_SHORT": "Password is too short.",
+		"PASSWORD_TOO_LONG": "Password is too long.",
+		"USER_ALREADY_EXISTS": "User already exists.",
+		"EMAIL_CAN_NOT_BE_UPDATED": "Email address cannot be updated.",
+		"CREDENTIAL_ACCOUNT_NOT_FOUND": "Credential account not found.",
+		"SESSION_EXPIRED": "Session expired. Please log in again.",
+		"FAILED_TO_UNLINK_LAST_ACCOUNT": "Cannot unlink the last connected account.",
+		"ACCOUNT_NOT_FOUND": "Account not found.",
+		"EMAIL_IS_THE_SAME": "Same Email address.",
+		"undefined": "An unexpected error has occurred!"
+	}
+}
