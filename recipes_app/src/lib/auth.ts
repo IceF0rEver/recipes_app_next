@@ -10,7 +10,7 @@ export const auth = betterAuth({
 	databaseHooks: {
 		user: {
 			create: {
-				before: async (user, ctx) => {
+				before: async (user) => {
 					return {
 						data: {
 							...user,
@@ -21,7 +21,7 @@ export const auth = betterAuth({
 				},
 			},
 		},
-  	},
+	},
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),

@@ -14,7 +14,6 @@ export const authSchemas = (t: (...args: Parameters<(key: string, ...params: any
 			firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
 			lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
 			image: z.string(),
-			
 		})
 		.refine((data) => data.password === data.passwordConfirmation, {
 			message: t("zod.password.mismatch"),
