@@ -67,8 +67,8 @@ export default async function HeroPage() {
 				</div>
 			</div>
 			<div className="absolute bottom-4 right-4 flex items-center gap-2">
-			<SelectLang/>
-			<DarkMode/>
+				<SelectLang />
+				<DarkMode />
 			</div>
 		</section>
 	);
