@@ -5,7 +5,7 @@
 	},
 	"heroPage": {
 		"title": {
-			"firstPart": "Gérez vos recettes avec",
+			"firstPart": "Gérez vos recettes avec ",
 			"secondPart": "l'aide de l’IA"
 		},
 		"description": "Recipes Master est votre tableau de bord personnel pour organiser, planifier et discuter cuisine avec un assistant intelligent.",
@@ -14,6 +14,15 @@
 			"chatbot": "Chatbot IA culinaire intégré",
 			"recipes": "Gestion intuitive des recettes",
 			"pdf": "Exportation facile en PDF"
+		}
+	},
+	"components": {
+		"utils": {
+			"selectLang": {
+				"fr": "Français",
+				"en": "Anglais",
+				"select": "Choisir une langue"
+			}
 		}
 	}
 }

@@ -35,8 +35,8 @@ export default async function RootLayout({ params, children }: RootLayoutProps) 
 			<body className={`${dmSans.variable} ${playfairDisplay.variable} ${firaCode.variable} antialiased`}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					<I18nProviderClient locale={locale}>
-							{children}
-							{/* <Toaster /> */}
+						{children}
+						{/* <Toaster /> */}
 					</I18nProviderClient>
 				</ThemeProvider>
 			</body>
