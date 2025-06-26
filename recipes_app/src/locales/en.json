@@ -1,0 +1,19 @@
+{
+	"button": {
+		"register": "Create an account",
+		"login": "Log in"
+	},
+	"heroPage": {
+		"title": {
+			"firstPart": "Manage your recipes with",
+			"secondPart": "the help of AI"
+		},
+		"description": "Recipes Master is your personal dashboard to organize, plan, and talk cooking with an intelligent assistant.",
+		"badge": "Private app",
+		"features": {
+			"chatbot": "Built-in AI cooking chatbot",
+			"recipes": "Intuitive recipe management",
+			"pdf": "Easy PDF export"
+		}
+	}
+}
