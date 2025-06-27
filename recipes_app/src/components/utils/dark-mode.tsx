@@ -25,7 +25,7 @@ export default function DarkMode({ className }: DarkModeProps) {
 		{ key: "system", icon: <MonitorCog className="h-4 w-4" /> },
 	];
 
-	if (!isMounted) return (<div className="bg-muted w-[86px] h-7.5 rounded-full"></div>);
+	if (!isMounted) return <div className="bg-muted w-[86px] h-7.5 rounded-full"></div>;
 
 	return (
 		<div className={cn(className)}>
