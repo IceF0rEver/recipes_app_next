@@ -36,7 +36,7 @@
 			},
 			"link": {
 				"forgotPassword": "Mot de passe oublié ? ",
-				"login": "Mot de passe retrouvé ? ",
+				"login": "Vous avez retrouvé votre mot de passe ? ",
 				"noAccount": "Vous n'avez pas de compte ? ",
 				"haveAccount": "Déjà inscrit ? "
 			},

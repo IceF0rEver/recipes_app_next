@@ -69,7 +69,7 @@
 			},
 			"link": {
 				"forgotPassword": "Forgot password?",
-				"login": "Password found? ",
+				"login": "Have you found your password? ",
 				"noAccount": "Don't have an account? ",
 				"haveAccount": "Already registered? "
 			},
