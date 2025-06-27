@@ -3,11 +3,13 @@ import SelectLang from "@/components/utils/select-lang";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<div>
-			<div>{children}</div>
-			<div className="absolute bottom-4 right-4 flex items-center gap-2">
-				<SelectLang />
-				<DarkMode />
+		<div className="flex flex-col justify-center items-center h-screen">
+			<div className="max-w-md space-y-2 px-2 md:px-4">
+				<div>{children}</div>
+				<div className="flex gap-2 items-center justify-end">
+					<SelectLang />
+					<DarkMode />
+				</div>
 			</div>
 		</div>
 	);

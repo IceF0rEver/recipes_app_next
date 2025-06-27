@@ -5,7 +5,9 @@
 		"google": "Google",
 		"github": "GitHub",
 		"send": "Envoyer",
-		"update": "Modifier"
+		"update": "Modifier",
+		"logOut": "Déconnexion",
+		"settings": "Paramètres"
 	},
 	"heroPage": {
 		"title": {
@@ -36,7 +38,7 @@
 			},
 			"link": {
 				"forgotPassword": "Mot de passe oublié ? ",
-				"login": "Mot de passe retrouvé ? ",
+				"login": "Vous avez retrouvé votre mot de passe ? ",
 				"noAccount": "Vous n'avez pas de compte ? ",
 				"haveAccount": "Déjà inscrit ? "
 			},
@@ -91,6 +93,14 @@
 					"success": "Mot de passe modifier avec succès !"
 				}
 			}
+		},
+		"dashboard": {
+			"title": "Tableau de bord",
+			"description": "Accédez à votre tableau de bord Recipes Master : gérez vos recettes, utilisez l’assistant IA pour en créer de nouvelles, exportez-les en PDF, et organisez votre cuisine au quotidien facilement depuis un espace privé et sécurisé."
+		},
+		"appSideBar": {
+			"myRecipes": "Mes recettes",
+			"chatBot": "Assistant"
 		}
 	},
 	"metaData": {

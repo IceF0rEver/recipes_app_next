@@ -5,7 +5,9 @@
 		"google": "Google",
 		"github": "Github",
 		"send": "Send",
-		"update": "Update"
+		"update": "Update",
+		"logOut": "Log Out",
+		"settings": "Parameters"
 	},
 	"heroPage": {
 		"title": {
@@ -69,7 +71,7 @@
 			},
 			"link": {
 				"forgotPassword": "Forgot password?",
-				"login": "Password found? ",
+				"login": "Have you found your password? ",
 				"noAccount": "Don't have an account? ",
 				"haveAccount": "Already registered? "
 			},
@@ -91,6 +93,14 @@
 					"success": "Password modify successfully!"
 				}
 			}
+		},
+		"dashboard": {
+			"title": "Dashboard",
+			"description": "Access your Recipe Master dashboard: manage your recipes, use the AI ​​assistant to create new ones, export them to PDF, and organize your daily kitchen easily from a private and secure space."
+		},
+		"appSideBar": {
+			"myRecipes": "My recipes",
+			"chatBot": "Assistant"
 		}
 	},
 	"metaData": {
