@@ -15,12 +15,15 @@ export default async function HeroPage() {
 		{ key: "pdf", value: t("heroPage.features.pdf") },
 	];
 	return (
-		<section className="min-h-screen flex items-center justify-center bg-background text-foreground px-4 md:px-8">
-			<div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+		<section className="min-h-screen flex flex-col gap-6 md:gap-12 items-center justify-center bg-background text-foreground px-4 md:px-8 py-4">
+			<div className="flex flex-col md:flex-row gap-6 md:gap-12 items-center max-w-7xl w-full">
 				<div className="space-y-6">
-					<Badge variant="outline" className="text-sm">
-						{t("heroPage.badge")}
-					</Badge>
+					<div className="flex items-center justify-between">
+						<Badge variant="outline" className="text-sm">
+							{t("heroPage.badge")}
+						</Badge>
+						<SelectLang />
+					</div>
 					<h1 className="text-4xl md:text-5xl font-bold tracking-tight">
 						<span>{t("heroPage.title.firstPart")}</span>
 						<span className="text-primary">{t("heroPage.title.secondPart")}</span>
@@ -56,19 +59,18 @@ export default async function HeroPage() {
 						</CardHeader>
 						<CardContent>
 							{/* <Image
-								src="/illustrations/ai-cooking.svg"
-								alt="Illustration IA et cuisine"
-								fill
-								className="object-contain"
-								priority
-							/> */}
+									src="/illustrations/ai-cooking.svg"
+									alt="Illustration IA et cuisine"
+									fill
+									className="object-contain"
+									priority
+									/> */}
 						</CardContent>
 					</Card>
 				</div>
 			</div>
-			<div className="absolute bottom-4 right-4 flex items-center gap-2">
-				<SelectLang />
-				<DarkMode />
+			<div className="float-end max-w-7xl w-full">
+				<DarkMode className="float-end" />
 			</div>
 		</section>
 	);
