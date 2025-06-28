@@ -12,7 +12,7 @@ interface SettingsArticleProps {
 export default function SettingsArticle({ children, label, description, className }: SettingsArticleProps) {
 	return (
 		<article className={cn(className)}>
-			<div className="flex flex-col md:flex-row gap-2">
+			<div className="flex gap-2 flex-wrap">
 				<p className="my-auto whitespace-nowrap">{label} :</p>
 				{children}
 			</div>
