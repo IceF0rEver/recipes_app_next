@@ -32,7 +32,7 @@ export default function DarkMode({ className }: DarkModeProps) {
 			<RadioGroup
 				value={theme}
 				onValueChange={setTheme}
-				className="flex flex-row gap-1 border p-0.5 rounded-full"
+				className="flex flex-row gap-1 border p-0.5 rounded-full max-w-max"
 			>
 				{mods?.map((item) => (
 					<div key={item.key} className="flex items-center space-x-2">
