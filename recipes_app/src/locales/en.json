@@ -7,7 +7,9 @@
 		"send": "Send",
 		"update": "Update",
 		"logOut": "Log Out",
-		"settings": "Parameters"
+		"settings": "Parameters",
+		"updatePassword": "Update your password",
+		"cancel": "Cancel"
 	},
 	"heroPage": {
 		"title": {
@@ -56,12 +58,20 @@
 					"placeholder": "confirm the password"
 				},
 				"newPassword": {
-					"placeholder": "new Password",
+					"placeholder": "new password",
 					"label": "New Password"
 				},
 				"confirmNewPassword": {
 					"label": "Confirm the new password",
 					"placeholder": "new Password"
+				},
+				"currentPassword": {
+					"label": "Current password",
+					"placeholder": "current password"
+				},
+				"newPasswordConfirmation": {
+					"label": "Confirm the new password",
+					"placeholder": "new password"
 				}
 			},
 			"login": {
@@ -101,6 +111,48 @@
 		"appSideBar": {
 			"myRecipes": "My recipes",
 			"chatBot": "Assistant"
+		},
+		"items": {
+			"account": {
+				"title": "Account"
+			},
+			"appearance": {
+				"title": "Appearance"
+			}
+		},
+		"settings": {
+			"title": "Settings",
+			"description": "Manage the parameters and preferences of your account.",
+			"items": {
+				"account": {
+					"title": "Account",
+					"description": "Update your account settings."
+				},
+				"appearance": {
+					"title": "Appearance",
+					"description": "Choose your favorite language and theme."
+				}
+			},
+			"toast": {
+				"emailSuccess": "Email address successfully modify!",
+				"nameOrImageSuccess": "First name last name and/or image modify successfully!"
+			},
+			"form": {
+				"language": {
+					"label": "Language",
+					"description": "Choose the language you want to use."
+				},
+				"darkMode": {
+					"label": "Theme",
+					"description": "Choose the theme you want to use."
+				},
+				"changePassword": {
+					"label": "Change your password",
+					"description": "Click on this button to define a new password.",
+					"confirmTitle": "Modify your password",
+					"confirmDescription": "Enter your information to change your password."
+				}
+			}
 		}
 	},
 	"metaData": {

@@ -7,7 +7,9 @@
 		"send": "Envoyer",
 		"update": "Modifier",
 		"logOut": "Déconnexion",
-		"settings": "Paramètres"
+		"settings": "Paramètres",
+		"updatePassword": "Modifier votre mot de passe",
+		"cancel": "Annuler"
 	},
 	"heroPage": {
 		"title": {
@@ -73,6 +75,14 @@
 				"confirmNewPassword": {
 					"label": "Confirmer le nouveau mot de passe",
 					"placeholder": "nouveau mot de passe"
+				},
+				"currentPassword": {
+					"label": "Mot de passe actuel",
+					"placeholder": "mot de passe actuel"
+				},
+				"newPasswordConfirmation": {
+					"label": "Confirmer le nouveau mot de passe",
+					"placeholder": "nouveau mot de passe"
 				}
 			},
 			"forgetPassword": {
@@ -101,6 +111,48 @@
 		"appSideBar": {
 			"myRecipes": "Mes recettes",
 			"chatBot": "Assistant"
+		},
+		"items": {
+			"account": {
+				"title": "Compte"
+			},
+			"appearance": {
+				"title": "Apparence"
+			}
+		},
+		"settings": {
+			"title": "Paramètres",
+			"description": "Gérez les paramètres et les préférences de votre compte.",
+			"items": {
+				"account": {
+					"title": "Compte",
+					"description": "Mettez à jour les paramètres de votre compte."
+				},
+				"appearance": {
+					"title": "Apparence",
+					"description": "Choisissez votre langue et thème préférés."
+				}
+			},
+			"toast": {
+				"emailSuccess": "Adresse e-mail modifier avec succès !",
+				"nameOrImageSuccess": "Prénom Nom et/ou image modifier avec succès !"
+			},
+			"form": {
+				"language": {
+					"label": "Langue",
+					"description": "Choisissez la langue que vous souhaitez utiliser."
+				},
+				"darkMode": {
+					"label": "Thème",
+					"description": "Choisissez le thème que vous souhaitez utiliser."
+				},
+				"changePassword": {
+					"label": "Changer votre mot de passe",
+					"description": "Cliquez sur ce bouton pour définir un nouveau mot de passe.",
+					"confirmTitle": "Modifier votre mot de passe",
+					"confirmDescription": "Entrez vos informations pour modifier votre mot de passe."
+				}
+			}
 		}
 	},
 	"metaData": {
