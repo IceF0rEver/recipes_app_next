@@ -34,7 +34,7 @@ export default function DarkMode({ className }: DarkModeProps) {
 				onValueChange={setTheme}
 				className="flex flex-row gap-1 border p-0.5 rounded-full"
 			>
-				{mods.map((item) => (
+				{mods?.map((item) => (
 					<div key={item.key} className="flex items-center space-x-2">
 						<RadioGroupItem value={item.key} id={item.key} className="sr-only" />
 						<Label
