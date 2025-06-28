@@ -150,7 +150,11 @@ export default function Account() {
 						fieldType="image"
 						className={"md:max-w-2/3"}
 					/>
-					<AuthButton className={"w-1/4"} isLoading={loading} label={t("button.update")} />
+					<AuthButton
+						className={"min-w-2/5 md:min-w-1/4 md:w-1/4"}
+						isLoading={loading}
+						label={t("button.update")}
+					/>
 				</AuthForm>
 			</section>
 		</article>
