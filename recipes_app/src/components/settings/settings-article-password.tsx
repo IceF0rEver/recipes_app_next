@@ -28,7 +28,7 @@ export default function SettingsArticlePassword() {
 		>
 			<AlertDialog open={open} onOpenChange={setOpen}>
 				<AlertDialogTrigger asChild>
-					<Button type="button" variant={"default"} className="min-w-1/4">
+					<Button type="button" variant={"link"} className="min-w-1/4">
 						<p>{t("button.updatePassword")}</p>
 					</Button>
 				</AlertDialogTrigger>
