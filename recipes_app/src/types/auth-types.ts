@@ -1,7 +1,7 @@
 import type { UseFormReturn, FieldValues, SubmitHandler, Control, FieldPath } from "react-hook-form";
 import type { VariantProps } from "class-variance-authority";
 import type { buttonVariants } from "@/components/ui/button";
-import type { signIn } from "@/lib/auth-client";
+import type { signIn } from "@/lib/auth/auth-client";
 
 export interface AuthFormProps<T extends FieldValues> {
 	children: React.ReactNode;

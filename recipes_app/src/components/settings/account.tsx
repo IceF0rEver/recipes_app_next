@@ -1,10 +1,10 @@
 "use client";
 import { useI18n } from "@/locales/client";
 import { useState } from "react";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth/auth-client";
 import SettingsArticlePassword from "./settings-article-password";
 import { z, type string } from "zod";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import AuthForm from "../auth/auth-form";
 import { authSchemas } from "@/lib/zod/auth-schemas";

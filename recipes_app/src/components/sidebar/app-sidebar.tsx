@@ -11,7 +11,7 @@ import {
 	SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 import { usePathname } from "next/navigation";
 import { BotMessageSquare, ReceiptText } from "lucide-react";

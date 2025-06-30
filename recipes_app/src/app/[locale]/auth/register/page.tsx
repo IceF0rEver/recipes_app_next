@@ -12,7 +12,7 @@ import AuthForm from "@/components/auth/auth-form";
 import AuthButton from "@/components/auth/auth-button";
 import AuthFooter from "@/components/auth/auth-footer";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { signUp } from "@/lib/auth/auth-client";
 
 export default function Page() {
 	const t = useI18n();
