@@ -56,13 +56,13 @@ export const auth = betterAuth({
 	},
 	plugins: [
 		adminPlugin({
-            ac,
-            roles: {
-                admin,
-                user,
-                premium
-            }
-        }),
-		nextCookies()
+			ac,
+			roles: {
+				admin,
+				user,
+				premium,
+			},
+		}),
+		nextCookies(),
 	],
 });
