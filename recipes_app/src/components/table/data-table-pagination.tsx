@@ -11,6 +11,7 @@ interface DataTablePaginationProps<TData> {
 
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
 	const t = useI18n();
+
 	const selectedCount = table.getFilteredSelectedRowModel().rows.length;
 	const totalCount = table.getFilteredRowModel().rows.length;
 	const thisPage = table.getState().pagination.pageIndex + 1;
@@ -28,9 +29,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 					<p className="text-sm font-medium">{t("components.table.pagination.rowsPerPage")}</p>
 					<Select
 						value={`${table.getState().pagination.pageSize}`}
-						onValueChange={(value) => {
-							table.setPageSize(Number(value));
-						}}
+						onValueChange={(value) => table.setPageSize(Number(value))}
 					>
 						<SelectTrigger className="h-8 w-[70px]">
 							<SelectValue placeholder={table.getState().pagination.pageSize} />

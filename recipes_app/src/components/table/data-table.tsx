@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const t = useI18n();
 	const initialColumnVisibility = React.useMemo(() => {
-	const visibility: Record<string, boolean> = {};
+		const visibility: Record<string, boolean> = {};
 		columns.forEach((col) => {
 			if (col.id === "select") {
 				visibility[col.id] = true;
@@ -71,7 +71,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 	});
-
 	return (
 		<div className="space-y-4">
 			<DataTableToolbar table={table} />
