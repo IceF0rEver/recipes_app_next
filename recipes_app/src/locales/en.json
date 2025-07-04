@@ -110,7 +110,10 @@
 		},
 		"appSideBar": {
 			"myRecipes": "My recipes",
-			"chatBot": "Assistant"
+			"chatBot": "Assistant",
+			"admin": "Administration",
+			"users": "Users",
+			"logs": "Logs"
 		},
 		"items": {
 			"account": {
@@ -152,6 +155,53 @@
 					"confirmTitle": "Modify your password",
 					"confirmDescription": "Enter your information to change your password."
 				}
+			}
+		},
+		"admin": {
+			"users": {
+				"description": "Consult, change and manage the roles of users registered on the platform. \nQuickly access their data, their activity and intervene if necessary.",
+				"title": "User management"
+			}
+		},
+		"table": {
+			"id": "Id",
+			"email": "E-mail address",
+			"emailVerified": "E-mail check",
+			"name": "Name",
+			"image": "Picture",
+			"role": "Role",
+			"banned": "Banned",
+			"banReason": "Reason for banishment",
+			"banExpires": "Banish expiration",
+			"createdAt": "Created at",
+			"updatedAt": "Updated at",
+			"pagination": {
+				"rowsPerPage": "Rows per page",
+				"firstPage": "Go to the first page",
+				"previousPage": "Go to previous page",
+				"nextPage": "Go to next page",
+				"lastPage": "Go to last page",
+				"rowsSelected": "{rowSelected} on {rowCount} row(s) selected",
+				"pageIndex": "Page {thisPage} of {pageCount}"
+			},
+			"toolbar": {
+				"search": "Research..."
+			},
+			"view": {
+				"label": "Display"
+			},
+			"roles": {
+				"user": "User",
+				"premium": "Premium",
+				"admin": "Admin"
+			},
+			"faceted": {
+				"selected": "selected",
+				"noResults": "No results found.",
+				"clearFilter": "Clear filters"
+			},
+			"table": {
+				"noResults": "No results."
 			}
 		}
 	},
@@ -207,5 +257,8 @@
 		"ACCOUNT_NOT_FOUND": "Account not found.",
 		"EMAIL_IS_THE_SAME": "Same Email address.",
 		"undefined": "An unexpected error has occurred!"
+	},
+	"message": {
+		"noResult": "No results"
 	}
 }
