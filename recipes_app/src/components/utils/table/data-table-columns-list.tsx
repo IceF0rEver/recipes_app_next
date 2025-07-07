@@ -4,17 +4,24 @@ import type { Column, ColumnDef, Row } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import type { ItemTableProps } from "@/types/auth-types";
 import { DataTableColumnHeader } from "./data-table-columns-header";
 import { DataTableRowActions } from "./data-table-row-action";
-import type { ItemUsers } from "@/types/auth-types";
 
-export const dataTableColumnList = <T extends object>(items: ItemUsers[]): ColumnDef<T>[] => [
+export const dataTableColumnList = <T extends object>(
+	items: ItemTableProps[],
+	onEdit: (value?: T) => void,
+	onDelete: (value?: T) => void,
+	links?: { key: string; label: string; url: string }[],
+): ColumnDef<T>[] => [
 	{
 		id: "select",
 		header: ({ table }) => (
 			<Checkbox
-				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+				checked={
+					table.getIsAllPageRowsSelected() ||
+					(table.getIsSomePageRowsSelected() && "indeterminate")
+				}
 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 				aria-label="Select all"
 				className="translate-y-[2px]"
@@ -32,7 +39,7 @@ export const dataTableColumnList = <T extends object>(items: ItemUsers[]): Colum
 		enableHiding: false,
 	},
 
-	...items.map((item: ItemUsers) => ({
+	...items.map((item: ItemTableProps) => ({
 		accessorKey: item.key,
 		header: ({ column }: { column: Column<T, unknown> }) => (
 			<DataTableColumnHeader column={column} title={item.value} />
@@ -64,6 +71,13 @@ export const dataTableColumnList = <T extends object>(items: ItemUsers[]): Colum
 
 	{
 		id: "actions",
-		cell: ({ row }) => <DataTableRowActions row={row} />,
+		cell: ({ row }) => (
+			<DataTableRowActions
+				row={row}
+				onEdit={onEdit}
+				onDelete={onDelete}
+				links={links}
+			/>
+		),
 	},
 ];
