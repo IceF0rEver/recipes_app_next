@@ -9,7 +9,9 @@
 		"logOut": "Log Out",
 		"settings": "Parameters",
 		"updatePassword": "Update your password",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit"
 	},
 	"heroPage": {
 		"title": {
@@ -30,6 +32,20 @@
 				"fr": "French",
 				"en": "English",
 				"select": "Choose a language"
+			},
+			"sheet": {
+				"title": {
+					"edit": "Modification: ",
+					"add": "Addition:"
+				},
+				"description": {
+					"edit": "You can now easily modify the following information: ",
+					"add": "You can now easily add the following information:"
+				}
+			},
+			"alertDialog": {
+				"title": "Deletion of this: ",
+				"description": "Are you sure you want to delete this {title}? This action is irreversible and all associated data will be lost."
 			}
 		},
 		"auth": {
@@ -160,7 +176,8 @@
 		"admin": {
 			"users": {
 				"description": "Consult, change and manage the roles of users registered on the platform. \nQuickly access their data, their activity and intervene if necessary.",
-				"title": "User management"
+				"title": "User management",
+				"name": "User"
 			}
 		},
 		"table": {
@@ -202,7 +219,8 @@
 			},
 			"table": {
 				"noResults": "No results."
-			}
+			},
+			"session": "Sessions"
 		}
 	},
 	"metaData": {

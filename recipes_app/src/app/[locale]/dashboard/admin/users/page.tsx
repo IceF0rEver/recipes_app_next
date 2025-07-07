@@ -1,8 +1,8 @@
-import { getI18n } from "@/locales/server";
+import { headers } from "next/headers";
+import { Suspense } from "react";
 import UsersTable from "@/components/admin/users/users-table";
 import { getUsersList } from "@/lib/auth/server";
-import { Suspense } from "react";
-import { headers } from "next/headers";
+import { getI18n } from "@/locales/server";
 
 export default async function Page() {
 	const t = await getI18n();
