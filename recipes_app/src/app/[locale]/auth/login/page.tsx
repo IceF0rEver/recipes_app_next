@@ -13,7 +13,7 @@ import AuthForm from "@/components/auth/auth-form";
 import AuthButton from "@/components/auth/auth-button";
 import AuthFooter from "@/components/auth/auth-footer";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth/auth-client";
 import { Separator } from "@/components/ui/separator";
 
 const GoogleLabel = () => {

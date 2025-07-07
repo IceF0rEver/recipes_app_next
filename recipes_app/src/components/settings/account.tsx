@@ -1,10 +1,10 @@
 "use client";
 import { useI18n } from "@/locales/client";
 import { useState } from "react";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth/auth-client";
 import SettingsArticlePassword from "./settings-article-password";
 import { z, type string } from "zod";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import AuthForm from "../auth/auth-form";
 import { authSchemas } from "@/lib/zod/auth-schemas";
@@ -150,7 +150,11 @@ export default function Account() {
 						fieldType="image"
 						className={"md:max-w-2/3"}
 					/>
-					<AuthButton className={"w-1/4"} isLoading={loading} label={t("button.update")} />
+					<AuthButton
+						className={"min-w-2/5 md:min-w-1/4 md:w-1/4"}
+						isLoading={loading}
+						label={t("button.update")}
+					/>
 				</AuthForm>
 			</section>
 		</article>

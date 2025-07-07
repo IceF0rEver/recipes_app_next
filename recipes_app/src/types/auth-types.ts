@@ -1,7 +1,9 @@
-import type { UseFormReturn, FieldValues, SubmitHandler, Control, FieldPath } from "react-hook-form";
+import type { UserWithRole } from "better-auth/plugins";
 import type { VariantProps } from "class-variance-authority";
+import type { ComponentType } from "react";
+import type { Control, FieldPath, FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 import type { buttonVariants } from "@/components/ui/button";
-import type { signIn } from "@/lib/auth-client";
+import type { signIn } from "@/lib/auth/auth-client";
 
 export interface AuthFormProps<T extends FieldValues> {
 	children: React.ReactNode;
@@ -43,4 +45,26 @@ export interface AuthButtonProps {
 	isSocial?: boolean;
 	isLoading?: boolean;
 	socialProvider?: Parameters<typeof signIn.social>[0]["provider"];
+}
+export interface TableProps {
+	datasTable: Promise<{
+		users: UserWithRole[];
+		total: number;
+		limit?: number;
+		offset?: number;
+	}>;
+	columnsItems: ItemTableProps[];
+}
+
+export interface ItemTableProps {
+	key: string;
+	value: string;
+	subItems?: {
+		value: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	enableSorting: boolean;
+	enableHiding: boolean;
+	initialStateVisibility: boolean;
 }

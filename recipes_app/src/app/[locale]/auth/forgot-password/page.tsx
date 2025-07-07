@@ -3,7 +3,7 @@
 import { z, type string } from "zod";
 import { useI18n } from "@/locales/client";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authSchemas } from "@/lib/zod/auth-schemas";

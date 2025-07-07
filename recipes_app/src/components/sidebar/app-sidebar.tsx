@@ -7,14 +7,17 @@ import {
 	SidebarGroup,
 	SidebarHeader,
 	SidebarMenu,
+	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarMenuSub,
 	SidebarMenuSubButton,
+	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 import { usePathname } from "next/navigation";
-import { BotMessageSquare, ReceiptText } from "lucide-react";
+import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
 
 const NavUserSkeleton = () => {
 	return (
@@ -39,11 +42,30 @@ export function AppSidebar() {
 				title: t("components.appSideBar.chatBot"),
 				url: "#",
 				icon: <BotMessageSquare />,
+				visibleTo: ["user"],
 			},
 			{
 				title: t("components.appSideBar.myRecipes"),
 				url: "my-recipes",
 				icon: <ReceiptText />,
+				visibleTo: ["user"],
+			},
+			{
+				title: t("components.appSideBar.admin"),
+				url: "#",
+				items: [
+					{
+						title: t("components.appSideBar.users"),
+						url: "/admin/users",
+						icon: <Users />,
+					},
+					{
+						title: t("components.appSideBar.logs"),
+						url: "/admin/logs",
+						icon: <Logs />,
+					},
+				],
+				visibleTo: ["admin"],
 			},
 		],
 	};
@@ -53,7 +75,6 @@ export function AppSidebar() {
 		email: session?.user.email || "",
 		avatar: session?.user.image || "./",
 	};
-
 	return (
 		<Sidebar variant="inset">
 			<SidebarHeader className="p-0">
@@ -67,25 +88,44 @@ export function AppSidebar() {
 			<SidebarContent>
 				<SidebarGroup />
 				<SidebarMenu>
-					{dataSideBar.navMain.map((item) => (
-						<SidebarMenuItem key={item.title}>
-							<SidebarMenuSubButton
-								asChild
-								isActive={
-									item.url ===
-										pathname.split("/")[
-											pathname.split("/").findIndex((i) => i === "dashboard") + 1
-										] ||
-									(item.url === "#" && pathname.split("/").at(-1) === "dashboard")
-								}
-							>
-								<a href={`/dashboard/${item.url}`}>
-									{item.icon}
-									{item.title}
-								</a>
-							</SidebarMenuSubButton>
-						</SidebarMenuItem>
-					))}
+					{dataSideBar.navMain.map((item) =>
+						item.visibleTo.includes(session?.user.role ?? "") ? (
+							<SidebarMenuItem key={item.title}>
+								<SidebarMenuButton
+									asChild
+									isActive={
+										!item.items &&
+										(pathname.split("/").at(-1) === item.url?.split("/").at(-1) ||
+											(item.url === "#" && pathname.split("/").at(-1) === "dashboard"))
+									}
+								>
+									<a href={`/dashboard/${item.url}`}>
+										{item.icon}
+										{item.title}
+									</a>
+								</SidebarMenuButton>
+								{item.items?.length ? (
+									<SidebarMenuSub>
+										{item.items.map((item) => (
+											<SidebarMenuSubItem key={item.title}>
+												<SidebarMenuSubButton
+													asChild
+													isActive={
+														pathname.split("/").at(-1) === item.url?.split("/").at(-1)
+													}
+												>
+													<a href={`/dashboard/${item.url}`}>
+														{item.icon}
+														{item.title}
+													</a>
+												</SidebarMenuSubButton>
+											</SidebarMenuSubItem>
+										))}
+									</SidebarMenuSub>
+								) : null}
+							</SidebarMenuItem>
+						) : null,
+					)}
 				</SidebarMenu>
 				<SidebarGroup />
 			</SidebarContent>

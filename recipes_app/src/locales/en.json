@@ -9,7 +9,9 @@
 		"logOut": "Log Out",
 		"settings": "Parameters",
 		"updatePassword": "Update your password",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit"
 	},
 	"heroPage": {
 		"title": {
@@ -30,6 +32,20 @@
 				"fr": "French",
 				"en": "English",
 				"select": "Choose a language"
+			},
+			"sheet": {
+				"title": {
+					"edit": "Modification: ",
+					"add": "Addition:"
+				},
+				"description": {
+					"edit": "You can now easily modify the following information: ",
+					"add": "You can now easily add the following information:"
+				}
+			},
+			"alertDialog": {
+				"title": "Deletion of this: ",
+				"description": "Are you sure you want to delete this {title}? This action is irreversible and all associated data will be lost."
 			}
 		},
 		"auth": {
@@ -110,7 +126,10 @@
 		},
 		"appSideBar": {
 			"myRecipes": "My recipes",
-			"chatBot": "Assistant"
+			"chatBot": "Assistant",
+			"admin": "Administration",
+			"users": "Users",
+			"logs": "Logs"
 		},
 		"items": {
 			"account": {
@@ -153,6 +172,55 @@
 					"confirmDescription": "Enter your information to change your password."
 				}
 			}
+		},
+		"admin": {
+			"users": {
+				"description": "Consult, change and manage the roles of users registered on the platform. \nQuickly access their data, their activity and intervene if necessary.",
+				"title": "User management",
+				"name": "User"
+			}
+		},
+		"table": {
+			"id": "Id",
+			"email": "E-mail address",
+			"emailVerified": "E-mail check",
+			"name": "Name",
+			"image": "Picture",
+			"role": "Role",
+			"banned": "Banned",
+			"banReason": "Reason for banishment",
+			"banExpires": "Banish expiration",
+			"createdAt": "Created at",
+			"updatedAt": "Updated at",
+			"pagination": {
+				"rowsPerPage": "Rows per page",
+				"firstPage": "Go to the first page",
+				"previousPage": "Go to previous page",
+				"nextPage": "Go to next page",
+				"lastPage": "Go to last page",
+				"rowsSelected": "{rowSelected} on {rowCount} row(s) selected",
+				"pageIndex": "Page {thisPage} of {pageCount}"
+			},
+			"toolbar": {
+				"search": "Research..."
+			},
+			"view": {
+				"label": "Display"
+			},
+			"roles": {
+				"user": "User",
+				"premium": "Premium",
+				"admin": "Admin"
+			},
+			"faceted": {
+				"selected": "selected",
+				"noResults": "No results found.",
+				"clearFilter": "Clear filters"
+			},
+			"table": {
+				"noResults": "No results."
+			},
+			"session": "Sessions"
 		}
 	},
 	"metaData": {
@@ -207,5 +275,8 @@
 		"ACCOUNT_NOT_FOUND": "Account not found.",
 		"EMAIL_IS_THE_SAME": "Same Email address.",
 		"undefined": "An unexpected error has occurred!"
+	},
+	"message": {
+		"noResult": "No results"
 	}
 }

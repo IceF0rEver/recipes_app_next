@@ -3,7 +3,7 @@
 import { useI18n } from "@/locales/client";
 import { z, type string } from "zod";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useForm } from "react-hook-form";

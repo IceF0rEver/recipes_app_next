@@ -9,7 +9,9 @@
 		"logOut": "Déconnexion",
 		"settings": "Paramètres",
 		"updatePassword": "Modifier votre mot de passe",
-		"cancel": "Annuler"
+		"cancel": "Annuler",
+		"delete": "Supprimer",
+		"edit": "Editer"
 	},
 	"heroPage": {
 		"title": {
@@ -30,6 +32,20 @@
 				"fr": "Français",
 				"en": "Anglais",
 				"select": "Choisir une langue"
+			},
+			"sheet": {
+				"title": {
+					"edit": "Modification: ",
+					"add": "Ajout: "
+				},
+				"description": {
+					"edit": "Vous pouvez désormais modifier facilement les informations suivantes de ce/cet/cette: ",
+					"add": "Vous pouvez désormais ajouter facilement les informations suivantes de ce/cet/cette: "
+				}
+			},
+			"alertDialog": {
+				"title": "Suppression de ce/cet/cette: ",
+				"description": "Êtes-vous sûr de vouloir supprimer ce/cet/cette {title} ? Cette action est irréversible et toutes les données associées seront perdues."
 			}
 		},
 		"auth": {
@@ -110,7 +126,10 @@
 		},
 		"appSideBar": {
 			"myRecipes": "Mes recettes",
-			"chatBot": "Assistant"
+			"chatBot": "Assistant",
+			"admin": "Administration",
+			"users": "Utilisateurs",
+			"logs": "Logs"
 		},
 		"items": {
 			"account": {
@@ -153,6 +172,55 @@
 					"confirmDescription": "Entrez vos informations pour modifier votre mot de passe."
 				}
 			}
+		},
+		"admin": {
+			"users": {
+				"description": "Consultez, modifiez et gérez les rôles des utilisateurs inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin.",
+				"title": "Gestion des utilisateurs",
+				"name": "Utilisateur"
+			}
+		},
+		"table": {
+			"id": "Id",
+			"email": "Adresse e-mail",
+			"emailVerified": "E-mail vérifier",
+			"name": "Nom",
+			"image": "Image",
+			"role": "Rôle",
+			"banned": "Banni",
+			"banReason": "Raison du bannissement",
+			"banExpires": "Expiration du bannissement",
+			"createdAt": "Créer le",
+			"updatedAt": "Modifier le",
+			"pagination": {
+				"rowsPerPage": "Lignes par page",
+				"firstPage": "Aller à la première page",
+				"previousPage": "Aller à la page précédente",
+				"nextPage": "Aller à la page suivante",
+				"lastPage": "Aller à la dernière page",
+				"rowsSelected": "{rowSelected} sur {rowCount} ligne(s) sélectionnées",
+				"pageIndex": "Page {thisPage} sur {pageCount}"
+			},
+			"toolbar": {
+				"search": "Rechercher..."
+			},
+			"view": {
+				"label": "Affichage"
+			},
+			"roles": {
+				"user": "Utilisateur",
+				"premium": "Premium",
+				"admin": "Administrateur"
+			},
+			"faceted": {
+				"selected": "choisi",
+				"noResults": "Aucun résultat trouvé.",
+				"clearFilter": "Effacer les filtres"
+			},
+			"table": {
+				"noResults": "Aucun résultats."
+			},
+			"session": "Sessions"
 		}
 	},
 	"metaData": {
@@ -207,5 +275,8 @@
 		"ACCOUNT_NOT_FOUND": "Compte introuvable.",
 		"EMAIL_IS_THE_SAME": "Adresse e-mail identique.",
 		"undefined": "Une erreur inattendue est survenue !"
+	},
+	"message": {
+		"noResult": "Pas de résultats"
 	}
 }

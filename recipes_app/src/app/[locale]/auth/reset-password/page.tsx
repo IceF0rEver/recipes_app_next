@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AuthField from "@/components/auth/auth-field";
 import AuthButton from "@/components/auth/auth-button";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
