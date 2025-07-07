@@ -20,36 +20,23 @@ interface DataTableRowActionsProps<TData> {
 	links?: { key: string; label: string; url: string }[];
 }
 
-export function DataTableRowActions<TData>({
-	row,
-	onEdit,
-	onDelete,
-	links,
-}: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({ row, onEdit, onDelete, links }: DataTableRowActionsProps<TData>) {
 	const t = useI18n();
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
-				<Button
-					variant="ghost"
-					className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-				>
+				<Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
 					<MoreHorizontal />
 					<span className="sr-only">Open menu</span>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-[160px]">
-				<DropdownMenuItem onClick={() => onEdit(row.original)}>
-					{t("button.edit")}
-				</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => onEdit(row.original)}>{t("button.edit")}</DropdownMenuItem>
 				{links && (
 					<div>
 						<DropdownMenuSeparator />
 						{links.map((link) => (
-							<Link
-								href={`${(row.original as { id: string }).id}${link.url}`}
-								key={link.url}
-							>
+							<Link href={`${(row.original as { id: string }).id}${link.url}`} key={link.url}>
 								<DropdownMenuItem>{link.label}</DropdownMenuItem>
 							</Link>
 						))}

@@ -18,10 +18,7 @@ export const dataTableColumnList = <T extends object>(
 		id: "select",
 		header: ({ table }) => (
 			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && "indeterminate")
-				}
+				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 				aria-label="Select all"
 				className="translate-y-[2px]"
@@ -71,13 +68,6 @@ export const dataTableColumnList = <T extends object>(
 
 	{
 		id: "actions",
-		cell: ({ row }) => (
-			<DataTableRowActions
-				row={row}
-				onEdit={onEdit}
-				onDelete={onDelete}
-				links={links}
-			/>
-		),
+		cell: ({ row }) => <DataTableRowActions row={row} onEdit={onEdit} onDelete={onDelete} links={links} />,
 	},
 ];
