@@ -1,5 +1,7 @@
 "use client";
 
+import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,11 +15,9 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
-import { usePathname } from "next/navigation";
-import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import { NavUser } from "./nav-user";
 
 const NavUserSkeleton = () => {
 	return (
@@ -95,8 +95,10 @@ export function AppSidebar() {
 									asChild
 									isActive={
 										!item.items &&
-										(pathname.split("/").at(-1) === item.url?.split("/").at(-1) ||
-											(item.url === "#" && pathname.split("/").at(-1) === "dashboard"))
+										(pathname.split("/").at(-1) ===
+											item.url?.split("/").at(-1) ||
+											(item.url === "#" &&
+												pathname.split("/").at(-1) === "dashboard"))
 									}
 								>
 									<a href={`/dashboard/${item.url}`}>
@@ -111,7 +113,8 @@ export function AppSidebar() {
 												<SidebarMenuSubButton
 													asChild
 													isActive={
-														pathname.split("/").at(-1) === item.url?.split("/").at(-1)
+														pathname.split("/").at(-1) ===
+														item.url?.split("/").at(-1)
 													}
 												>
 													<a href={`/dashboard/${item.url}`}>
@@ -129,7 +132,9 @@ export function AppSidebar() {
 				</SidebarMenu>
 				<SidebarGroup />
 			</SidebarContent>
-			<SidebarFooter>{isPending ? <NavUserSkeleton /> : <NavUser user={dataUser} />}</SidebarFooter>
+			<SidebarFooter>
+				{isPending ? <NavUserSkeleton /> : <NavUser user={dataUser} />}
+			</SidebarFooter>
 		</Sidebar>
 	);
 }

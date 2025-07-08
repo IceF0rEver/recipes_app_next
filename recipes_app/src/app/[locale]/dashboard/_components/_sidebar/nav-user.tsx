@@ -1,7 +1,8 @@
 "use client";
 
 import { ChevronsUpDown, LogOut, Settings2 } from "lucide-react";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -12,10 +13,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
+import {
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	useSidebar,
+} from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/auth-client";
-import Link from "next/link";
 import { useI18n } from "@/locales/client";
 
 export function NavUser({
@@ -45,7 +49,9 @@ export function NavUser({
 						<SidebarMenuButton variant={"outline"} size="lg">
 							<Avatar className="h-8 w-8 rounded-lg">
 								<AvatarImage src={user.avatar} alt={user.name} />
-								<AvatarFallback className="rounded-lg bg-primary">CN</AvatarFallback>
+								<AvatarFallback className="rounded-lg bg-primary">
+									CN
+								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">{user.name}</span>
