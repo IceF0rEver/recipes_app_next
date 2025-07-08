@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import UsersTable from "@/components/admin/users/users-table";
+import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
 import { getUsersList } from "@/lib/auth/server";
 import { getI18n } from "@/locales/server";
 

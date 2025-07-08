@@ -16,12 +16,16 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 	const [sheetType, setSheetType] = useState<"edit" | "add">("add");
 
 	const usersList = use(datasTable);
-	const links = [{ key: "session", label: t("components.table.session"), url: "/session" }];
+	const links = [
+		{ key: "session", label: t("components.table.session"), url: "/session" },
+	];
 	const users =
 		usersList.users.map((user) => ({
 			...user,
 			role: user.role as "user" | "admin" | "premium",
-			banExpires: user.banExpires ? new Date(user.banExpires).toLocaleString() : "",
+			banExpires: user.banExpires
+				? new Date(user.banExpires).toLocaleString()
+				: "",
 			createdAt: new Date(user.createdAt).toLocaleString(),
 			updatedAt: new Date(user.updatedAt).toLocaleString(),
 		})) ?? [];
@@ -35,7 +39,12 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 		setAlertOpenDialog(true);
 	}, []);
 
-	const columns = dataTableColumnList<Auth>(columnsItems, onEdit, onDelete, links);
+	const columns = dataTableColumnList<Auth>(
+		columnsItems,
+		onEdit,
+		onDelete,
+		links,
+	);
 	return (
 		<div>
 			<DataTable columns={columns} data={users} />
