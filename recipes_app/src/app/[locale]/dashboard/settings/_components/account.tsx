@@ -7,9 +7,9 @@ import { type string, z } from "zod";
 import { authClient, useSession } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
-import AuthButton from "../../../../../components/auth/auth-button";
-import AuthField from "../../../../../components/auth/auth-field";
-import AuthForm from "../../../../../components/auth/auth-form";
+import AuthButton from "../../../auth/_components/auth-button";
+import AuthField from "../../../auth/_components/auth-field";
+import AuthForm from "../../../auth/_components/auth-form";
 import SettingsArticlePassword from "./settings-article-password";
 import SettingsItemsHeader from "./settings-items-header";
 
