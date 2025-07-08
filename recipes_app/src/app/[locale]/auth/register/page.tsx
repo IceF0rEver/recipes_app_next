@@ -1,18 +1,18 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { z, type string } from "zod";
-import { useI18n } from "@/locales/client";
-import { useState } from "react";
-import AuthCard from "@/components/auth/auth-card";
-import AuthField from "@/components/auth/auth-field";
-import AuthForm from "@/components/auth/auth-form";
-import AuthButton from "@/components/auth/auth-button";
-import AuthFooter from "@/components/auth/auth-footer";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { type string, z } from "zod";
+import AuthButton from "@/app/[locale]/auth/_components/auth-button";
+import AuthCard from "@/app/[locale]/auth/_components/auth-card";
+import AuthField from "@/app/[locale]/auth/_components/auth-field";
+import AuthFooter from "@/app/[locale]/auth/_components/auth-footer";
+import AuthForm from "@/app/[locale]/auth/_components/auth-form";
 import { signUp } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
 
 export default function Page() {
 	const t = useI18n();
@@ -62,7 +62,9 @@ export default function Page() {
 					},
 					onError: (ctx) => {
 						setErrorMessage({
-							betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+							betterError: t(
+								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+							),
 						});
 					},
 					onSuccess: async () => {
@@ -92,7 +94,11 @@ export default function Page() {
 		>
 			<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 				{errorMessage.betterError && (
-					<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
+					<p
+						className="text-sm text-destructive"
+						aria-live="polite"
+						aria-atomic="true"
+					>
 						{errorMessage.betterError}
 					</p>
 				)}
