@@ -9,7 +9,12 @@ interface SettingsArticleProps {
 	className?: string;
 }
 
-export default function SettingsArticle({ children, label, description, className }: SettingsArticleProps) {
+export default function SettingsArticle({
+	children,
+	label,
+	description,
+	className,
+}: SettingsArticleProps) {
 	return (
 		<article className={cn(className)}>
 			<div className="flex gap-2 flex-wrap">

@@ -1,20 +1,20 @@
 "use client";
 
-import { useI18n } from "@/locales/client";
-import { Button } from "../ui/button";
 import { useState } from "react";
 import {
 	AlertDialog,
-	AlertDialogContent,
-	AlertDialogTrigger,
 	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogDescription,
+	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import UpdatePassword from "./update-password";
+import { useI18n } from "@/locales/client";
+import { Button } from "../../../../../components/ui/button";
 import SettingsArticle from "./settings-article";
+import UpdatePassword from "./update-password";
 
 export default function SettingsArticlePassword() {
 	const t = useI18n();
@@ -34,14 +34,18 @@ export default function SettingsArticlePassword() {
 				</AlertDialogTrigger>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>{t("components.settings.form.changePassword.confirmTitle")}</AlertDialogTitle>
+						<AlertDialogTitle>
+							{t("components.settings.form.changePassword.confirmTitle")}
+						</AlertDialogTitle>
 						<AlertDialogDescription>
 							{t("components.settings.form.changePassword.confirmDescription")}
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<UpdatePassword onOpenChange={setOpen} />
 					<AlertDialogFooter>
-						<AlertDialogCancel className="w-full">{t("button.cancel")}</AlertDialogCancel>
+						<AlertDialogCancel className="w-full">
+							{t("button.cancel")}
+						</AlertDialogCancel>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

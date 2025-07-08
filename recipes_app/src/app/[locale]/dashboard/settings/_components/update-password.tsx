@@ -1,16 +1,16 @@
 "use client";
 
-import { useI18n } from "@/locales/client";
-import { z, type string } from "zod";
-import { useState } from "react";
-import { authClient } from "@/lib/auth/auth-client";
-import { toast } from "sonner";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AuthForm from "../auth/auth-form";
-import AuthField from "../auth/auth-field";
-import AuthButton from "../auth/auth-button";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { type string, z } from "zod";
+import { authClient } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
+import AuthButton from "../../../../../components/auth/auth-button";
+import AuthField from "../../../../../components/auth/auth-field";
+import AuthForm from "../../../../../components/auth/auth-form";
 
 interface UpdatePasswordProps {
 	onOpenChange?: (open: boolean) => void;
@@ -55,7 +55,9 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 					},
 					onError: (ctx) => {
 						setErrorMessage({
-							betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+							betterError: t(
+								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+							),
 						});
 					},
 					onSuccess: async () => {
@@ -74,7 +76,11 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 	return (
 		<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 			{errorMessage.betterError && (
-				<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
+				<p
+					className="text-sm text-destructive"
+					aria-live="polite"
+					aria-atomic="true"
+				>
 					{errorMessage.betterError}
 				</p>
 			)}
@@ -94,7 +100,9 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 			/>
 			<AuthField
 				label={t("components.auth.form.newPasswordConfirmation.label")}
-				placeholder={t("components.auth.form.newPasswordConfirmation.placeholder")}
+				placeholder={t(
+					"components.auth.form.newPasswordConfirmation.placeholder",
+				)}
 				control={form.control}
 				name="passwordConfirmation"
 				type="password"

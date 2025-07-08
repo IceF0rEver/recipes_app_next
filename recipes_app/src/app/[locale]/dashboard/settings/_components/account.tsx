@@ -1,17 +1,16 @@
 "use client";
-import { useI18n } from "@/locales/client";
-import { useState } from "react";
-import { useSession } from "@/lib/auth/auth-client";
-import SettingsArticlePassword from "./settings-article-password";
-import { z, type string } from "zod";
-import { authClient } from "@/lib/auth/auth-client";
-import { toast } from "sonner";
-import AuthForm from "../auth/auth-form";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import AuthField from "../auth/auth-field";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AuthButton from "../auth/auth-button";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { type string, z } from "zod";
+import { authClient, useSession } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
+import AuthButton from "../../../../../components/auth/auth-button";
+import AuthField from "../../../../../components/auth/auth-field";
+import AuthForm from "../../../../../components/auth/auth-form";
+import SettingsArticlePassword from "./settings-article-password";
 import SettingsItemsHeader from "./settings-items-header";
 
 export default function Account() {
@@ -52,7 +51,9 @@ export default function Account() {
 							validatedData.lastName !== session?.user.name.split(" ")[1]) && {
 							name: `${validatedData.firstName} ${validatedData.lastName}`,
 						}),
-						...(validatedData.image !== session?.user.image && { image: validatedData.image }),
+						...(validatedData.image !== session?.user.image && {
+							image: validatedData.image,
+						}),
 					},
 					{
 						onResponse: () => {
@@ -63,7 +64,9 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
 							});
 						},
 						onSuccess: async () => {
@@ -84,7 +87,9 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
 							});
 						},
 						onSuccess: async () => {
@@ -110,7 +115,11 @@ export default function Account() {
 				<SettingsArticlePassword />
 				<AuthForm form={form} onSubmit={onSubmit} className="grid gap-9">
 					{errorMessage.betterError && (
-						<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
+						<p
+							className="text-sm text-destructive"
+							aria-live="polite"
+							aria-atomic="true"
+						>
 							{errorMessage.betterError}
 						</p>
 					)}

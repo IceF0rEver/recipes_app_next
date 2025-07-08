@@ -1,8 +1,8 @@
 "use client";
 
 import { useI18n } from "@/locales/client";
-import DarkMode from "../utils/dark-mode";
-import SelectLang from "../utils/select-lang";
+import DarkMode from "../../../../../components/utils/dark-mode";
+import SelectLang from "../../../../../components/utils/select-lang";
 import SettingsArticle from "./settings-article";
 import SettingsItemsHeader from "./settings-items-header";
 
