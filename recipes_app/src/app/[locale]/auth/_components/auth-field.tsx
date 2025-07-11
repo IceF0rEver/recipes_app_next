@@ -4,14 +4,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { FieldValues } from "react-hook-form";
-import {
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { AuthFieldProps } from "@/types/auth-types";
@@ -115,12 +108,7 @@ export default function AuthField<T extends FieldValues>({
 						<FormItem>
 							{label && <FormLabel>{label}</FormLabel>}
 							<FormControl>
-								<Input
-									placeholder={placeholder}
-									type={type}
-									{...field}
-									className={cn(className)}
-								/>
+								<Input placeholder={placeholder} type={type} {...field} className={cn(className)} />
 							</FormControl>
 							{description && <FormDescription>{description}</FormDescription>}
 							<FormMessage />
