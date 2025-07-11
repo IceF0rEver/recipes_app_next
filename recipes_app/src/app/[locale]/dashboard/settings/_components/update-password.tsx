@@ -55,9 +55,7 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 					},
 					onError: (ctx) => {
 						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
+							betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 						});
 					},
 					onSuccess: async () => {
@@ -76,11 +74,7 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 	return (
 		<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 			{errorMessage.betterError && (
-				<p
-					className="text-sm text-destructive"
-					aria-live="polite"
-					aria-atomic="true"
-				>
+				<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
 					{errorMessage.betterError}
 				</p>
 			)}
@@ -100,9 +94,7 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 			/>
 			<AuthField
 				label={t("components.auth.form.newPasswordConfirmation.label")}
-				placeholder={t(
-					"components.auth.form.newPasswordConfirmation.placeholder",
-				)}
+				placeholder={t("components.auth.form.newPasswordConfirmation.placeholder")}
 				control={form.control}
 				name="passwordConfirmation"
 				type="password"

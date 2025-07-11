@@ -66,9 +66,7 @@ export default function Page() {
 			</aside>
 			<section className="md:col-span-4 px-6">
 				{items?.map((item) => (
-					<div key={item.key}>
-						{settingItemSelected === item.key && item.component}
-					</div>
+					<div key={item.key}>{settingItemSelected === item.key && item.component}</div>
 				))}
 			</section>
 		</section>

@@ -34,18 +34,14 @@ export default function SettingsArticlePassword() {
 				</AlertDialogTrigger>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>
-							{t("components.settings.form.changePassword.confirmTitle")}
-						</AlertDialogTitle>
+						<AlertDialogTitle>{t("components.settings.form.changePassword.confirmTitle")}</AlertDialogTitle>
 						<AlertDialogDescription>
 							{t("components.settings.form.changePassword.confirmDescription")}
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<UpdatePassword onOpenChange={setOpen} />
 					<AlertDialogFooter>
-						<AlertDialogCancel className="w-full">
-							{t("button.cancel")}
-						</AlertDialogCancel>
+						<AlertDialogCancel className="w-full">{t("button.cancel")}</AlertDialogCancel>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

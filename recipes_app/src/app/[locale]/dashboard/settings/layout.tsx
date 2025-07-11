@@ -14,18 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
 		},
 	};
 }
-export default async function Layout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
 	const t = await getI18n();
 	return (
 		<section className="p-6">
-			<LayoutHeader
-				title={t("components.settings.title")}
-				description={t("components.settings.description")}
-			/>
+			<LayoutHeader title={t("components.settings.title")} description={t("components.settings.description")} />
 			{children}
 		</section>
 	);

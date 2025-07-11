@@ -6,10 +6,7 @@ interface SettingsItemsHeaderProps {
 	title: string;
 	description: string;
 }
-export default function SettingsItemsHeader({
-	title,
-	description,
-}: SettingsItemsHeaderProps) {
+export default function SettingsItemsHeader({ title, description }: SettingsItemsHeaderProps) {
 	return (
 		<header>
 			<h2 className="text-xl font-bold">{title}</h2>

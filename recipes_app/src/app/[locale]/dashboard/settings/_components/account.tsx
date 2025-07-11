@@ -64,9 +64,7 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
+								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 							});
 						},
 						onSuccess: async () => {
@@ -87,9 +85,7 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
+								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 							});
 						},
 						onSuccess: async () => {
@@ -115,11 +111,7 @@ export default function Account() {
 				<SettingsArticlePassword />
 				<AuthForm form={form} onSubmit={onSubmit} className="grid gap-9">
 					{errorMessage.betterError && (
-						<p
-							className="text-sm text-destructive"
-							aria-live="polite"
-							aria-atomic="true"
-						>
+						<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
 							{errorMessage.betterError}
 						</p>
 					)}
