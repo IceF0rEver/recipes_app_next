@@ -6,7 +6,6 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
-		"format": "bunx @biomejs/biome format --write ./",
 		"lint": "bunx @biomejs/biome lint ./"
 	},
 	"dependencies": {
