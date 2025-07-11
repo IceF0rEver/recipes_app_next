@@ -96,9 +96,7 @@ export default function Page() {
 				},
 				onError: (ctx) => {
 					setErrorMessage({
-						betterError: t(
-							`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-						),
+						betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 					});
 				},
 				onSuccess: async () => {
@@ -128,11 +126,7 @@ export default function Page() {
 		>
 			<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 				{errorMessage.betterError && (
-					<p
-						className="text-sm text-destructive"
-						aria-live="polite"
-						aria-atomic="true"
-					>
+					<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
 						{errorMessage.betterError}
 					</p>
 				)}
@@ -159,9 +153,7 @@ export default function Page() {
 				<AuthButton isLoading={loading} label={t("button.login")} />
 				<div className="flex items-center gap-2 px-2 pb-1">
 					<Separator className="flex-1" />
-					<span className="text-xs text-muted-foreground">
-						{t("components.auth.login.orSocial")}
-					</span>
+					<span className="text-xs text-muted-foreground">{t("components.auth.login.orSocial")}</span>
 					<Separator className="flex-1" />
 				</div>
 				<AuthButton
