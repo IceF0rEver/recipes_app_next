@@ -1,29 +1,40 @@
 "use client";
 
-import { use, useCallback, useState } from "react";
+import { type ComponentType, use, useCallback, useState } from "react";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import type { TableProps } from "@/types/auth-types";
 import DeleteUsers from "./delete-users";
-import ManageUsers from "./manage-users";
+// import ManageUsers from "./manage-users";
+import RoleUsers from "./role-users";
 
 type ActionType = "edit" | "delete" | "link" | "select";
 
 export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 	const t = useI18n();
-	const [openSheet, setOpenSheet] = useState<boolean>(false);
-	const [openAlertDialog, setAlertOpenDialog] = useState<boolean>(false);
-	const [sheetType, setSheetType] = useState<"edit" | "add">("add");
+	// const [openSheet, setOpenSheet] = useState<boolean>(false);
+	// const [sheetType, setSheetType] = useState<"edit" | "add">("add");
+	const [openAlertDialogDelete, setAlertOpenDialogDelete] =
+		useState<boolean>(false);
+	const [openAlertDialogRole, setAlertOpenDialogRole] =
+		useState<boolean>(false);
 	const [selectedUser, setSelectedUser] = useState<Auth | null>(null);
+	const [selectedKey, setSelectedKey] = useState<{
+		key: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	} | null>(null);
 
 	const usersList = use(datasTable);
 	const users =
 		usersList.users.map((user) => ({
 			...user,
 			role: user.role as "user" | "admin" | "premium",
-			banExpires: user.banExpires ? new Date(user.banExpires).toLocaleString() : "",
+			banExpires: user.banExpires
+				? new Date(user.banExpires).toLocaleString()
+				: "",
 			createdAt: new Date(user.createdAt).toLocaleString(),
 			updatedAt: new Date(user.updatedAt).toLocaleString(),
 		})) ?? [];
@@ -34,8 +45,8 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 			label: t("button.edit"),
 			type: "edit" as ActionType,
 			onAction: useCallback((data: Auth) => {
-				setOpenSheet(true);
-				setSheetType("edit");
+				// setOpenSheet(true);
+				// setSheetType("edit");
 				setSelectedUser(data);
 			}, []),
 		},
@@ -55,9 +66,23 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 				{ key: "user", label: t("components.table.roles.user") },
 				{ key: "premium", label: t("components.table.roles.premium") },
 			],
-			onAction: useCallback((_data: Auth) => {
-				console.log("set role");
-			}, []),
+			onAction: useCallback(
+				(
+					data: Auth,
+					role?: {
+						key: string;
+						label: string;
+						icon?: ComponentType<{ className?: string }>;
+					},
+				) => {
+					setAlertOpenDialogRole(true);
+					setSelectedUser(data);
+					if (role) {
+						setSelectedKey(role);
+					}
+				},
+				[],
+			),
 		},
 		{
 			key: "delete",
@@ -65,7 +90,7 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 			type: "delete" as ActionType,
 			separator: true,
 			onAction: useCallback((data: Auth) => {
-				setAlertOpenDialog(true);
+				setAlertOpenDialogDelete(true);
 				setSelectedUser(data);
 			}, []),
 		},
@@ -76,11 +101,17 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 	return (
 		<div>
 			<DataTable columns={columns} data={users} />
-			<ManageUsers sheetOpen={openSheet} onSheetOpen={setOpenSheet} type={sheetType} userData={selectedUser} />
+			{/* <ManageUsers sheetOpen={openSheet} onSheetOpen={setOpenSheet} type={sheetType} userData={selectedUser} /> */}
 			<DeleteUsers
-				alertDialogOpen={openAlertDialog}
-				onAlertDialogOpen={setAlertOpenDialog}
+				alertDialogOpen={openAlertDialogDelete}
+				onAlertDialogOpen={setAlertOpenDialogDelete}
 				userData={selectedUser}
+			/>
+			<RoleUsers
+				alertDialogOpen={openAlertDialogRole}
+				onAlertDialogOpen={setAlertOpenDialogRole}
+				userData={selectedUser}
+				selectedKey={selectedKey}
 			/>
 		</div>
 	);

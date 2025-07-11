@@ -13,8 +13,16 @@ export const authSchemas = (
 			email: z.string().email(t("zod.email")),
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
-			firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-			lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+			firstName: z
+				.string()
+				.min(1, t("zod.min.firstName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
+			lastName: z
+				.string()
+				.min(1, t("zod.min.lastName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
 			image: z.string(),
 		})
 		.refine((data) => data.password === data.passwordConfirmation, {
@@ -49,12 +57,24 @@ export const authSchemas = (
 
 	updateUser: z.object({
 		email: z.string().email(t("zod.email")),
-		firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-		lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+		firstName: z
+			.string()
+			.min(1, t("zod.min.firstName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
+		lastName: z
+			.string()
+			.min(1, t("zod.min.lastName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
 		image: z.string(),
 	}),
 	deleteUser: z.object({
 		userId: z.string().min(1),
+	}),
+	roleUser: z.object({
+		userId: z.string().min(1),
+		role: z.enum(["user", "admin", "premium"]),
 	}),
 });
 

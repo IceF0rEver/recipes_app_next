@@ -32,7 +32,14 @@ interface ActionItemTableProps<TData> {
 		label: string;
 		icon?: ComponentType<{ className?: string }>;
 	}[];
-	onAction?: (value: TData) => void;
+	onAction?: (
+		value: TData,
+		selectedKey?: {
+			key: string;
+			label: string;
+			icon?: ComponentType<{ className?: string }>;
+		},
+	) => void;
 }
 
 export const dataTableColumnList = <TData extends Record<string, unknown>>(
@@ -43,7 +50,10 @@ export const dataTableColumnList = <TData extends Record<string, unknown>>(
 		id: "select",
 		header: ({ table }) => (
 			<Checkbox
-				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+				checked={
+					table.getIsAllPageRowsSelected() ||
+					(table.getIsSomePageRowsSelected() && "indeterminate")
+				}
 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 				aria-label="Select all"
 				className="translate-y-[2px]"

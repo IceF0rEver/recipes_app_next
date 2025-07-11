@@ -32,7 +32,14 @@ interface RowAction<TData> {
 		label: string;
 		icon?: ComponentType<{ className?: string }>;
 	}[];
-	onAction?: (value: TData) => void;
+	onAction?: (
+		value: TData,
+		selectedKey?: {
+			key: string;
+			label: string;
+			icon?: ComponentType<{ className?: string }>;
+		},
+	) => void;
 }
 
 interface DataTableRowActionsProps<TData> {
@@ -40,11 +47,17 @@ interface DataTableRowActionsProps<TData> {
 	actions: RowAction<TData>[];
 }
 
-export function DataTableRowActions<TData>({ row, actions }: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData>({
+	row,
+	actions,
+}: DataTableRowActionsProps<TData>) {
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="flex h-8 w-8 p-0 data-[state=open]:bg-muted">
+				<Button
+					variant="ghost"
+					className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+				>
 					<MoreHorizontal />
 					<span className="sr-only">Open menu</span>
 				</Button>
@@ -69,9 +82,15 @@ export function DataTableRowActions<TData>({ row, actions }: DataTableRowActions
 								{action.separator && <DropdownMenuSeparator />}
 								<DropdownMenuSubTrigger>{action.label}</DropdownMenuSubTrigger>
 								<DropdownMenuSubContent>
-									<DropdownMenuRadioGroup value={(row.original as { role: string }).role}>
+									<DropdownMenuRadioGroup
+										value={(row.original as { role: string }).role}
+									>
 										{action.subItems?.map((item) => (
-											<DropdownMenuRadioItem key={item.key} value={item.key}>
+											<DropdownMenuRadioItem
+												key={item.key}
+												onClick={() => action.onAction?.(row.original, item)}
+												value={item.key}
+											>
 												{item.label}
 											</DropdownMenuRadioItem>
 										))}
@@ -88,10 +107,14 @@ export function DataTableRowActions<TData>({ row, actions }: DataTableRowActions
 								<DropdownMenuItem
 									onClick={() => action.onAction?.(row.original)}
 									className={
-										action.type === "delete" ? "text-destructive focus:text-destructive" : ""
+										action.type === "delete"
+											? "text-destructive focus:text-destructive"
+											: ""
 									}
 								>
-									{action.type === "delete" && <Trash2 className="text-destructive h-4 w-4" />}
+									{action.type === "delete" && (
+										<Trash2 className="text-destructive h-4 w-4" />
+									)}
 									{action.type === "edit" && <Pencil className="h-4 w-4" />}
 									{action.label}
 								</DropdownMenuItem>

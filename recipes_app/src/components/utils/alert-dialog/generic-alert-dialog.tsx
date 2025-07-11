@@ -15,14 +15,16 @@ import { useI18n } from "@/locales/client";
 interface GenericAlertDialogProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (dialogOpen: boolean) => void;
-	label?: string;
+	title: string;
+	description: string;
 	onAction: () => void;
 	isPending: boolean;
 }
 export default function GenericAlertDialog({
 	alertDialogOpen,
 	onAlertDialogOpen,
-	label = "",
+	title,
+	description,
 	onAction,
 	isPending = false,
 }: GenericAlertDialogProps) {
@@ -38,16 +40,14 @@ export default function GenericAlertDialog({
 		<AlertDialog open={alertDialogOpen}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>{t("components.utils.alertDialog.title") + label}</AlertDialogTitle>
-					<AlertDialogDescription>
-						{
-							// @ts-ignore
-							t("components.utils.alertDialog.description", { title: label })
-						}
-					</AlertDialogDescription>
+					<AlertDialogTitle>{title}</AlertDialogTitle>
+					<AlertDialogDescription>{description}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel disabled={isPending} onClick={() => onAlertDialogOpen(false)}>
+					<AlertDialogCancel
+						disabled={isPending}
+						onClick={() => onAlertDialogOpen(false)}
+					>
 						{t("button.cancel")}
 					</AlertDialogCancel>
 					<AlertDialogAction onClick={handleAction} disabled={isPending}>
@@ -56,7 +56,7 @@ export default function GenericAlertDialog({
 								<Loader2 size={16} className="animate-spin" />
 							</span>
 						) : (
-							<span>{t("button.delete")}</span>
+							<span>{t("button.submit")}</span>
 						)}
 					</AlertDialogAction>
 				</AlertDialogFooter>
