@@ -177,7 +177,12 @@
 			"users": {
 				"description": "Consultez, modifiez et gérez les rôles des utilisateurs inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin.",
 				"title": "Gestion des utilisateurs",
-				"name": "Utilisateur"
+				"name": "Utilisateur",
+				"toast": {
+					"success": " Supprimer avec succès !",
+					"error": "Une erreur s'est produite !",
+					"identicalIdError": "Impossible de ce supprimer soi-même !"
+				}
 			}
 		},
 		"table": {
@@ -278,5 +283,10 @@
 	},
 	"message": {
 		"noResult": "Pas de résultats"
+	},
+	"errors": {
+		"userBadId": "ID utilisateur requis !",
+		"unexpectedError": "Une erreur inattendue s'est produite !",
+		"APIError": "Une erreur d'API inattendue s'est produite !"
 	}
 }

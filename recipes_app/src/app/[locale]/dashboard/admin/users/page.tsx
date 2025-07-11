@@ -1,14 +1,17 @@
+"use server";
 import { headers } from "next/headers";
 import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
-import { getUsersList } from "@/lib/auth/server";
 import { getI18n } from "@/locales/server";
+import { getUsersList } from "./_components/_serveractions/actions";
 
 export default async function Page() {
 	const t = await getI18n();
 	const header = await headers();
 
 	const datasTable = getUsersList(header);
+
 	const columnsItems = [
 		{
 			key: "id",
@@ -105,8 +108,10 @@ export default async function Page() {
 	];
 
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
-			<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
-		</Suspense>
+		<ErrorBoundary fallback={<div>Something went wrong</div>}>
+			<Suspense fallback={<div>Loading...</div>}>
+				<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
+			</Suspense>
+		</ErrorBoundary>
 	);
 }

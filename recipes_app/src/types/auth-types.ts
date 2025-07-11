@@ -68,3 +68,18 @@ export interface ItemTableProps {
 	enableHiding: boolean;
 	initialStateVisibility: boolean;
 }
+
+export interface ActionItemTableProps {
+	key: string;
+	label: string;
+	type: "edit" | "delete" | "link" | "select";
+	url?: string;
+	separator?: boolean;
+	icon?: ComponentType<{ className?: string }>;
+	subItems?: {
+		key: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	onAction?: (value: unknown) => void;
+}

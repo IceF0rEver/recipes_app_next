@@ -177,7 +177,12 @@
 			"users": {
 				"description": "Consult, change and manage the roles of users registered on the platform. \nQuickly access their data, their activity and intervene if necessary.",
 				"title": "User management",
-				"name": "User"
+				"name": "User",
+				"toast": {
+					"success": " Delete successfully!",
+					"error": "An error occurred!",
+					"identicalIdError": "Impossible to delete yourself!"
+				}
 			}
 		},
 		"table": {
@@ -278,5 +283,10 @@
 	},
 	"message": {
 		"noResult": "No results"
+	},
+	"errors": {
+		"userBadId": "User ID is required",
+		"unexpectedError": "An unexpected error has occurred!",
+		"APIError": "An unexpected API error has occurred!"
 	}
 }
