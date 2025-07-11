@@ -5,6 +5,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
 import { getI18n } from "@/locales/server";
 import { getUsersList } from "./_components/_serveractions/actions";
+import ErrorFallback from "./_components/error-fallback";
+import SuspenseFallback from "./_components/suspense-fallback";
 
 export default async function Page() {
 	const t = await getI18n();
@@ -108,8 +110,8 @@ export default async function Page() {
 	];
 
 	return (
-		<ErrorBoundary fallback={<div>Something went wrong</div>}>
-			<Suspense fallback={<div>Loading...</div>}>
+		<ErrorBoundary fallback={<ErrorFallback />}>
+			<Suspense fallback={<SuspenseFallback />}>
 				<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
 			</Suspense>
 		</ErrorBoundary>

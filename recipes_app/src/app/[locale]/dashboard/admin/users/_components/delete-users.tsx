@@ -6,7 +6,7 @@ import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-di
 import { useSession } from "@/lib/auth/auth-client";
 import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
-import { type DeleteUserState, deleteUser } from "./_serveractions/actions";
+import { deleteUser, type UserState } from "./_serveractions/actions";
 
 interface DeleteUsersProps {
 	alertDialogOpen: boolean;
@@ -14,16 +14,23 @@ interface DeleteUsersProps {
 	userData: Auth | null;
 }
 
-const initialState: DeleteUserState = {
+const initialState: UserState = {
 	success: undefined,
 	error: undefined,
 	message: undefined,
 };
 
-export default function DeleteUsers({ alertDialogOpen, onAlertDialogOpen, userData }: DeleteUsersProps) {
+export default function DeleteUsers({
+	alertDialogOpen,
+	onAlertDialogOpen,
+	userData,
+}: DeleteUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
-	const [state, formAction, isPending] = useActionState(deleteUser, initialState);
+	const [state, formAction, isPending] = useActionState(
+		deleteUser,
+		initialState,
+	);
 
 	const handleDelete = () => {
 		if (userData?.id !== currentUser?.user.id) {
@@ -41,7 +48,9 @@ export default function DeleteUsers({ alertDialogOpen, onAlertDialogOpen, userDa
 
 	useEffect(() => {
 		if (state.success === true) {
-			toast.success(state.message || t("components.admin.users.toast.success"));
+			toast.success(
+				state.message || t("components.admin.users.toast.delete.success"),
+			);
 			onAlertDialogOpen(false);
 		} else if (state.success === false && state.error) {
 			toast.error(state.error || t("components.admin.users.toast.error"));
@@ -52,7 +61,8 @@ export default function DeleteUsers({ alertDialogOpen, onAlertDialogOpen, userDa
 		<GenericAlertDialog
 			alertDialogOpen={alertDialogOpen}
 			onAlertDialogOpen={onAlertDialogOpen}
-			label={t("components.table.roles.user")}
+			title={t("components.admin.users.delete.title")}
+			description={t("components.admin.users.delete.descrption")}
 			onAction={handleDelete}
 			isPending={isPending}
 		/>
