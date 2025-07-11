@@ -21,7 +21,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 			<div className="flex-1 text-sm text-muted-foreground">
 				{
 					// @ts-ignore
-					t("components.table.pagination.rowsSelected", { rowSelected: selectedCount, rowCount: totalCount })
+					t("components.table.pagination.rowsSelected", {
+						rowSelected: selectedCount,
+						rowCount: totalCount,
+					})
 				}
 			</div>
 			<div className="flex items-center space-x-6 lg:space-x-8">
@@ -46,7 +49,10 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
 				<div className="flex w-[100px] items-center justify-center text-sm font-medium">
 					{
 						// @ts-ignore
-						t("components.table.pagination.pageIndex", { thisPage: thisPage, pageCount: pageCount })
+						t("components.table.pagination.pageIndex", {
+							thisPage: thisPage,
+							pageCount: pageCount,
+						})
 					}
 				</div>
 				<div className="flex items-center space-x-2">

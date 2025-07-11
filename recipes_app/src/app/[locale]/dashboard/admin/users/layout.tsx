@@ -1,6 +1,6 @@
-import LayoutHeader from "@/components/dashboard/layout/layout-header";
-import { getI18n } from "@/locales/server";
 import type { Metadata } from "next";
+import LayoutHeader from "@/app/[locale]/dashboard/_components/layout-header";
+import { getI18n } from "@/locales/server";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getI18n();

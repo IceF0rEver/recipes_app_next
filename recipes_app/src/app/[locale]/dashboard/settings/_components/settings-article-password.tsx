@@ -1,20 +1,20 @@
 "use client";
 
-import { useI18n } from "@/locales/client";
-import { Button } from "../ui/button";
 import { useState } from "react";
 import {
 	AlertDialog,
-	AlertDialogContent,
-	AlertDialogTrigger,
 	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogDescription,
+	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import UpdatePassword from "./update-password";
+import { useI18n } from "@/locales/client";
+import { Button } from "../../../../../components/ui/button";
 import SettingsArticle from "./settings-article";
+import UpdatePassword from "./update-password";
 
 export default function SettingsArticlePassword() {
 	const t = useI18n();

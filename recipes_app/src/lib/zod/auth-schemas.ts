@@ -1,6 +1,8 @@
 import { z } from "zod";
-// biome-ignore lint: any
-export const authSchemas = (t: (...args: Parameters<(key: string, ...params: any[]) => string>) => string) => ({
+export const authSchemas = (
+	// biome-ignore lint/suspicious/noExplicitAny: more complex
+	t: (...args: Parameters<(key: string, ...params: any[]) => string>) => string,
+) => ({
 	signIn: z.object({
 		email: z.string().email(t("zod.email")),
 		password: z.string().min(6, t("zod.min.password")),
@@ -11,8 +13,16 @@ export const authSchemas = (t: (...args: Parameters<(key: string, ...params: any
 			email: z.string().email(t("zod.email")),
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
-			firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-			lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+			firstName: z
+				.string()
+				.min(1, t("zod.min.firstName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
+			lastName: z
+				.string()
+				.min(1, t("zod.min.lastName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
 			image: z.string(),
 		})
 		.refine((data) => data.password === data.passwordConfirmation, {
@@ -47,9 +57,24 @@ export const authSchemas = (t: (...args: Parameters<(key: string, ...params: any
 
 	updateUser: z.object({
 		email: z.string().email(t("zod.email")),
-		firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-		lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+		firstName: z
+			.string()
+			.min(1, t("zod.min.firstName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
+		lastName: z
+			.string()
+			.min(1, t("zod.min.lastName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
 		image: z.string(),
+	}),
+	deleteUser: z.object({
+		userId: z.string().min(1),
+	}),
+	roleUser: z.object({
+		userId: z.string().min(1),
+		role: z.enum(["user", "admin", "premium"]),
 	}),
 });
 

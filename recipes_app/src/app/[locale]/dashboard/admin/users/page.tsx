@@ -1,14 +1,19 @@
+"use server";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import UsersTable from "@/components/admin/users/users-table";
-import { getUsersList } from "@/lib/auth/server";
+import { ErrorBoundary } from "react-error-boundary";
+import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
 import { getI18n } from "@/locales/server";
+import { getUsersList } from "./_components/_serveractions/actions";
+import ErrorFallback from "./_components/error-fallback";
+import SuspenseFallback from "./_components/suspense-fallback";
 
 export default async function Page() {
 	const t = await getI18n();
 	const header = await headers();
 
 	const datasTable = getUsersList(header);
+
 	const columnsItems = [
 		{
 			key: "id",
@@ -105,8 +110,10 @@ export default async function Page() {
 	];
 
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
-			<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
-		</Suspense>
+		<ErrorBoundary fallback={<ErrorFallback />}>
+			<Suspense fallback={<SuspenseFallback />}>
+				<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
+			</Suspense>
+		</ErrorBoundary>
 	);
 }

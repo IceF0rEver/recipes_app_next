@@ -1,20 +1,20 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { z, type string } from "zod";
-import { useI18n } from "@/locales/client";
-import { useState } from "react";
 import Link from "next/link";
-import AuthCard from "@/components/auth/auth-card";
-import AuthField from "@/components/auth/auth-field";
-import AuthForm from "@/components/auth/auth-form";
-import AuthButton from "@/components/auth/auth-button";
-import AuthFooter from "@/components/auth/auth-footer";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/lib/auth/auth-client";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { type string, z } from "zod";
+import AuthButton from "@/app/[locale]/auth/_components/auth-button";
+import AuthCard from "@/app/[locale]/auth/_components/auth-card";
+import AuthField from "@/app/[locale]/auth/_components/auth-field";
+import AuthFooter from "@/app/[locale]/auth/_components/auth-footer";
+import AuthForm from "@/app/[locale]/auth/_components/auth-form";
 import { Separator } from "@/components/ui/separator";
+import { signIn } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
 
 const GoogleLabel = () => {
 	const t = useI18n();
@@ -95,7 +95,9 @@ export default function Page() {
 					setLoading(false);
 				},
 				onError: (ctx) => {
-					setErrorMessage({ betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string) });
+					setErrorMessage({
+						betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+					});
 				},
 				onSuccess: async () => {
 					router.push(`/dashboard`);

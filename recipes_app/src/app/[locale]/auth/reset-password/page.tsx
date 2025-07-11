@@ -1,19 +1,18 @@
 "use client";
 
-import AuthCard from "@/components/auth/auth-card";
-import AuthForm from "@/components/auth/auth-form";
-import { useI18n } from "@/locales/client";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { z, type string } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AuthField from "@/components/auth/auth-field";
-import AuthButton from "@/components/auth/auth-button";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { authClient } from "@/lib/auth/auth-client";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { type string, z } from "zod";
+import AuthButton from "@/app/[locale]/auth/_components/auth-button";
+import AuthCard from "@/app/[locale]/auth/_components/auth-card";
+import AuthField from "@/app/[locale]/auth/_components/auth-field";
+import AuthForm from "@/app/[locale]/auth/_components/auth-form";
+import { authClient } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
 
 export default function Page() {
 	const t = useI18n();

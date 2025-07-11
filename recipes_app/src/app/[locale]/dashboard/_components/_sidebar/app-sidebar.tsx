@@ -1,5 +1,7 @@
 "use client";
 
+import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,11 +15,9 @@ import {
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
-import { usePathname } from "next/navigation";
-import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import { NavUser } from "./nav-user";
 
 const NavUserSkeleton = () => {
 	return (

@@ -1,16 +1,16 @@
 "use client";
 
-import { useI18n } from "@/locales/client";
-import { z, type string } from "zod";
-import { useState } from "react";
-import { authClient } from "@/lib/auth/auth-client";
-import { toast } from "sonner";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AuthForm from "../auth/auth-form";
-import AuthField from "../auth/auth-field";
-import AuthButton from "../auth/auth-button";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { type string, z } from "zod";
+import { authClient } from "@/lib/auth/auth-client";
+import { authSchemas } from "@/lib/zod/auth-schemas";
+import { useI18n } from "@/locales/client";
+import AuthButton from "../../../auth/_components/auth-button";
+import AuthField from "../../../auth/_components/auth-field";
+import AuthForm from "../../../auth/_components/auth-form";
 
 interface UpdatePasswordProps {
 	onOpenChange?: (open: boolean) => void;

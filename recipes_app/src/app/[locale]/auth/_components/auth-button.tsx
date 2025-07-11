@@ -1,12 +1,12 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { signIn } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
-import { useI18n } from "@/locales/client";
+import { useEffect, useState } from "react";
 import type { string } from "zod";
+import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth/auth-client";
+import { useI18n } from "@/locales/client";
 import type { AuthButtonProps } from "@/types/auth-types";
 
 export default function AuthButton({
@@ -37,7 +37,9 @@ export default function AuthButton({
 					setLoading(false);
 				},
 				onError: (ctx) => {
-					console.error({ betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string) });
+					console.error({
+						betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+					});
 				},
 				onSuccess: async () => {
 					router.push(`/dashboard`);

@@ -1,17 +1,17 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import Account from "@/app/[locale]/dashboard/settings/_components/account";
+import Appearance from "@/app/[locale]/dashboard/settings/_components/appearance";
 import {
 	SidebarContent,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarMenu,
-	SidebarMenuItem,
 	SidebarMenuButton,
+	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useState } from "react";
 import { useI18n } from "@/locales/client";
-import Appearance from "@/components/settings/appearance";
-import Account from "@/components/settings/account";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
 	const t = useI18n();
@@ -19,8 +19,16 @@ export default function Page() {
 	const searchParams = useSearchParams();
 
 	const items = [
-		{ title: t("components.items.appearance.title"), key: "appearance", component: <Appearance /> },
-		{ title: t("components.items.account.title"), key: "account", component: <Account /> },
+		{
+			title: t("components.items.appearance.title"),
+			key: "appearance",
+			component: <Appearance />,
+		},
+		{
+			title: t("components.items.account.title"),
+			key: "account",
+			component: <Account />,
+		},
 	];
 
 	const [settingItemSelected, setSettingItemSelected] = useState<string>(

@@ -1,7 +1,13 @@
 import type { UserWithRole } from "better-auth/plugins";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentType } from "react";
-import type { Control, FieldPath, FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
+import type {
+	Control,
+	FieldPath,
+	FieldValues,
+	SubmitHandler,
+	UseFormReturn,
+} from "react-hook-form";
 import type { buttonVariants } from "@/components/ui/button";
 import type { signIn } from "@/lib/auth/auth-client";
 
@@ -67,4 +73,26 @@ export interface ItemTableProps {
 	enableSorting: boolean;
 	enableHiding: boolean;
 	initialStateVisibility: boolean;
+}
+
+export interface ActionItemTableProps {
+	key: string;
+	label: string;
+	type: "edit" | "delete" | "link" | "select";
+	url?: string;
+	separator?: boolean;
+	icon?: ComponentType<{ className?: string }>;
+	subItems?: {
+		key: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	onAction?: (
+		value: unknown,
+		selectedKey?: {
+			key: string;
+			label: string;
+			icon?: ComponentType<{ className?: string }>;
+		},
+	) => void;
 }

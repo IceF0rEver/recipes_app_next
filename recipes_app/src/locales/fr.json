@@ -1,282 +1,315 @@
 {
-	"button": {
-		"register": "Créer un compte",
-		"login": "Se connecter",
-		"google": "Google",
-		"github": "GitHub",
-		"send": "Envoyer",
-		"update": "Modifier",
-		"logOut": "Déconnexion",
-		"settings": "Paramètres",
-		"updatePassword": "Modifier votre mot de passe",
-		"cancel": "Annuler",
-		"delete": "Supprimer",
-		"edit": "Editer"
-	},
-	"heroPage": {
-		"title": {
-			"firstPart": "Gérez vos recettes avec ",
-			"secondPart": "l'aide de l’IA"
-		},
-		"description": "Recipes Master est votre tableau de bord personnel pour organiser, planifier et discuter cuisine avec un assistant intelligent.",
-		"badge": "Application privée",
-		"features": {
-			"chatbot": "Chatbot IA culinaire intégré",
-			"recipes": "Gestion intuitive des recettes",
-			"pdf": "Exportation facile en PDF"
-		}
-	},
-	"components": {
-		"utils": {
-			"selectLang": {
-				"fr": "Français",
-				"en": "Anglais",
-				"select": "Choisir une langue"
-			},
-			"sheet": {
-				"title": {
-					"edit": "Modification: ",
-					"add": "Ajout: "
-				},
-				"description": {
-					"edit": "Vous pouvez désormais modifier facilement les informations suivantes de ce/cet/cette: ",
-					"add": "Vous pouvez désormais ajouter facilement les informations suivantes de ce/cet/cette: "
-				}
-			},
-			"alertDialog": {
-				"title": "Suppression de ce/cet/cette: ",
-				"description": "Êtes-vous sûr de vouloir supprimer ce/cet/cette {title} ? Cette action est irréversible et toutes les données associées seront perdues."
-			}
-		},
-		"auth": {
-			"login": {
-				"title": "S'identifier",
-				"description": "Entrez votre informations ci-dessous pour accéder à votre compte.",
-				"orSocial": "OU CONTINUEZ AVEC"
-			},
-			"link": {
-				"forgotPassword": "Mot de passe oublié ? ",
-				"login": "Vous avez retrouvé votre mot de passe ? ",
-				"noAccount": "Vous n'avez pas de compte ? ",
-				"haveAccount": "Déjà inscrit ? "
-			},
-			"form": {
-				"email": {
-					"label": "Adresse e-mail",
-					"placeholder": "m@example.com"
-				},
-				"password": {
-					"label": "Mot de passe",
-					"placeholder": "mot de passe"
-				},
-				"image": {
-					"label": "Image de profil (optionnel)"
-				},
-				"firstName": {
-					"label": "Prénom",
-					"placeholder": "Max"
-				},
-				"lastName": {
-					"label": "Nom",
-					"placeholder": "Smith"
-				},
-				"confirmPassword": {
-					"label": "Confirmer le mot de passe",
-					"placeholder": "confirmer le mot de passe"
-				},
-				"newPassword": {
-					"placeholder": "nouveau mot de passe",
-					"label": "Nouveau mot de passe"
-				},
-				"confirmNewPassword": {
-					"label": "Confirmer le nouveau mot de passe",
-					"placeholder": "nouveau mot de passe"
-				},
-				"currentPassword": {
-					"label": "Mot de passe actuel",
-					"placeholder": "mot de passe actuel"
-				},
-				"newPasswordConfirmation": {
-					"label": "Confirmer le nouveau mot de passe",
-					"placeholder": "nouveau mot de passe"
-				}
-			},
-			"forgetPassword": {
-				"description": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
-				"title": "Mot de passe oublié ?",
-				"toast": {
-					"success": "E-mail envoyer avec succès ! "
-				}
-			},
-			"register": {
-				"title": "Créer un compte",
-				"description": "Entrez vos informations pour créer votre compte."
-			},
-			"resetPassword": {
-				"title": "Modifier votre mot de passe",
-				"description": "Entrez vos informations pour modifier votre mot de passe.",
-				"toast": {
-					"success": "Mot de passe modifier avec succès !"
-				}
-			}
-		},
-		"dashboard": {
-			"title": "Tableau de bord",
-			"description": "Accédez à votre tableau de bord Recipes Master : gérez vos recettes, utilisez l’assistant IA pour en créer de nouvelles, exportez-les en PDF, et organisez votre cuisine au quotidien facilement depuis un espace privé et sécurisé."
-		},
-		"appSideBar": {
-			"myRecipes": "Mes recettes",
-			"chatBot": "Assistant",
-			"admin": "Administration",
-			"users": "Utilisateurs",
-			"logs": "Logs"
-		},
-		"items": {
-			"account": {
-				"title": "Compte"
-			},
-			"appearance": {
-				"title": "Apparence"
-			}
-		},
-		"settings": {
-			"title": "Paramètres",
-			"description": "Gérez les paramètres et les préférences de votre compte.",
-			"items": {
-				"account": {
-					"title": "Compte",
-					"description": "Mettez à jour les paramètres de votre compte."
-				},
-				"appearance": {
-					"title": "Apparence",
-					"description": "Choisissez votre langue et thème préférés."
-				}
-			},
-			"toast": {
-				"emailSuccess": "Adresse e-mail modifier avec succès !",
-				"nameOrImageSuccess": "Prénom Nom et/ou image modifier avec succès !"
-			},
-			"form": {
-				"language": {
-					"label": "Langue",
-					"description": "Choisissez la langue que vous souhaitez utiliser."
-				},
-				"darkMode": {
-					"label": "Thème",
-					"description": "Choisissez le thème que vous souhaitez utiliser."
-				},
-				"changePassword": {
-					"label": "Changer votre mot de passe",
-					"description": "Cliquez sur ce bouton pour définir un nouveau mot de passe.",
-					"confirmTitle": "Modifier votre mot de passe",
-					"confirmDescription": "Entrez vos informations pour modifier votre mot de passe."
-				}
-			}
-		},
-		"admin": {
-			"users": {
-				"description": "Consultez, modifiez et gérez les rôles des utilisateurs inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin.",
-				"title": "Gestion des utilisateurs",
-				"name": "Utilisateur"
-			}
-		},
-		"table": {
-			"id": "Id",
-			"email": "Adresse e-mail",
-			"emailVerified": "E-mail vérifier",
-			"name": "Nom",
-			"image": "Image",
-			"role": "Rôle",
-			"banned": "Banni",
-			"banReason": "Raison du bannissement",
-			"banExpires": "Expiration du bannissement",
-			"createdAt": "Créer le",
-			"updatedAt": "Modifier le",
-			"pagination": {
-				"rowsPerPage": "Lignes par page",
-				"firstPage": "Aller à la première page",
-				"previousPage": "Aller à la page précédente",
-				"nextPage": "Aller à la page suivante",
-				"lastPage": "Aller à la dernière page",
-				"rowsSelected": "{rowSelected} sur {rowCount} ligne(s) sélectionnées",
-				"pageIndex": "Page {thisPage} sur {pageCount}"
-			},
-			"toolbar": {
-				"search": "Rechercher..."
-			},
-			"view": {
-				"label": "Affichage"
-			},
-			"roles": {
-				"user": "Utilisateur",
-				"premium": "Premium",
-				"admin": "Administrateur"
-			},
-			"faceted": {
-				"selected": "choisi",
-				"noResults": "Aucun résultat trouvé.",
-				"clearFilter": "Effacer les filtres"
-			},
-			"table": {
-				"noResults": "Aucun résultats."
-			},
-			"session": "Sessions"
-		}
-	},
-	"metaData": {
-		"defaultTitle": "Recipes Master",
-		"heroLayout": {
-			"description": "Recipes Master est une application web tout-en-un pour créer, gérer et sauvegarder vos recettes de cuisine personnelles. Utilisez l’intelligence artificielle pour générer des idées, planifier vos repas, et exporter vos recettes au format PDF.",
-			"keywords": {
-				"recipe": "recette",
-				"cooking": "cuisine",
-				"dashboard": "dashboard recettes",
-				"ai_assistant": "assistant cuisine IA",
-				"pdf_export": "export PDF recettes"
-			}
-		}
-	},
-	"zod": {
-		"min": {
-			"password": "Le mot de passe doit contenir au moins 6 caractères.",
-			"firstName": "Prénom obligatoire !",
-			"lastName": "Nom obligatoire !"
-		},
-		"password": {
-			"mismatch": "Les mots de passe ne correspondent pas !"
-		},
-		"email": "Email non valide !",
-		"space": "Aucun espace autorisé !"
-	},
-	"BASE_ERROR_CODES": {
-		"VALIDATION_ERROR": "Erreur de validation.",
-		"USER_NOT_FOUND": "Utilisateur introuvable.",
-		"FAILED_TO_CREATE_USER": "Échec de la création de l'utilisateur.",
-		"FAILED_TO_CREATE_SESSION": "Échec de la création de la session.",
-		"FAILED_TO_UPDATE_USER": "Échec de la mise à jour de l'utilisateur.",
-		"FAILED_TO_GET_SESSION": "Échec de la récupération de la session.",
-		"INVALID_PASSWORD": "Mot de passe invalide.",
-		"INVALID_EMAIL": "Adresse e-mail invalide.",
-		"INVALID_EMAIL_OR_PASSWORD": "Adresse e-mail ou mot de passe incorrect.",
-		"SOCIAL_ACCOUNT_ALREADY_LINKED": "Ce compte social est déjà lié à un utilisateur.",
-		"PROVIDER_NOT_FOUND": "Fournisseur non trouvé.",
-		"INVALID_TOKEN": "Jeton invalide.",
-		"ID_TOKEN_NOT_SUPPORTED": "Jeton d'identité non pris en charge.",
-		"FAILED_TO_GET_USER_INFO": "Impossible de récupérer les informations de l'utilisateur.",
-		"USER_EMAIL_NOT_FOUND": "Adresse e-mail de l'utilisateur introuvable.",
-		"EMAIL_NOT_VERIFIED": "Adresse e-mail non vérifiée.",
-		"PASSWORD_TOO_SHORT": "Mot de passe trop court.",
-		"PASSWORD_TOO_LONG": "Mot de passe trop long.",
-		"USER_ALREADY_EXISTS": "L'utilisateur existe déjà.",
-		"EMAIL_CAN_NOT_BE_UPDATED": "L'adresse e-mail ne peut pas être modifiée.",
-		"CREDENTIAL_ACCOUNT_NOT_FOUND": "Compte d'identification introuvable.",
-		"SESSION_EXPIRED": "Session expirée. Veuillez vous reconnecter.",
-		"FAILED_TO_UNLINK_LAST_ACCOUNT": "Impossible de dissocier le dernier compte lié.",
-		"ACCOUNT_NOT_FOUND": "Compte introuvable.",
-		"EMAIL_IS_THE_SAME": "Adresse e-mail identique.",
-		"undefined": "Une erreur inattendue est survenue !"
-	},
-	"message": {
-		"noResult": "Pas de résultats"
-	}
+  "button": {
+    "register": "Créer un compte",
+    "login": "Se connecter",
+    "google": "Google",
+    "github": "GitHub",
+    "send": "Envoyer",
+    "update": "Modifier",
+    "logOut": "Déconnexion",
+    "settings": "Paramètres",
+    "updatePassword": "Modifier votre mot de passe",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Editer",
+    "submit": "Soumettre"
+  },
+  "heroPage": {
+    "title": {
+      "firstPart": "Gérez vos recettes avec ",
+      "secondPart": "l'aide de l’IA"
+    },
+    "description": "Recipes Master est votre tableau de bord personnel pour organiser, planifier et discuter cuisine avec un assistant intelligent.",
+    "badge": "Application privée",
+    "features": {
+      "chatbot": "Chatbot IA culinaire intégré",
+      "recipes": "Gestion intuitive des recettes",
+      "pdf": "Exportation facile en PDF"
+    }
+  },
+  "components": {
+    "utils": {
+      "selectLang": {
+        "fr": "Français",
+        "en": "Anglais",
+        "select": "Choisir une langue"
+      },
+      "sheet": {
+        "title": {
+          "edit": "Modification: ",
+          "add": "Ajout: "
+        },
+        "description": {
+          "edit": "Vous pouvez désormais modifier facilement les informations suivantes de ce/cet/cette: ",
+          "add": "Vous pouvez désormais ajouter facilement les informations suivantes de ce/cet/cette: "
+        }
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "S'identifier",
+        "description": "Entrez votre informations ci-dessous pour accéder à votre compte.",
+        "orSocial": "OU CONTINUEZ AVEC"
+      },
+      "link": {
+        "forgotPassword": "Mot de passe oublié ? ",
+        "login": "Vous avez retrouvé votre mot de passe ? ",
+        "noAccount": "Vous n'avez pas de compte ? ",
+        "haveAccount": "Déjà inscrit ? "
+      },
+      "form": {
+        "email": {
+          "label": "Adresse e-mail",
+          "placeholder": "m@example.com"
+        },
+        "password": {
+          "label": "Mot de passe",
+          "placeholder": "mot de passe"
+        },
+        "image": {
+          "label": "Image de profil (optionnel)"
+        },
+        "firstName": {
+          "label": "Prénom",
+          "placeholder": "Max"
+        },
+        "lastName": {
+          "label": "Nom",
+          "placeholder": "Smith"
+        },
+        "confirmPassword": {
+          "label": "Confirmer le mot de passe",
+          "placeholder": "confirmer le mot de passe"
+        },
+        "newPassword": {
+          "placeholder": "nouveau mot de passe",
+          "label": "Nouveau mot de passe"
+        },
+        "confirmNewPassword": {
+          "label": "Confirmer le nouveau mot de passe",
+          "placeholder": "nouveau mot de passe"
+        },
+        "currentPassword": {
+          "label": "Mot de passe actuel",
+          "placeholder": "mot de passe actuel"
+        },
+        "newPasswordConfirmation": {
+          "label": "Confirmer le nouveau mot de passe",
+          "placeholder": "nouveau mot de passe"
+        }
+      },
+      "forgetPassword": {
+        "description": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+        "title": "Mot de passe oublié ?",
+        "toast": {
+          "success": "E-mail envoyer avec succès ! "
+        }
+      },
+      "register": {
+        "title": "Créer un compte",
+        "description": "Entrez vos informations pour créer votre compte."
+      },
+      "resetPassword": {
+        "title": "Modifier votre mot de passe",
+        "description": "Entrez vos informations pour modifier votre mot de passe.",
+        "toast": {
+          "success": "Mot de passe modifier avec succès !"
+        }
+      }
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "description": "Accédez à votre tableau de bord Recipes Master : gérez vos recettes, utilisez l’assistant IA pour en créer de nouvelles, exportez-les en PDF, et organisez votre cuisine au quotidien facilement depuis un espace privé et sécurisé."
+    },
+    "appSideBar": {
+      "myRecipes": "Mes recettes",
+      "chatBot": "Assistant",
+      "admin": "Administration",
+      "users": "Utilisateurs",
+      "logs": "Logs"
+    },
+    "items": {
+      "account": {
+        "title": "Compte"
+      },
+      "appearance": {
+        "title": "Apparence"
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "Gérez les paramètres et les préférences de votre compte.",
+      "items": {
+        "account": {
+          "title": "Compte",
+          "description": "Mettez à jour les paramètres de votre compte."
+        },
+        "appearance": {
+          "title": "Apparence",
+          "description": "Choisissez votre langue et thème préférés."
+        }
+      },
+      "toast": {
+        "emailSuccess": "Adresse e-mail modifier avec succès !",
+        "nameOrImageSuccess": "Prénom Nom et/ou image modifier avec succès !"
+      },
+      "form": {
+        "language": {
+          "label": "Langue",
+          "description": "Choisissez la langue que vous souhaitez utiliser."
+        },
+        "darkMode": {
+          "label": "Thème",
+          "description": "Choisissez le thème que vous souhaitez utiliser."
+        },
+        "changePassword": {
+          "label": "Changer votre mot de passe",
+          "description": "Cliquez sur ce bouton pour définir un nouveau mot de passe.",
+          "confirmTitle": "Modifier votre mot de passe",
+          "confirmDescription": "Entrez vos informations pour modifier votre mot de passe."
+        }
+      }
+    },
+    "admin": {
+      "users": {
+        "description": "Consultez, modifiez et gérez les rôles des utilisateurs inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin.",
+        "title": "Gestion des utilisateurs",
+        "name": "Utilisateur",
+        "toast": {
+          "delete": {
+            "success": " Supprimer avec succès !"
+          },
+          "error": "Une erreur s'est produite !",
+          "identicalIdError": "Impossible de ce modifier/supprimer soi-même !",
+          "role": {
+            "success": "Rôle modifier avec succès !"
+          }
+        },
+        "error": {
+          "fallback": {
+            "title": "Erreur de chargement",
+            "description": "Impossible de charger les informations demandées !",
+            "reload": "Réessayer"
+          }
+        },
+        "suspense": {
+          "fallback": {
+            "title": "Chargement...",
+            "description": "Chargement des informations demandées !"
+          }
+        },
+        "delete": {
+          "title": "Suppression d'un utilisateur",
+          "descrption": "Êtes-vous sûr de vouloir supprimer cette utilisateur ? Cette action est irréversible et toutes les données associées seront perdues."
+        },
+        "role": {
+          "title": "Modification du rôle de l'utilisateur suivant sûr : ",
+          "description": "Êtes-vous sûr de vouloir modifier le rôle de cette utilisateur ? "
+        }
+      }
+    },
+    "table": {
+      "id": "Id",
+      "email": "Adresse e-mail",
+      "emailVerified": "E-mail vérifier",
+      "name": "Nom",
+      "image": "Image",
+      "role": "Rôle",
+      "banned": "Banni",
+      "banReason": "Raison du bannissement",
+      "banExpires": "Expiration du bannissement",
+      "createdAt": "Créer le",
+      "updatedAt": "Modifier le",
+      "pagination": {
+        "rowsPerPage": "Lignes par page",
+        "firstPage": "Aller à la première page",
+        "previousPage": "Aller à la page précédente",
+        "nextPage": "Aller à la page suivante",
+        "lastPage": "Aller à la dernière page",
+        "rowsSelected": "{rowSelected} sur {rowCount} ligne(s) sélectionnées",
+        "pageIndex": "Page {thisPage} sur {pageCount}"
+      },
+      "toolbar": {
+        "search": "Rechercher..."
+      },
+      "view": {
+        "label": "Affichage"
+      },
+      "roles": {
+        "user": "Utilisateur",
+        "premium": "Premium",
+        "admin": "Administrateur"
+      },
+      "faceted": {
+        "selected": "choisi",
+        "noResults": "Aucun résultat trouvé.",
+        "clearFilter": "Effacer les filtres"
+      },
+      "table": {
+        "noResults": "Aucun résultats."
+      },
+      "session": "Sessions"
+    }
+  },
+  "metaData": {
+    "defaultTitle": "Recipes Master",
+    "heroLayout": {
+      "description": "Recipes Master est une application web tout-en-un pour créer, gérer et sauvegarder vos recettes de cuisine personnelles. Utilisez l’intelligence artificielle pour générer des idées, planifier vos repas, et exporter vos recettes au format PDF.",
+      "keywords": {
+        "recipe": "recette",
+        "cooking": "cuisine",
+        "dashboard": "dashboard recettes",
+        "ai_assistant": "assistant cuisine IA",
+        "pdf_export": "export PDF recettes"
+      }
+    }
+  },
+  "zod": {
+    "min": {
+      "password": "Le mot de passe doit contenir au moins 6 caractères.",
+      "firstName": "Prénom obligatoire !",
+      "lastName": "Nom obligatoire !"
+    },
+    "password": {
+      "mismatch": "Les mots de passe ne correspondent pas !"
+    },
+    "email": "Email non valide !",
+    "space": "Aucun espace autorisé !"
+  },
+  "BASE_ERROR_CODES": {
+    "VALIDATION_ERROR": "Erreur de validation.",
+    "USER_NOT_FOUND": "Utilisateur introuvable.",
+    "FAILED_TO_CREATE_USER": "Échec de la création de l'utilisateur.",
+    "FAILED_TO_CREATE_SESSION": "Échec de la création de la session.",
+    "FAILED_TO_UPDATE_USER": "Échec de la mise à jour de l'utilisateur.",
+    "FAILED_TO_GET_SESSION": "Échec de la récupération de la session.",
+    "INVALID_PASSWORD": "Mot de passe invalide.",
+    "INVALID_EMAIL": "Adresse e-mail invalide.",
+    "INVALID_EMAIL_OR_PASSWORD": "Adresse e-mail ou mot de passe incorrect.",
+    "SOCIAL_ACCOUNT_ALREADY_LINKED": "Ce compte social est déjà lié à un utilisateur.",
+    "PROVIDER_NOT_FOUND": "Fournisseur non trouvé.",
+    "INVALID_TOKEN": "Jeton invalide.",
+    "ID_TOKEN_NOT_SUPPORTED": "Jeton d'identité non pris en charge.",
+    "FAILED_TO_GET_USER_INFO": "Impossible de récupérer les informations de l'utilisateur.",
+    "USER_EMAIL_NOT_FOUND": "Adresse e-mail de l'utilisateur introuvable.",
+    "EMAIL_NOT_VERIFIED": "Adresse e-mail non vérifiée.",
+    "PASSWORD_TOO_SHORT": "Mot de passe trop court.",
+    "PASSWORD_TOO_LONG": "Mot de passe trop long.",
+    "USER_ALREADY_EXISTS": "L'utilisateur existe déjà.",
+    "EMAIL_CAN_NOT_BE_UPDATED": "L'adresse e-mail ne peut pas être modifiée.",
+    "CREDENTIAL_ACCOUNT_NOT_FOUND": "Compte d'identification introuvable.",
+    "SESSION_EXPIRED": "Session expirée. Veuillez vous reconnecter.",
+    "FAILED_TO_UNLINK_LAST_ACCOUNT": "Impossible de dissocier le dernier compte lié.",
+    "ACCOUNT_NOT_FOUND": "Compte introuvable.",
+    "EMAIL_IS_THE_SAME": "Adresse e-mail identique.",
+    "undefined": "Une erreur inattendue est survenue !"
+  },
+  "message": {
+    "noResult": "Pas de résultats"
+  },
+  "errors": {
+    "userBadId": "ID utilisateur requis !",
+    "unexpectedError": "Une erreur inattendue s'est produite !",
+    "APIError": "Une erreur d'API inattendue s'est produite !"
+  }
 }

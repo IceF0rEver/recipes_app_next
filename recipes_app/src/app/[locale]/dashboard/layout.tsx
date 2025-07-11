@@ -1,8 +1,5 @@
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import type { Metadata } from "next";
-import { getI18n } from "@/locales/server";
-import { Separator } from "@/components/ui/separator";
+import { AppSidebar } from "@/app/[locale]/dashboard/_components/_sidebar/app-sidebar";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -11,6 +8,9 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { getI18n } from "@/locales/server";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getI18n();
