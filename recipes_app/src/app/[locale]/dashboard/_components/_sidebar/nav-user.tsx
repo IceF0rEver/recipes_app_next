@@ -13,12 +13,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
-	useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 
@@ -49,9 +44,7 @@ export function NavUser({
 						<SidebarMenuButton variant={"outline"} size="lg">
 							<Avatar className="h-8 w-8 rounded-lg">
 								<AvatarImage src={user.avatar} alt={user.name} />
-								<AvatarFallback className="rounded-lg bg-primary">
-									CN
-								</AvatarFallback>
+								<AvatarFallback className="rounded-lg bg-primary">CN</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">{user.name}</span>
