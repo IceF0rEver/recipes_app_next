@@ -1,19 +1,44 @@
 "use client";
 
 import type { Column, ColumnDef, Row } from "@tanstack/react-table";
-
+import type { ComponentType } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { ItemTableProps } from "@/types/auth-types";
 import { DataTableColumnHeader } from "./data-table-columns-header";
 import { DataTableRowActions } from "./data-table-row-action";
 
-export const dataTableColumnList = <T extends object>(
+interface ItemTableProps {
+	key: string;
+	value: string;
+	subItems?: {
+		value: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	enableSorting: boolean;
+	enableHiding: boolean;
+	initialStateVisibility: boolean;
+}
+
+interface ActionItemTableProps<TData> {
+	key: string;
+	label: string;
+	type: "edit" | "delete" | "link" | "select";
+	url?: string;
+	separator?: boolean;
+	icon?: ComponentType<{ className?: string }>;
+	subItems?: {
+		key: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	onAction?: (value: TData) => void;
+}
+
+export const dataTableColumnList = <TData extends Record<string, unknown>>(
 	items: ItemTableProps[],
-	onEdit: (value?: T) => void,
-	onDelete: (value?: T) => void,
-	links?: { key: string; label: string; url: string }[],
-): ColumnDef<T>[] => [
+	actions: ActionItemTableProps<TData>[],
+): ColumnDef<TData>[] => [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -38,10 +63,10 @@ export const dataTableColumnList = <T extends object>(
 
 	...items.map((item: ItemTableProps) => ({
 		accessorKey: item.key,
-		header: ({ column }: { column: Column<T, unknown> }) => (
+		header: ({ column }: { column: Column<TData, unknown> }) => (
 			<DataTableColumnHeader column={column} title={item.value} />
 		),
-		cell: ({ row }: { row: Row<T> }) => {
+		cell: ({ row }: { row: Row<TData> }) => {
 			if (item.subItems && item.subItems.length > 0) {
 				const cellValue = row.getValue(item.key);
 				const matched = item.subItems?.find((sub) => sub.value === cellValue);
@@ -68,6 +93,6 @@ export const dataTableColumnList = <T extends object>(
 
 	{
 		id: "actions",
-		cell: ({ row }) => <DataTableRowActions row={row} onEdit={onEdit} onDelete={onDelete} links={links} />,
+		cell: ({ row }) => <DataTableRowActions row={row} actions={actions} />,
 	},
 ];

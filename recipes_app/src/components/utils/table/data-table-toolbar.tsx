@@ -2,14 +2,12 @@
 
 import type { Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
-
+import { type ComponentType, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { useI18n } from "@/locales/client";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { DataTableViewOptions } from "./data-table-view-options";
-import { useI18n } from "@/locales/client";
-import { useMemo, type ComponentType } from "react";
 
 interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
