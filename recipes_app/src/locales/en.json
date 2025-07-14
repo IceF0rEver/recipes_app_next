@@ -12,7 +12,12 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "submit": "Submit"
+    "submit": "Submit",
+    "ban": "Banishment",
+    "choice": "Choose",
+    "no": "No",
+    "yes": "Yes",
+    "unban": "Unban"
   },
   "heroPage": {
     "title": {
@@ -33,16 +38,6 @@
         "fr": "French",
         "en": "English",
         "select": "Choose a language"
-      },
-      "sheet": {
-        "title": {
-          "edit": "Modification: ",
-          "add": "Addition:"
-        },
-        "description": {
-          "edit": "You can now easily modify the following information: ",
-          "add": "You can now easily add the following information:"
-        }
       }
     },
     "auth": {
@@ -183,6 +178,12 @@
           "identicalIdError": "Impossible to modify/delete yourself!",
           "role": {
             "success": "Role modify successfully!"
+          },
+          "ban": {
+            "success": "User successfully banished!"
+          },
+          "unban": {
+            "success": "User successfully unban!"
           }
         },
         "error": {
@@ -205,6 +206,27 @@
         "role": {
           "title": "Changing the role of the following user: ",
           "description": "Are you sure you want to modify the role of this user?"
+        },
+        "ban": {
+          "title": "Banning management",
+          "description": "This panel allows you to consult, ban or debannate users. Define the duration, the reason for banishment and apply moderation actions with ease.",
+          "duration": {
+            "permanent": "Permanent",
+            "oneHour": "1 hour",
+            "threeHours": "3 hours",
+            "twelveHours": "12 hours",
+            "oneDay": "1 day",
+            "sevenDays": "7 days",
+            "oneMonth": "1 month"
+          }
+        },
+        "form": {
+          "banReason": {
+            "label": "Reason for banishment"
+          },
+          "banExpires": {
+            "label": "Banning duration"
+          }
         }
       }
     },
@@ -268,7 +290,9 @@
     "min": {
       "password": "The password must contain at least 6 characters.",
       "firstName": "Compulsory first name!",
-      "lastName": "Compulsory name!"
+      "lastName": "Compulsory name!",
+      "banReason": "Reason for compulsory banishment!",
+      "banExpires": "Mandatory ban duration!"
     },
     "password": {
       "mismatch": "Passwords do not match!"
@@ -302,7 +326,8 @@
     "FAILED_TO_UNLINK_LAST_ACCOUNT": "Cannot unlink the last connected account.",
     "ACCOUNT_NOT_FOUND": "Account not found.",
     "EMAIL_IS_THE_SAME": "Same Email address.",
-    "undefined": "An unexpected error has occurred!"
+    "undefined": "An unexpected error has occurred!",
+    "BANNED_USER": "User ban!"
   },
   "message": {
     "noResult": "No results"
@@ -310,6 +335,7 @@
   "errors": {
     "userBadId": "User ID is required",
     "unexpectedError": "An unexpected error has occurred!",
-    "APIError": "An unexpected API error has occurred!"
+    "APIError": "An unexpected API error has occurred!",
+    "validatedData": "Error in data validation!"
   }
 }

@@ -12,7 +12,12 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "edit": "Editer",
-    "submit": "Soumettre"
+    "submit": "Soumettre",
+    "ban": "Bannissement",
+    "choice": "Choisir",
+    "no": "Non",
+    "yes": "Oui",
+    "unban": "Débannir"
   },
   "heroPage": {
     "title": {
@@ -33,16 +38,6 @@
         "fr": "Français",
         "en": "Anglais",
         "select": "Choisir une langue"
-      },
-      "sheet": {
-        "title": {
-          "edit": "Modification: ",
-          "add": "Ajout: "
-        },
-        "description": {
-          "edit": "Vous pouvez désormais modifier facilement les informations suivantes de ce/cet/cette: ",
-          "add": "Vous pouvez désormais ajouter facilement les informations suivantes de ce/cet/cette: "
-        }
       }
     },
     "auth": {
@@ -183,6 +178,12 @@
           "identicalIdError": "Impossible de ce modifier/supprimer soi-même !",
           "role": {
             "success": "Rôle modifier avec succès !"
+          },
+          "ban": {
+            "success": "Utilisateur banni avec succès !"
+          },
+          "unban": {
+            "success": "Utilisateur débanni avec succès!"
           }
         },
         "error": {
@@ -205,6 +206,27 @@
         "role": {
           "title": "Modification du rôle de l'utilisateur suivant sûr : ",
           "description": "Êtes-vous sûr de vouloir modifier le rôle de cette utilisateur ? "
+        },
+        "ban": {
+          "title": "Gestion des bannissements",
+          "description": "Ce panneau vous permet de consulter, bannir ou débannir des utilisateurs. Définissez la durée, le motif du bannissement et appliquez les actions de modération en toute simplicité.",
+          "duration": {
+            "permanent": "Permanent",
+            "oneHour": "1 heure",
+            "threeHours": "3 heures",
+            "twelveHours": "12 heures",
+            "oneDay": "1 jour",
+            "sevenDays": "7 jours",
+            "oneMonth": "1 mois"
+          }
+        },
+        "form": {
+          "banReason": {
+            "label": "Raison du bannissement"
+          },
+          "banExpires": {
+            "label": "Durée du bannissement"
+          }
         }
       }
     },
@@ -268,7 +290,9 @@
     "min": {
       "password": "Le mot de passe doit contenir au moins 6 caractères.",
       "firstName": "Prénom obligatoire !",
-      "lastName": "Nom obligatoire !"
+      "lastName": "Nom obligatoire !",
+      "banReason": "Raison du bannissement obligatoire !",
+      "banExpires": "Durée du bannissement obligatoire !"
     },
     "password": {
       "mismatch": "Les mots de passe ne correspondent pas !"
@@ -302,7 +326,8 @@
     "FAILED_TO_UNLINK_LAST_ACCOUNT": "Impossible de dissocier le dernier compte lié.",
     "ACCOUNT_NOT_FOUND": "Compte introuvable.",
     "EMAIL_IS_THE_SAME": "Adresse e-mail identique.",
-    "undefined": "Une erreur inattendue est survenue !"
+    "undefined": "Une erreur inattendue est survenue !",
+    "BANNED_USER": "Utilisateur banni !"
   },
   "message": {
     "noResult": "Pas de résultats"
@@ -310,6 +335,7 @@
   "errors": {
     "userBadId": "ID utilisateur requis !",
     "unexpectedError": "Une erreur inattendue s'est produite !",
-    "APIError": "Une erreur d'API inattendue s'est produite !"
+    "APIError": "Une erreur d'API inattendue s'est produite !",
+    "validatedData": "Erreur dans la validation des données !"
   }
 }

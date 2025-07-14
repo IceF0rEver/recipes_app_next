@@ -6,32 +6,34 @@ import { dataTableColumnList } from "@/components/utils/table/data-table-columns
 import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import type { TableProps } from "@/types/auth-types";
+import BanUsers from "./ban-users";
 import DeleteUsers from "./delete-users";
-// import ManageUsers from "./manage-users";
 import RoleUsers from "./role-users";
 
-type ActionType = "edit" | "delete" | "link" | "select";
+type ActionType = "sheet" | "delete" | "link" | "select";
+type RoleType = "user" | "admin" | "premium";
+
+interface Role {
+	key: string;
+	label: string;
+	icon?: ComponentType<{ className?: string }>;
+}
 
 export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 	const t = useI18n();
-	// const [openSheet, setOpenSheet] = useState<boolean>(false);
-	// const [sheetType, setSheetType] = useState<"edit" | "add">("add");
+	const [openSheet, setOpenSheet] = useState<boolean>(false);
 	const [openAlertDialogDelete, setAlertOpenDialogDelete] =
 		useState<boolean>(false);
 	const [openAlertDialogRole, setAlertOpenDialogRole] =
 		useState<boolean>(false);
 	const [selectedUser, setSelectedUser] = useState<Auth | null>(null);
-	const [selectedKey, setSelectedKey] = useState<{
-		key: string;
-		label: string;
-		icon?: ComponentType<{ className?: string }>;
-	} | null>(null);
+	const [selectedKey, setSelectedKey] = useState<Role | null>(null);
 
 	const usersList = use(datasTable);
 	const users =
 		usersList.users.map((user) => ({
 			...user,
-			role: user.role as "user" | "admin" | "premium",
+			role: user.role as RoleType,
 			banExpires: user.banExpires
 				? new Date(user.banExpires).toLocaleString()
 				: "",
@@ -41,20 +43,19 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 
 	const actionsItems = [
 		{
-			key: "edit",
-			label: t("button.edit"),
-			type: "edit" as ActionType,
-			onAction: useCallback((data: Auth) => {
-				// setOpenSheet(true);
-				// setSheetType("edit");
-				setSelectedUser(data);
-			}, []),
-		},
-		{
 			key: "session",
 			label: t("components.table.session"),
 			url: "/session",
 			type: "link" as ActionType,
+		},
+		{
+			key: "ban",
+			label: t("button.ban"),
+			type: "sheet" as ActionType,
+			onAction: useCallback((data: Auth) => {
+				setOpenSheet(true);
+				setSelectedUser(data);
+			}, []),
 			separator: true,
 		},
 		{
@@ -66,23 +67,13 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 				{ key: "user", label: t("components.table.roles.user") },
 				{ key: "premium", label: t("components.table.roles.premium") },
 			],
-			onAction: useCallback(
-				(
-					data: Auth,
-					role?: {
-						key: string;
-						label: string;
-						icon?: ComponentType<{ className?: string }>;
-					},
-				) => {
-					setAlertOpenDialogRole(true);
-					setSelectedUser(data);
-					if (role) {
-						setSelectedKey(role);
-					}
-				},
-				[],
-			),
+			onAction: useCallback((data: Auth, role?: Role) => {
+				setAlertOpenDialogRole(true);
+				setSelectedUser(data);
+				if (role) {
+					setSelectedKey(role);
+				}
+			}, []),
 		},
 		{
 			key: "delete",
@@ -101,7 +92,11 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 	return (
 		<div>
 			<DataTable columns={columns} data={users} />
-			{/* <ManageUsers sheetOpen={openSheet} onSheetOpen={setOpenSheet} type={sheetType} userData={selectedUser} /> */}
+			<BanUsers
+				sheetOpen={openSheet}
+				onSheetOpen={setOpenSheet}
+				userData={selectedUser}
+			/>
 			<DeleteUsers
 				alertDialogOpen={openAlertDialogDelete}
 				onAlertDialogOpen={setAlertOpenDialogDelete}
