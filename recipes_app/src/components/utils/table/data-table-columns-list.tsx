@@ -4,6 +4,7 @@ import type { Column, ColumnDef, Row } from "@tanstack/react-table";
 import type { ComponentType } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useI18n } from "@/locales/client";
 import { DataTableColumnHeader } from "./data-table-columns-header";
 import { DataTableRowActions } from "./data-table-row-action";
 
@@ -23,7 +24,7 @@ interface ItemTableProps {
 interface ActionItemTableProps<TData> {
 	key: string;
 	label: string;
-	type: "edit" | "delete" | "link" | "select";
+	type: "sheet" | "delete" | "link" | "select";
 	url?: string;
 	separator?: boolean;
 	icon?: ComponentType<{ className?: string }>;
@@ -77,10 +78,10 @@ export const dataTableColumnList = <TData extends Record<string, unknown>>(
 			<DataTableColumnHeader column={column} title={item.value} />
 		),
 		cell: ({ row }: { row: Row<TData> }) => {
+			const t = useI18n();
 			if (item.subItems && item.subItems.length > 0) {
 				const cellValue = row.getValue(item.key);
 				const matched = item.subItems?.find((sub) => sub.value === cellValue);
-
 				if (!matched) return null;
 
 				return (
@@ -88,6 +89,12 @@ export const dataTableColumnList = <TData extends Record<string, unknown>>(
 						<Badge variant={"outline"}>{matched.label}</Badge>
 					</div>
 				);
+			} else if (typeof row.getValue(item.key) === "boolean") {
+				if (row.getValue(item.key) === true) {
+					return <div>{t("button.yes")}</div>;
+				} else {
+					return <div>{t("button.no")}</div>;
+				}
 			}
 
 			return <div>{row.getValue(item.key)}</div>;
