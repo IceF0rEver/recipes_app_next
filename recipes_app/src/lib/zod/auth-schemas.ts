@@ -76,6 +76,14 @@ export const authSchemas = (
 		userId: z.string().min(1),
 		role: z.enum(["user", "admin", "premium"]),
 	}),
+	banUser: z.object({
+		userId: z.string().min(1),
+		banReason: z.string().min(1, t("zod.min.banReason")),
+		banExpires: z.string().min(1, t("zod.min.banExpires")),
+	}),
+	unBanUser: z.object({
+		userId: z.string().min(1),
+	}),
 });
 
 export const authSchema = z.object({

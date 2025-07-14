@@ -11,17 +11,19 @@ import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-di
 import { useSession } from "@/lib/auth/auth-client";
 import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
-import { roleUser, type UserState } from "./_serveractions/actions";
+import { type UserState, updateRoleUser } from "./_serveractions/actions";
+
+interface Role {
+	key: string;
+	label: string;
+	icon?: ComponentType<{ className?: string }>;
+}
 
 interface RoleUsersProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (alertDialogOpen: boolean) => void;
 	userData: Auth | null;
-	selectedKey: {
-		key: string;
-		label: string;
-		icon?: ComponentType<{ className?: string }>;
-	} | null;
+	selectedKey: Role | null;
 }
 
 const initialState: UserState = {
@@ -38,7 +40,10 @@ export default function RoleUsers({
 }: RoleUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
-	const [state, formAction, isPending] = useActionState(roleUser, initialState);
+	const [state, formAction, isPending] = useActionState(
+		updateRoleUser,
+		initialState,
+	);
 
 	const handleSetRole = () => {
 		if (userData?.id !== currentUser?.user.id) {

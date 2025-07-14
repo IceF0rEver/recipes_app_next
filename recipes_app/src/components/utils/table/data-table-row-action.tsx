@@ -1,7 +1,7 @@
 "use client";
 
 import type { Row } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,13 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type ActionType = "edit" | "delete" | "link" | "select";
+type ActionType = "sheet" | "delete" | "link" | "select";
+
+interface SubItems {
+	key: string;
+	label: string;
+	icon?: ComponentType<{ className?: string }>;
+}
 
 interface RowAction<TData> {
 	key: string;
@@ -27,19 +33,8 @@ interface RowAction<TData> {
 	url?: string;
 	separator?: boolean;
 	icon?: ComponentType<{ className?: string }>;
-	subItems?: {
-		key: string;
-		label: string;
-		icon?: ComponentType<{ className?: string }>;
-	}[];
-	onAction?: (
-		value: TData,
-		selectedKey?: {
-			key: string;
-			label: string;
-			icon?: ComponentType<{ className?: string }>;
-		},
-	) => void;
+	subItems?: SubItems[];
+	onAction?: (value: TData, selectedKey?: SubItems) => void;
 }
 
 interface DataTableRowActionsProps<TData> {
@@ -100,7 +95,7 @@ export function DataTableRowActions<TData>({
 						);
 					}
 
-					if (action.type === "edit" || action.type === "delete") {
+					if (action.type === "sheet" || action.type === "delete") {
 						return (
 							<div key={action.key}>
 								{action.separator && <DropdownMenuSeparator />}
@@ -115,7 +110,6 @@ export function DataTableRowActions<TData>({
 									{action.type === "delete" && (
 										<Trash2 className="text-destructive h-4 w-4" />
 									)}
-									{action.type === "edit" && <Pencil className="h-4 w-4" />}
 									{action.label}
 								</DropdownMenuItem>
 							</div>

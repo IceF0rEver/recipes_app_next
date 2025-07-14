@@ -75,6 +75,12 @@ export interface ItemTableProps {
 	initialStateVisibility: boolean;
 }
 
+interface subItemsTable {
+	key: string;
+	label: string;
+	icon?: ComponentType<{ className?: string }>;
+}
+
 export interface ActionItemTableProps {
 	key: string;
 	label: string;
@@ -82,17 +88,6 @@ export interface ActionItemTableProps {
 	url?: string;
 	separator?: boolean;
 	icon?: ComponentType<{ className?: string }>;
-	subItems?: {
-		key: string;
-		label: string;
-		icon?: ComponentType<{ className?: string }>;
-	}[];
-	onAction?: (
-		value: unknown,
-		selectedKey?: {
-			key: string;
-			label: string;
-			icon?: ComponentType<{ className?: string }>;
-		},
-	) => void;
+	subItems?: subItemsTable[];
+	onAction?: (value: unknown, selectedKey?: subItemsTable) => void;
 }

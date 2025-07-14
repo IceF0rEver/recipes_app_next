@@ -124,7 +124,7 @@ export async function deleteUser(
 	}
 }
 
-export async function roleUser(
+export async function updateRoleUser(
 	_prevState: UserState,
 	formData: FormData,
 ): Promise<UserState> {
@@ -153,6 +153,132 @@ export async function roleUser(
 				body: {
 					userId: userId,
 					role: role,
+				},
+			});
+			if (result) {
+				revalidatePath("[locale]/dashboard/admin/users", "page");
+
+				return {
+					success: true,
+				};
+			} else {
+				return {
+					success: false,
+				};
+			}
+		} else {
+			return {
+				success: false,
+			};
+		}
+	} catch (error) {
+		if (error instanceof APIError) {
+			console.error(error);
+			return {
+				success: false,
+				error: t("errors.APIError"),
+			};
+		} else {
+			console.error(error);
+			return {
+				success: false,
+				error: t("errors.unexpectedError"),
+			};
+		}
+	}
+}
+
+export async function banUser(
+	_prevState: UserState,
+	formData: FormData,
+): Promise<UserState> {
+	const t = await getI18n();
+	const banUserSchema = authSchemas(t).banUser;
+	const currentUser = await getUser();
+
+	try {
+		const validatedData = banUserSchema.safeParse({
+			userId: formData.get("userId"),
+			banReason: formData.get("banReason"),
+			banExpires: formData.get("banExpires"),
+		});
+
+		if (!validatedData.success) {
+			console.error(validatedData.error);
+			return {
+				success: false,
+				error: t("errors.validatedData"),
+			};
+		}
+		const { userId, banReason, banExpires } = validatedData.data;
+		if (userId !== currentUser?.id) {
+			const result = await auth.api.banUser({
+				headers: await headers(),
+				body: {
+					userId: userId,
+					banReason: banReason,
+					banExpiresIn: banExpires === "-1" ? undefined : Number(banExpires),
+				},
+			});
+			if (result) {
+				revalidatePath("[locale]/dashboard/admin/users", "page");
+
+				return {
+					success: true,
+				};
+			} else {
+				return {
+					success: false,
+				};
+			}
+		} else {
+			return {
+				success: false,
+			};
+		}
+	} catch (error) {
+		if (error instanceof APIError) {
+			console.error(error);
+			return {
+				success: false,
+				error: t("errors.APIError"),
+			};
+		} else {
+			console.error(error);
+			return {
+				success: false,
+				error: t("errors.unexpectedError"),
+			};
+		}
+	}
+}
+
+export async function unBanUser(
+	_prevState: UserState,
+	formData: FormData,
+): Promise<UserState> {
+	const t = await getI18n();
+	const unBanUserSchema = authSchemas(t).unBanUser;
+	const currentUser = await getUser();
+
+	try {
+		const validatedData = unBanUserSchema.safeParse({
+			userId: formData.get("userId"),
+		});
+
+		if (!validatedData.success) {
+			console.error(validatedData.error);
+			return {
+				success: false,
+				error: t("errors.validatedData"),
+			};
+		}
+		const { userId } = validatedData.data;
+		if (userId !== currentUser?.id) {
+			const result = await auth.api.unbanUser({
+				headers: await headers(),
+				body: {
+					userId: userId,
 				},
 			});
 			if (result) {
