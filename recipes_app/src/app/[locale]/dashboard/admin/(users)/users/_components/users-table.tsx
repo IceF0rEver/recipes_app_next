@@ -4,7 +4,6 @@ import type { UserWithRole } from "better-auth/plugins";
 import { type ComponentType, use, useCallback, useState } from "react";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
-// import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import type { UsersTableProps } from "@/types/users-types";
 import BanUsers from "./ban-users";
@@ -12,7 +11,6 @@ import DeleteUsers from "./delete-users";
 import RoleUsers from "./role-users";
 
 type ActionType = "sheet" | "delete" | "link" | "select";
-type RoleType = "user" | "admin" | "premium";
 
 interface Role {
 	key: string;
