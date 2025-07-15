@@ -45,7 +45,7 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 		{
 			key: "session",
 			label: t("components.table.session"),
-			url: "/session",
+			url: "/sessions",
 			type: "link" as ActionType,
 		},
 		{

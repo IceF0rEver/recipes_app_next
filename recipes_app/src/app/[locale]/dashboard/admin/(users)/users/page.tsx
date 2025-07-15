@@ -2,7 +2,7 @@
 import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
+import UsersTable from "@/app/[locale]/dashboard/admin/(users)/users/_components/users-table";
 import { getI18n } from "@/locales/server";
 import { getUsersList } from "./_components/_serveractions/actions";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: error name
