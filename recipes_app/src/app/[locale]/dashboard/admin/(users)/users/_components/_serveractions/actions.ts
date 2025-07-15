@@ -32,30 +32,6 @@ export async function getUsersList(headers: Headers): Promise<{
 	}
 }
 
-export async function checkAdminPermission(
-	action: "create" | "share" | "update" | "delete",
-) {
-	try {
-		const user = await getUser();
-
-		if (user) {
-			const { success, error } = await auth.api.userHasPermission({
-				body: {
-					userId: user.id,
-					permissions: {
-						project: [action],
-					},
-				},
-			});
-			return { success, error };
-		}
-	} catch (error) {
-		if (error instanceof APIError) {
-			console.log(error.message, error.status);
-		}
-	}
-}
-
 export interface UserState {
 	success?: boolean;
 	error?: string;
