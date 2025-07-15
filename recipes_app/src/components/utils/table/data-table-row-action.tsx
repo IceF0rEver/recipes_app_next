@@ -3,6 +3,7 @@
 import type { Row } from "@tanstack/react-table";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,6 +47,7 @@ export function DataTableRowActions<TData>({
 	row,
 	actions,
 }: DataTableRowActionsProps<TData>) {
+	const pathname = usePathname();
 	return (
 		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
@@ -60,7 +62,7 @@ export function DataTableRowActions<TData>({
 			<DropdownMenuContent align="end" className="w-[160px]">
 				{actions.map((action) => {
 					if (action.type === "link" && action.url) {
-						const href = `${(row.original as { id: string }).id}${action.url}`;
+						const href = `${pathname}/${(row.original as { id: string }).id}${action.url}`;
 						return (
 							<div key={action.key}>
 								{action.separator && <DropdownMenuSeparator />}
