@@ -34,17 +34,6 @@ export default function UsersTable({
 	const [selectedKey, setSelectedKey] = useState<Role | null>(null);
 
 	const usersList = use(datasTable);
-	// const users =
-	// 	usersList.users.map((user) => ({
-	// 		...user,
-	// 		role: user.role as RoleType,
-	// 		banExpires: user.banExpires
-	// 			? new Date(user.banExpires).toLocaleString().toString()
-	// 			: "",
-	// 		createdAt: new Date(user.createdAt).toLocaleString().toString(),
-	// 		updatedAt: new Date(user.updatedAt).toLocaleString().toString(),
-	// 	})) ?? [];
-
 	const actionsItems = [
 		{
 			key: "session",
