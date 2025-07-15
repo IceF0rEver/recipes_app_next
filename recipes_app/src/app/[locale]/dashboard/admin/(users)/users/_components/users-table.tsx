@@ -1,11 +1,12 @@
 "use client";
 
+import type { UserWithRole } from "better-auth/plugins";
 import { type ComponentType, use, useCallback, useState } from "react";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
-import type { Auth } from "@/lib/zod/auth-schemas";
+// import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
-import type { TableProps } from "@/types/auth-types";
+import type { UsersTableProps } from "@/types/users-types";
 import BanUsers from "./ban-users";
 import DeleteUsers from "./delete-users";
 import RoleUsers from "./role-users";
@@ -19,27 +20,30 @@ interface Role {
 	icon?: ComponentType<{ className?: string }>;
 }
 
-export default function UsersTable({ datasTable, columnsItems }: TableProps) {
+export default function UsersTable({
+	datasTable,
+	columnsItems,
+}: UsersTableProps) {
 	const t = useI18n();
 	const [openSheet, setOpenSheet] = useState<boolean>(false);
 	const [openAlertDialogDelete, setAlertOpenDialogDelete] =
 		useState<boolean>(false);
 	const [openAlertDialogRole, setAlertOpenDialogRole] =
 		useState<boolean>(false);
-	const [selectedUser, setSelectedUser] = useState<Auth | null>(null);
+	const [selectedUser, setSelectedUser] = useState<UserWithRole | null>(null);
 	const [selectedKey, setSelectedKey] = useState<Role | null>(null);
 
 	const usersList = use(datasTable);
-	const users =
-		usersList.users.map((user) => ({
-			...user,
-			role: user.role as RoleType,
-			banExpires: user.banExpires
-				? new Date(user.banExpires).toLocaleString()
-				: "",
-			createdAt: new Date(user.createdAt).toLocaleString(),
-			updatedAt: new Date(user.updatedAt).toLocaleString(),
-		})) ?? [];
+	// const users =
+	// 	usersList.users.map((user) => ({
+	// 		...user,
+	// 		role: user.role as RoleType,
+	// 		banExpires: user.banExpires
+	// 			? new Date(user.banExpires).toLocaleString().toString()
+	// 			: "",
+	// 		createdAt: new Date(user.createdAt).toLocaleString().toString(),
+	// 		updatedAt: new Date(user.updatedAt).toLocaleString().toString(),
+	// 	})) ?? [];
 
 	const actionsItems = [
 		{
@@ -52,7 +56,7 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 			key: "ban",
 			label: t("button.ban"),
 			type: "sheet" as ActionType,
-			onAction: useCallback((data: Auth) => {
+			onAction: useCallback((data: UserWithRole) => {
 				setOpenSheet(true);
 				setSelectedUser(data);
 			}, []),
@@ -67,7 +71,7 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 				{ key: "user", label: t("components.table.roles.user") },
 				{ key: "premium", label: t("components.table.roles.premium") },
 			],
-			onAction: useCallback((data: Auth, role?: Role) => {
+			onAction: useCallback((data: UserWithRole, role?: Role) => {
 				setAlertOpenDialogRole(true);
 				setSelectedUser(data);
 				if (role) {
@@ -80,18 +84,18 @@ export default function UsersTable({ datasTable, columnsItems }: TableProps) {
 			label: t("button.delete"),
 			type: "delete" as ActionType,
 			separator: true,
-			onAction: useCallback((data: Auth) => {
+			onAction: useCallback((data: UserWithRole) => {
 				setAlertOpenDialogDelete(true);
 				setSelectedUser(data);
 			}, []),
 		},
 	];
 
-	const columns = dataTableColumnList<Auth>(columnsItems, actionsItems);
+	const columns = dataTableColumnList<UserWithRole>(columnsItems, actionsItems);
 
 	return (
 		<div>
-			<DataTable columns={columns} data={users} />
+			<DataTable columns={columns} data={usersList.users} />
 			<BanUsers
 				sheetOpen={openSheet}
 				onSheetOpen={setOpenSheet}

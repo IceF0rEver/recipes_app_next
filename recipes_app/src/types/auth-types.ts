@@ -1,6 +1,4 @@
-import type { UserWithRole } from "better-auth/plugins";
 import type { VariantProps } from "class-variance-authority";
-import type { ComponentType } from "react";
 import type {
 	Control,
 	FieldPath,
@@ -51,43 +49,4 @@ export interface AuthButtonProps {
 	isSocial?: boolean;
 	isLoading?: boolean;
 	socialProvider?: Parameters<typeof signIn.social>[0]["provider"];
-}
-export interface TableProps {
-	datasTable: Promise<{
-		users: UserWithRole[];
-		total: number;
-		limit?: number;
-		offset?: number;
-	}>;
-	columnsItems: ItemTableProps[];
-}
-
-export interface ItemTableProps {
-	key: string;
-	value: string;
-	subItems?: {
-		value: string;
-		label: string;
-		icon?: ComponentType<{ className?: string }>;
-	}[];
-	enableSorting: boolean;
-	enableHiding: boolean;
-	initialStateVisibility: boolean;
-}
-
-interface subItemsTable {
-	key: string;
-	label: string;
-	icon?: ComponentType<{ className?: string }>;
-}
-
-export interface ActionItemTableProps {
-	key: string;
-	label: string;
-	type: "edit" | "delete" | "link" | "select";
-	url?: string;
-	separator?: boolean;
-	icon?: ComponentType<{ className?: string }>;
-	subItems?: subItemsTable[];
-	onAction?: (value: unknown, selectedKey?: subItemsTable) => void;
 }
