@@ -85,19 +85,3 @@ export const authSchemas = (
 		userId: z.string().min(1),
 	}),
 });
-
-export const authSchema = z.object({
-	id: z.string(),
-	email: z.string().email(),
-	emailVerified: z.boolean(),
-	name: z.string(),
-	image: z.string().nullable().optional(),
-	role: z.enum(["user", "admin", "premium"]),
-	banned: z.boolean().nullable().optional(),
-	banReason: z.string().nullable().optional(),
-	banExpires: z.string().nullable().optional(),
-	createdAt: z.string(),
-	updatedAt: z.string(),
-});
-
-export type Auth = z.infer<typeof authSchema>;
