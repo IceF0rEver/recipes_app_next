@@ -4,7 +4,8 @@ import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/locales/client";
 
-export default function ErrorFallback() {
+// biome-ignore lint/suspicious/noShadowRestrictedNames: error name
+export default function Error() {
 	const t = useI18n();
 	return (
 		<section className="w-full">
