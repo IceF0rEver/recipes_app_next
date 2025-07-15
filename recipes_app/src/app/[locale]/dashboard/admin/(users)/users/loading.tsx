@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { useI18n } from "@/locales/client";
 
-export default function SuspenseFallback() {
+export default function Loading() {
 	const t = useI18n();
 	return (
 		<section className="w-full">

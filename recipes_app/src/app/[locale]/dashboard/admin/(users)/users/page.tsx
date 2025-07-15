@@ -2,11 +2,12 @@
 import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import UsersTable from "@/app/[locale]/dashboard/admin/users/_components/users-table";
+import UsersTable from "@/app/[locale]/dashboard/admin/(users)/users/_components/users-table";
 import { getI18n } from "@/locales/server";
 import { getUsersList } from "./_components/_serveractions/actions";
-import ErrorFallback from "./_components/error-fallback";
-import SuspenseFallback from "./_components/suspense-fallback";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: error name
+import Error from "./error";
+import Loading from "./loading";
 
 export default async function Page() {
 	const t = await getI18n();
@@ -110,8 +111,8 @@ export default async function Page() {
 	];
 
 	return (
-		<ErrorBoundary fallback={<ErrorFallback />}>
-			<Suspense fallback={<SuspenseFallback />}>
+		<ErrorBoundary fallback={<Error />}>
+			<Suspense fallback={<Loading />}>
 				<UsersTable datasTable={datasTable} columnsItems={columnsItems} />
 			</Suspense>
 		</ErrorBoundary>

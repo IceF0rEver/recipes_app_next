@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { UserWithRole } from "better-auth/plugins";
 import { Loader2 } from "lucide-react";
 import { startTransition, useActionState, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -11,14 +12,14 @@ import { Form } from "@/components/ui/form";
 import GenericField from "@/components/utils/form/generic-field";
 import GenericSheet from "@/components/utils/sheet/generic-sheet";
 import { useSession } from "@/lib/auth/auth-client";
-import { type Auth, authSchemas } from "@/lib/zod/auth-schemas";
+import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import { banUser, unBanUser } from "./_serveractions/actions";
 
 interface BanUsersProps {
 	sheetOpen: boolean;
 	onSheetOpen: (sheetOpen: boolean) => void;
-	userData: Auth | null;
+	userData: UserWithRole | null;
 }
 
 function BanUser({ userData, onSheetOpen }: BanUsersProps) {

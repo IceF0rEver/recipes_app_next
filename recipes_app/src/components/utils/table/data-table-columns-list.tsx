@@ -43,7 +43,7 @@ interface ActionItemTableProps<TData> {
 	) => void;
 }
 
-export const dataTableColumnList = <TData extends Record<string, unknown>>(
+export const dataTableColumnList = <TData extends object>(
 	items: ItemTableProps[],
 	actions: ActionItemTableProps<TData>[],
 ): ColumnDef<TData>[] => [
@@ -79,25 +79,24 @@ export const dataTableColumnList = <TData extends Record<string, unknown>>(
 		),
 		cell: ({ row }: { row: Row<TData> }) => {
 			const t = useI18n();
+			const value = row.getValue(item.key);
+
 			if (item.subItems && item.subItems.length > 0) {
-				const cellValue = row.getValue(item.key);
-				const matched = item.subItems?.find((sub) => sub.value === cellValue);
+				const matched = item.subItems.find((sub) => sub.value === value);
 				if (!matched) return null;
 
 				return (
 					<div className="flex items-center">
-						<Badge variant={"outline"}>{matched.label}</Badge>
+						<Badge variant="outline">{matched.label}</Badge>
 					</div>
 				);
-			} else if (typeof row.getValue(item.key) === "boolean") {
-				if (row.getValue(item.key) === true) {
-					return <div>{t("button.yes")}</div>;
-				} else {
-					return <div>{t("button.no")}</div>;
-				}
+			} else if (typeof value === "boolean") {
+				return <div>{value ? t("button.yes") : t("button.no")}</div>;
+			} else if (value instanceof Date) {
+				return <div>{value.toLocaleString()}</div>;
 			}
 
-			return <div>{row.getValue(item.key)}</div>;
+			return <div>{String(value)}</div>;
 		},
 		enableSorting: item.enableSorting,
 		enableHiding: item.enableHiding,

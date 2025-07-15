@@ -1,5 +1,6 @@
 "use client";
 
+import type { UserWithRole } from "better-auth/plugins";
 import {
 	type ComponentType,
 	startTransition,
@@ -9,7 +10,6 @@ import {
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
-import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import { type UserState, updateRoleUser } from "./_serveractions/actions";
 
@@ -22,7 +22,7 @@ interface Role {
 interface RoleUsersProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (alertDialogOpen: boolean) => void;
-	userData: Auth | null;
+	userData: UserWithRole | null;
 	selectedKey: Role | null;
 }
 

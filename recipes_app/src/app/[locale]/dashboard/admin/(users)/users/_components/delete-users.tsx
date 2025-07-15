@@ -1,17 +1,17 @@
 "use client";
 
+import type { UserWithRole } from "better-auth/plugins";
 import { startTransition, useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
-import type { Auth } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import { deleteUser, type UserState } from "./_serveractions/actions";
 
 interface DeleteUsersProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (alertDialogOpen: boolean) => void;
-	userData: Auth | null;
+	userData: UserWithRole | null;
 }
 
 const initialState: UserState = {
