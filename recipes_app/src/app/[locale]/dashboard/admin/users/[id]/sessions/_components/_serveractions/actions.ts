@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
+import { getSession, getUser } from "@/lib/auth/server";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
@@ -56,6 +57,7 @@ export async function deleteSession(
 ): Promise<SessionState> {
 	const t = await getI18n();
 	const deleteSessionSchema = authSchemas(t).deleteSession;
+	const currentSession = await getSession();
 
 	try {
 		const validatedData = deleteSessionSchema.safeParse({
@@ -70,19 +72,24 @@ export async function deleteSession(
 			};
 		}
 		const { token } = validatedData.data;
+		if (token !== currentSession?.token) {
+			const result = await auth.api.revokeUserSession({
+				headers: await headers(),
+				body: {
+					sessionToken: token,
+				},
+			});
+			if (result) {
+				revalidatePath("[locale]/dashboard/admin/users", "page");
 
-		const result = await auth.api.revokeUserSession({
-			headers: await headers(),
-			body: {
-				sessionToken: token,
-			},
-		});
-		if (result) {
-			revalidatePath("[locale]/dashboard/admin/users", "page");
-
-			return {
-				success: true,
-			};
+				return {
+					success: true,
+				};
+			} else {
+				return {
+					success: false,
+				};
+			}
 		} else {
 			return {
 				success: false,
