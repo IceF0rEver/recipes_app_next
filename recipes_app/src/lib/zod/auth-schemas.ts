@@ -84,4 +84,7 @@ export const authSchemas = (
 	unBanUser: z.object({
 		userId: z.string().min(1),
 	}),
+	deleteSession: z.object({
+		token: z.string().min(1),
+	}),
 });

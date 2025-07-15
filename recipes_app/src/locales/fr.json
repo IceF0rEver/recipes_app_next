@@ -184,7 +184,8 @@
           },
           "unban": {
             "success": "Utilisateur débanni avec succès!"
-          }
+          },
+          "identicalSessionError": "Impossible de supprimer votre session active !"
         },
         "error": {
           "fallback": {
@@ -228,6 +229,10 @@
             "label": "Durée du bannissement"
           }
         }
+      },
+      "sessions": {
+        "title": "Gestion des sessions",
+        "description": "Consultez et gérez les sessions d'un utilisateur inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin."
       }
     },
     "table": {
@@ -270,7 +275,13 @@
       "table": {
         "noResults": "Aucun résultats."
       },
-      "session": "Sessions"
+      "session": "Sessions",
+      "token": "Token",
+      "expiresAt": "Expire à",
+      "ipAddress": "Adresse IP",
+      "userAgent": "Navigateur",
+      "userId": "Id utilisateur",
+      "impersonatedBy": "Usurpation d'identité"
     }
   },
   "metaData": {
@@ -336,6 +347,7 @@
     "userBadId": "ID utilisateur requis !",
     "unexpectedError": "Une erreur inattendue s'est produite !",
     "APIError": "Une erreur d'API inattendue s'est produite !",
-    "validatedData": "Erreur dans la validation des données !"
+    "validatedData": "Erreur dans la validation des données !",
+    "badToken": "Token requit !"
   }
 }

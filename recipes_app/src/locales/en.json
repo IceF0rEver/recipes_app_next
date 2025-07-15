@@ -184,7 +184,8 @@
           },
           "unban": {
             "success": "User successfully unban!"
-          }
+          },
+          "identicalSessionError": "Unable to delete your active session!"
         },
         "error": {
           "fallback": {
@@ -228,6 +229,10 @@
             "label": "Banning duration"
           }
         }
+      },
+      "sessions": {
+        "title": "Sessions management",
+        "description": "Consult and manage the sessions of a user registered on the platform. Quickly access their data, their activity and intervene if necessary."
       }
     },
     "table": {
@@ -270,7 +275,13 @@
       "table": {
         "noResults": "No results."
       },
-      "session": "Sessions"
+      "session": "Sessions",
+      "token": "Token",
+      "expiresAt": "Expire at",
+      "ipAddress": "IP address",
+      "userAgent": "Navigator",
+      "userId": "User id",
+      "impersonatedBy": "Identity theft"
     }
   },
   "metaData": {
@@ -336,6 +347,7 @@
     "userBadId": "User ID is required",
     "unexpectedError": "An unexpected error has occurred!",
     "APIError": "An unexpected API error has occurred!",
-    "validatedData": "Error in data validation!"
+    "validatedData": "Error in data validation!",
+    "badToken": "Token requires!"
   }
 }
