@@ -233,6 +233,10 @@
       "sessions": {
         "title": "Gestion des sessions",
         "description": "Consultez et gérez les sessions d'un utilisateur inscrits sur la plateforme. Accédez rapidement à leurs données, leur activité et intervenez en cas de besoin."
+      },
+      "logs": {
+        "title": "Historique des actions administratives",
+        "description": "Consultez toutes les actions effectuées par les administrateurs. Gardez une trace des modifications et suppressions."
       }
     },
     "table": {
@@ -281,7 +285,23 @@
       "ipAddress": "Adresse IP",
       "userAgent": "Navigateur",
       "userId": "Id utilisateur",
-      "impersonatedBy": "Usurpation d'identité"
+      "impersonatedBy": "Usurpation d'identité",
+      "userIdSource": "ID de l'auteur",
+      "action": "Action",
+      "logs": {
+        "sessionRevoke": "Révocation d'une session",
+        "roleChange": "Changement de rôle",
+        "userActivate": "Débannissement d'un utilisateur",
+        "userSuspend": "Bannissement d'un utilisateur",
+        "userDelete": "Suppression d'un utilisateur",
+        "success": "Succès",
+        "failed": "Echec",
+        "pending": "En attente"
+      },
+      "userIdAuthor": "ID de l'auteur",
+      "targetId": "ID ciblé",
+      "status": "Status",
+      "metadata": "Meta data"
     }
   },
   "metaData": {
