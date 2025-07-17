@@ -233,6 +233,10 @@
       "sessions": {
         "title": "Sessions management",
         "description": "Consult and manage the sessions of a user registered on the platform. Quickly access their data, their activity and intervene if necessary."
+      },
+      "logs": {
+        "title": "History of administrative actions",
+        "description": "Consult all the actions carried out by the administrators. \nKeep a trace of changes and deletions."
       }
     },
     "table": {
@@ -281,7 +285,23 @@
       "ipAddress": "IP address",
       "userAgent": "Navigator",
       "userId": "User id",
-      "impersonatedBy": "Identity theft"
+      "impersonatedBy": "Identity theft",
+      "userIdSource": "Author's ID",
+      "action": "Action",
+      "logs": {
+        "sessionRevoke": "Revocation of a session",
+        "roleChange": "Change of role",
+        "userActivate": "User unban",
+        "userSuspend": "User banishment",
+        "userDelete": "Deletion of a user",
+        "success": "Success",
+        "failed": "Failed",
+        "pending": "Pending"
+      },
+      "userIdAuthor": "Author's ID",
+      "targetId": "Targeted ID",
+      "status": "Status",
+      "metadata": "Meta Data"
     }
   },
   "metaData": {

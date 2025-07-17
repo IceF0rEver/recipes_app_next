@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
 import { getSession, getUser } from "@/lib/auth/server";
+import prisma from "@/lib/prisma";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
@@ -58,6 +59,7 @@ export async function deleteSession(
 	const t = await getI18n();
 	const deleteSessionSchema = authSchemas(t).deleteSession;
 	const currentSession = await getSession();
+	const currentUser = await getUser();
 
 	try {
 		const validatedData = deleteSessionSchema.safeParse({
@@ -80,6 +82,17 @@ export async function deleteSession(
 				},
 			});
 			if (result) {
+				if (currentUser) {
+					await prisma.log.create({
+						data: {
+							userId: currentUser.id,
+							action: "SESSION_REVOKE",
+							targetId: token,
+							status: "SUCCESS",
+						},
+					});
+				}
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -91,6 +104,17 @@ export async function deleteSession(
 				};
 			}
 		} else {
+			if (currentUser) {
+				await prisma.log.create({
+					data: {
+						userId: currentUser.id,
+						action: "SESSION_REVOKE",
+						targetId: token,
+						status: "FAILED",
+					},
+				});
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
+			}
 			return {
 				success: false,
 			};

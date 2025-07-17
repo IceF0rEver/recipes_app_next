@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
 import { getUser } from "@/lib/auth/server";
+import prisma from "@/lib/prisma";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
@@ -68,6 +69,17 @@ export async function deleteUser(
 				},
 			});
 			if (result) {
+				if (currentUser) {
+					await prisma.log.create({
+						data: {
+							userId: currentUser.id,
+							action: "USER_DELETE",
+							targetId: userId,
+							status: "SUCCESS",
+						},
+					});
+				}
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -79,6 +91,17 @@ export async function deleteUser(
 				};
 			}
 		} else {
+			if (currentUser) {
+				await prisma.log.create({
+					data: {
+						userId: currentUser.id,
+						action: "USER_DELETE",
+						targetId: userId,
+						status: "FAILED",
+					},
+				});
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
+			}
 			return {
 				success: false,
 			};
@@ -132,6 +155,20 @@ export async function updateRoleUser(
 				},
 			});
 			if (result) {
+				if (currentUser) {
+					await prisma.log.create({
+						data: {
+							userId: currentUser.id,
+							action: "ROLE_CHANGE",
+							targetId: userId,
+							status: "SUCCESS",
+							metadata: {
+								newRole: role,
+							},
+						},
+					});
+				}
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -143,6 +180,17 @@ export async function updateRoleUser(
 				};
 			}
 		} else {
+			if (currentUser) {
+				await prisma.log.create({
+					data: {
+						userId: currentUser.id,
+						action: "ROLE_CHANGE",
+						targetId: userId,
+						status: "FAILED",
+					},
+				});
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
+			}
 			return {
 				success: false,
 			};
@@ -197,6 +245,21 @@ export async function banUser(
 				},
 			});
 			if (result) {
+				if (currentUser) {
+					await prisma.log.create({
+						data: {
+							userId: currentUser.id,
+							action: "USER_SUSPEND",
+							targetId: userId,
+							status: "SUCCESS",
+							metadata: {
+								banReason: banReason,
+								banExpires: banExpires,
+							},
+						},
+					});
+				}
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -208,6 +271,17 @@ export async function banUser(
 				};
 			}
 		} else {
+			if (currentUser) {
+				await prisma.log.create({
+					data: {
+						userId: currentUser.id,
+						action: "USER_SUSPEND",
+						targetId: userId,
+						status: "FAILED",
+					},
+				});
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
+			}
 			return {
 				success: false,
 			};
@@ -258,6 +332,17 @@ export async function unBanUser(
 				},
 			});
 			if (result) {
+				if (currentUser) {
+					await prisma.log.create({
+						data: {
+							userId: currentUser.id,
+							action: "USER_ACTIVATE",
+							targetId: userId,
+							status: "SUCCESS",
+						},
+					});
+				}
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -269,6 +354,17 @@ export async function unBanUser(
 				};
 			}
 		} else {
+			if (currentUser) {
+				await prisma.log.create({
+					data: {
+						userId: currentUser.id,
+						action: "USER_ACTIVATE",
+						targetId: userId,
+						status: "FAILED",
+					},
+				});
+				revalidatePath("[locale]/dashboard/admin/logs", "page");
+			}
 			return {
 				success: false,
 			};
