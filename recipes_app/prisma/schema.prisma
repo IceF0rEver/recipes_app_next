@@ -26,6 +26,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  logs			Log[]
 
   role       String?
   banned     Boolean?
@@ -82,3 +83,36 @@ model Verification {
 
   @@map("verification")
 }
+
+model Log {
+  id          String      @id
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action      LogAction
+  targetId    String
+  status      LogStatus   @default(PENDING)
+  metadata    Json?
+  createdAt   DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime    @updatedAt @db.Timestamptz(6)
+  
+  @@map("log")
+}
+
+enum LogAction {
+  USER_DELETE
+  USER_SUSPEND
+  USER_ACTIVATE
+  ROLE_CHANGE
+  SESSION_REVOKE
+  
+  @@map("log_actions")
+}
+
+enum LogStatus {
+  SUCCESS
+  FAILED
+  PENDING
+  
+  @@map("log_status")
+}
+
