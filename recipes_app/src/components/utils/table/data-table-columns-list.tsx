@@ -109,6 +109,11 @@ export const dataTableColumnList = <TData extends object>(
 
 	{
 		id: "actions",
-		cell: ({ row }) => <DataTableRowActions row={row} actions={actions} />,
+		cell: ({ row }) => {
+			if (actions.length !== 0) {
+				return <DataTableRowActions row={row} actions={actions} />;
+			}
+			return null;
+		},
 	},
 ];
