@@ -62,7 +62,9 @@ export default function Page() {
 					},
 					onError: (ctx) => {
 						setErrorMessage({
-							betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+							betterError: t(
+								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+							),
 						});
 					},
 					onSuccess: async () => {
@@ -81,7 +83,7 @@ export default function Page() {
 		<AuthCard
 			title={t("components.auth.register.title")}
 			description={t("components.auth.register.description")}
-			className="max-w-md"
+			className="w-full sm:w-sm"
 			footer={
 				<AuthFooter
 					href={"/auth/login"}
@@ -92,7 +94,11 @@ export default function Page() {
 		>
 			<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 				{errorMessage.betterError && (
-					<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
+					<p
+						className="text-sm text-destructive"
+						aria-live="polite"
+						aria-atomic="true"
+					>
 						{errorMessage.betterError}
 					</p>
 				)}
