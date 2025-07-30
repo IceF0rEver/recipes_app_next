@@ -13,46 +13,57 @@ interface DataTableToolbarProps<TData> {
 	table: Table<TData>;
 }
 
-export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({
+	table,
+}: DataTableToolbarProps<TData>) {
 	const t = useI18n();
 	const globalFilter = table.getState().globalFilter ?? "";
 
-	const isFiltered = table.getState().columnFilters.length > 0 || globalFilter.length > 0;
+	const isFiltered =
+		table.getState().columnFilters.length > 0 || globalFilter.length > 0;
 
 	const filterableColumns = useMemo(() => {
 		return table
 			.getVisibleLeafColumns()
-			.filter((col) => col.columnDef.meta?.subItems && col.columnDef.meta.subItems.length > 0);
+			.filter(
+				(col) =>
+					col.columnDef.meta?.subItems &&
+					col.columnDef.meta.subItems.length > 0,
+			);
 	}, [table]);
 	return (
-		<div className="flex items-center justify-between">
-			<div className="flex flex-1 items-center space-x-2">
+		<div className="flex flex-col md:flex-row-reverse items-center justify-between gap-2">
+			<DataTableViewOptions table={table} />
+
+			<div className="flex flex-col md:flex-row gap-2 w-full md:max-w-full md:flex-1">
 				<Input
 					placeholder={t("components.table.toolbar.search")}
 					value={globalFilter as string}
 					onChange={(event) => table.setGlobalFilter(event.target.value)}
-					className="h-8 w-[150px] lg:w-[250px]"
+					className="h-8 md:w-[150px] lg:w-[250px]"
 				/>
-				{filterableColumns.map((column) => (
-					<DataTableFacetedFilter
-						key={column.id}
-						column={column}
-						title={column.columnDef.meta?.label}
-						options={
-							column.columnDef.meta?.subItems?.map(
-								(item: {
-									value: string;
-									label: string;
-									icon?: ComponentType<{ className?: string }>;
-								}) => ({
-									label: item.label,
-									value: item.value,
-									icon: item.icon,
-								}),
-							) ?? []
-						}
-					/>
-				))}
+				<div className="flex gap-2 overflow-x-auto md:max-w-md">
+					{filterableColumns.map((column) => (
+						<DataTableFacetedFilter
+							key={column.id}
+							column={column}
+							title={column.columnDef.meta?.label}
+							options={
+								column.columnDef.meta?.subItems?.map(
+									(item: {
+										value: string;
+										label: string;
+										icon?: ComponentType<{ className?: string }>;
+									}) => ({
+										label: item.label,
+										value: item.value,
+										icon: item.icon,
+									}),
+								) ?? []
+							}
+						/>
+					))}
+				</div>
 				{isFiltered && (
 					<Button
 						variant="outline"
@@ -66,7 +77,6 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 					</Button>
 				)}
 			</div>
-			<DataTableViewOptions table={table} />
 		</div>
 	);
 }

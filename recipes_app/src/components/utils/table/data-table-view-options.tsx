@@ -5,19 +5,25 @@ import type { Table } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
 import { useI18n } from "@/locales/client";
 
 interface DataTableViewOptionsProps<TData> {
 	table: Table<TData>;
 }
 
-export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps<TData>) {
+export function DataTableViewOptions<TData>({
+	table,
+}: DataTableViewOptionsProps<TData>) {
 	const t = useI18n();
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
+				<Button variant="outline" size="sm" className="ml-auto h-8 flex">
 					<Eye />
 					{t("components.table.view.label")}
 				</Button>
@@ -25,7 +31,10 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
 			<DropdownMenuContent align="end" className="w-[150px]">
 				{table
 					.getAllColumns()
-					.filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
+					.filter(
+						(column) =>
+							typeof column.accessorFn !== "undefined" && column.getCanHide(),
+					)
 					.map((column) => {
 						return (
 							<DropdownMenuCheckboxItem

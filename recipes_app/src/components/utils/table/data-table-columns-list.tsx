@@ -96,7 +96,13 @@ export const dataTableColumnList = <TData extends object>(
 				return <div>{value.toLocaleString()}</div>;
 			}
 
-			return <div>{String(value)}</div>;
+			return (
+				<div>
+					{String(value).length >= 35
+						? String(value).slice(0, 35).concat("...")
+						: String(value)}
+				</div>
+			);
 		},
 		enableSorting: item.enableSorting,
 		enableHiding: item.enableHiding,
