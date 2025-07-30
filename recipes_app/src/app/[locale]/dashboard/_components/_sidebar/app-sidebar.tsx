@@ -42,13 +42,13 @@ export function AppSidebar() {
 				title: t("components.appSideBar.chatBot"),
 				url: "#",
 				icon: <BotMessageSquare />,
-				visibleTo: ["user"],
+				visibleTo: ["user", "admin", "premium"],
 			},
 			{
 				title: t("components.appSideBar.myRecipes"),
 				url: "my-recipes",
 				icon: <ReceiptText />,
-				visibleTo: ["user"],
+				visibleTo: ["user", "admin", "premium"],
 			},
 			{
 				title: t("components.appSideBar.admin"),
@@ -95,8 +95,10 @@ export function AppSidebar() {
 									asChild
 									isActive={
 										!item.items &&
-										(pathname.split("/").at(-1) === item.url?.split("/").at(-1) ||
-											(item.url === "#" && pathname.split("/").at(-1) === "dashboard"))
+										(pathname.split("/").at(-1) ===
+											item.url?.split("/").at(-1) ||
+											(item.url === "#" &&
+												pathname.split("/").at(-1) === "dashboard"))
 									}
 								>
 									<a href={`/dashboard/${item.url}`}>
@@ -111,7 +113,8 @@ export function AppSidebar() {
 												<SidebarMenuSubButton
 													asChild
 													isActive={
-														pathname.split("/").at(-1) === item.url?.split("/").at(-1)
+														pathname.split("/").at(-1) ===
+														item.url?.split("/").at(-1)
 													}
 												>
 													<a href={`/dashboard/${item.url}`}>
@@ -129,7 +132,9 @@ export function AppSidebar() {
 				</SidebarMenu>
 				<SidebarGroup />
 			</SidebarContent>
-			<SidebarFooter>{isPending ? <NavUserSkeleton /> : <NavUser user={dataUser} />}</SidebarFooter>
+			<SidebarFooter>
+				{isPending ? <NavUserSkeleton /> : <NavUser user={dataUser} />}
+			</SidebarFooter>
 		</Sidebar>
 	);
 }
