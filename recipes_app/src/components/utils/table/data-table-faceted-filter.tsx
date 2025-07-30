@@ -11,7 +11,11 @@ import {
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/locales/client";
@@ -43,13 +47,20 @@ export function DataTableFacetedFilter<TData, TValue>({
 					{selectedValues?.size > 0 && (
 						<>
 							<Separator orientation="vertical" className="mx-2 h-4" />
-							<Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
+							<Badge
+								variant="secondary"
+								className="rounded-sm px-1 font-normal lg:hidden"
+							>
 								{selectedValues.size}
 							</Badge>
 							<div className="hidden space-x-1 lg:flex">
 								{selectedValues.size > 2 ? (
-									<Badge variant="secondary" className="rounded-sm px-1 font-normal">
-										{selectedValues.size} {t("components.table.faceted.selected")}
+									<Badge
+										variant="secondary"
+										className="rounded-sm px-1 font-normal"
+									>
+										{selectedValues.size}{" "}
+										{t("components.table.faceted.selected")}
 									</Badge>
 								) : (
 									options
@@ -73,7 +84,9 @@ export function DataTableFacetedFilter<TData, TValue>({
 				<Command>
 					<CommandInput placeholder={title} />
 					<CommandList>
-						<CommandEmpty>{t("components.table.faceted.noResults")}</CommandEmpty>
+						<CommandEmpty>
+							{t("components.table.faceted.noResults")}
+						</CommandEmpty>
 						<CommandGroup>
 							{options.map((option) => {
 								const isSelected = selectedValues.has(option.value);
@@ -88,7 +101,9 @@ export function DataTableFacetedFilter<TData, TValue>({
 												newSelected.add(option.value);
 											}
 											const filterValues = Array.from(newSelected);
-											column?.setFilterValue(filterValues.length ? filterValues : undefined);
+											column?.setFilterValue(
+												filterValues.length ? filterValues : undefined,
+											);
 										}}
 									>
 										<div
@@ -101,7 +116,9 @@ export function DataTableFacetedFilter<TData, TValue>({
 										>
 											<Check />
 										</div>
-										{option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+										{option.icon && (
+											<option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+										)}
 										<span>{option.label}</span>
 										{facets?.get(option.value) && (
 											<span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
