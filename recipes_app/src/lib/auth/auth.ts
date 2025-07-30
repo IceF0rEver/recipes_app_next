@@ -9,7 +9,11 @@ import { ac, admin, premium, user } from "./permissions";
 const prisma = new PrismaClient();
 
 export const auth = betterAuth({
-	trustedOrigins: ["http://localhost:3000", "http://192.168.0.11:3000"],
+	trustedOrigins: [
+		"http://localhost:3000",
+		"http://192.168.0.11:3000",
+		"https://recipes-app-next-ten.vercel.app/",
+	],
 	databaseHooks: {
 		user: {
 			create: {
