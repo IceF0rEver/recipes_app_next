@@ -369,5 +369,33 @@
     "APIError": "Une erreur d'API inattendue s'est produite !",
     "validatedData": "Erreur dans la validation des données !",
     "badToken": "Token requit !"
+  },
+  "quickPrompts": {
+    "newRecipe": {
+      "title": "Nouvelle recette",
+      "description": "Créer une nouvelle recette personnalisée.",
+      "prompt": "Propose-moi une nouvelle recette avec les ingrédients que j'ai."
+    },
+    "quickRecipe": {
+      "prompt": "Propose-moi une recette rapide à préparer en moins de 30 minutes.",
+      "description": "Plat en moins de 30 min.",
+      "title": "Recette rapide"
+    },
+    "familyRecipe": {
+      "title": "Repas de famille",
+      "description": "Pour 6 à 8 personnes.",
+      "prompt": "Propose-moi un menu complet pour un repas de famille de 6 à 8 personnes."
+    },
+    "catchRecipe": {
+      "title": "Surprend moi !",
+      "description": "Recette aléatoire.",
+      "prompt": "Propose-moi avec une recette originale et délicieuse."
+    }
+  },
+  "aiChat": {
+    "aiInput": {
+      "placehoder": "Demandez-moi une recette, des conseils de cuisine...",
+      "warning": "L'IA peut faire des erreurs, vérifiez les informations importantes !"
+    }
   }
 }

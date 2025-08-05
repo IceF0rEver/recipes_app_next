@@ -369,5 +369,33 @@
     "APIError": "An unexpected API error has occurred!",
     "validatedData": "Error in data validation!",
     "badToken": "Token requires!"
+  },
+  "quickPrompts": {
+    "newRecipe": {
+      "title": "New recipe",
+      "description": "Create a new personalized recipe.",
+      "prompt": "Offer me a new recipe with the ingredients I have."
+    },
+    "quickRecipe": {
+      "prompt": "Offer me a quick recipe to prepare in less than 30 minutes.",
+      "description": "Dish in less than 30 min.",
+      "title": "Quick recipe"
+    },
+    "familyRecipe": {
+      "title": "Family meal",
+      "description": "For 6 to 8 people.",
+      "prompt": "Offer me a full menu for a family meal of 6 to 8 people."
+    },
+    "catchRecipe": {
+      "title": "Catch me!",
+      "description": "Random recipe.",
+      "prompt": "Propose me with an original and delicious recipe."
+    }
+  },
+  "aiChat": {
+    "aiInput": {
+      "placehoder": "Ask me for a recipe, cooking tips ...",
+      "warning": "AI can make mistakes, check the important information!"
+    }
   }
 }
