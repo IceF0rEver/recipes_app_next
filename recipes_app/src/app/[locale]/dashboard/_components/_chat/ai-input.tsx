@@ -9,14 +9,24 @@ import {
 	AIInputToolbar,
 	AIInputTools,
 } from "@/components/ui/kibo-ui/ai/input";
+import { useI18n } from "@/locales/client";
 
 type Status = "submitted" | "streaming" | "ready" | "error";
 interface AiInputProps {
 	status: Status;
 	onSubmit: (text: string) => void;
+	className?: string;
+	placeholder?: string;
 }
-export default function AiInput({ onSubmit, status }: AiInputProps) {
+export default function AiInput({
+	onSubmit,
+	status,
+	className,
+	placeholder,
+}: AiInputProps) {
 	const [input, setInput] = useState("");
+	const t = useI18n();
+
 	const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
 		if (!input.trim()) return;
@@ -24,12 +34,12 @@ export default function AiInput({ onSubmit, status }: AiInputProps) {
 		setInput("");
 	};
 	return (
-		<div>
+		<div className={className}>
 			<AIInput onSubmit={handleSubmit}>
 				<AIInputTextarea
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					placeholder="Demandez-moi une recette, des conseils de cuisine..."
+					placeholder={placeholder}
 				/>
 				<AIInputToolbar className="border-t">
 					<AIInputTools>
@@ -48,8 +58,7 @@ export default function AiInput({ onSubmit, status }: AiInputProps) {
 				</AIInputToolbar>
 			</AIInput>
 			<p className="text-xs text-muted-foreground mt-2 text-center">
-				Appuyez sur Entrée pour envoyer • L'IA peut faire des erreurs, vérifiez
-				les informations importantes
+				{t("aiChat.aiInput.warning")}
 			</p>
 		</div>
 	);
