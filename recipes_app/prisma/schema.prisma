@@ -26,6 +26,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  chats         Chat[]
   logs			Log[]
 
   role       String?
@@ -96,6 +97,18 @@ model Log {
   updatedAt   DateTime    @updatedAt @db.Timestamptz(6)
   
   @@map("log")
+}
+
+model Chat {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String?                
+  messages    Json?
+  isActive    Boolean      @default(false)
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime     @updatedAt @db.Timestamptz(6)
+
 }
 
 enum LogAction {
