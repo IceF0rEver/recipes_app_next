@@ -1,12 +1,21 @@
 import { mistral } from "@ai-sdk/mistral";
-import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import {
+	convertToModelMessages,
+	createIdGenerator,
+	streamText,
+	type UIMessage,
+} from "ai";
+import { updateMessagesChatById } from "@/app/[locale]/dashboard/_components/_serveractions/actions";
 import { getCurrentLocale } from "@/locales/server";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-	const { messages }: { messages: UIMessage[] } = await req.json();
+	const { messages, id }: { messages: UIMessage[]; id: string } =
+		await req.json();
+
 	const locale = await getCurrentLocale();
+
 	const result = streamText({
 		model: mistral("ministral-3b-latest"),
 		system:
@@ -27,5 +36,15 @@ export async function POST(req: Request) {
 		messages: convertToModelMessages(messages),
 	});
 
-	return result.toUIMessageStreamResponse();
+	return result.toUIMessageStreamResponse({
+		originalMessages: messages,
+		generateMessageId: createIdGenerator({
+			prefix: "msg",
+			size: 16,
+		}),
+		onFinish: async ({ messages }) => {
+			const content = JSON.stringify(messages, null, 2);
+			const { status, error } = await updateMessagesChatById(id, content);
+		},
+	});
 }
