@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth/auth";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
+import { createLog } from "@/lib/service/logs-service";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
@@ -25,17 +26,17 @@ export async function getUsersList(headers: Headers): Promise<{
 		});
 		return usersList;
 	} catch (error) {
-		console.error(error);
-		return {
-			users: [],
-			total: 0,
-		};
+		if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		} else {
+			throw new Error("500 - INTERNAL_SERVER_ERROR");
+		}
 	}
 }
 
 export interface UserState {
 	success?: boolean;
-	error?: string;
+	error?: { code?: string; message?: string; status?: number };
 	message?: string;
 }
 
@@ -53,10 +54,12 @@ export async function deleteUser(
 		});
 
 		if (!validatedData.success) {
-			console.error(t("errors.userBadId"));
 			return {
 				success: false,
-				error: t("errors.userBadId"),
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
 			};
 		}
 		const { userId } = validatedData.data;
@@ -70,16 +73,16 @@ export async function deleteUser(
 			});
 			if (result) {
 				if (currentUser) {
-					await prisma.log.create({
-						data: {
-							userId: currentUser.id,
-							action: "USER_DELETE",
-							targetId: userId,
-							status: "SUCCESS",
-						},
+					const { success: logSuccess, error: logError } = await createLog({
+						userId: currentUser.id,
+						action: "USER_DELETE",
+						targetId: userId,
+						status: "SUCCESS",
 					});
+					if (!logSuccess) {
+						console.warn(logError);
+					}
 				}
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -88,36 +91,50 @@ export async function deleteUser(
 			} else {
 				return {
 					success: false,
+					error: {
+						code: "USER_DELETE_FAILED",
+						status: 500,
+					},
 				};
 			}
 		} else {
 			if (currentUser) {
-				await prisma.log.create({
-					data: {
-						userId: currentUser.id,
-						action: "USER_DELETE",
-						targetId: userId,
-						status: "FAILED",
-					},
+				const { success: logSuccess, error: logError } = await createLog({
+					userId: currentUser.id,
+					action: "USER_DELETE",
+					targetId: userId,
+					status: "FAILED",
 				});
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
+				if (!logSuccess) {
+					console.warn(logError);
+				}
 			}
 			return {
 				success: false,
+				error: {
+					code: "INVALID_OPERATION",
+					status: 403,
+				},
 			};
 		}
 	} catch (error) {
+		console.warn(error);
+
 		if (error instanceof APIError) {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.APIError"),
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
 			};
 		} else {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.unexpectedError"),
+				error: {
+					code: "UNEXPECTED_ERROR",
+					status: 500,
+				},
 			};
 		}
 	}
@@ -138,10 +155,12 @@ export async function updateRoleUser(
 		});
 
 		if (!validatedData.success) {
-			console.error(t("errors.userBadId"));
 			return {
 				success: false,
-				error: t("errors.userBadId"),
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
 			};
 		}
 		const { userId, role } = validatedData.data;
@@ -156,19 +175,16 @@ export async function updateRoleUser(
 			});
 			if (result) {
 				if (currentUser) {
-					await prisma.log.create({
-						data: {
-							userId: currentUser.id,
-							action: "ROLE_CHANGE",
-							targetId: userId,
-							status: "SUCCESS",
-							metadata: {
-								newRole: role,
-							},
-						},
+					const { success: logSuccess, error: logError } = await createLog({
+						userId: currentUser.id,
+						action: "ROLE_CHANGE",
+						targetId: userId,
+						status: "SUCCESS",
 					});
+					if (!logSuccess) {
+						console.warn(logError);
+					}
 				}
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -177,6 +193,10 @@ export async function updateRoleUser(
 			} else {
 				return {
 					success: false,
+					error: {
+						code: "ROLE_CHANGE_FAILED",
+						status: 500,
+					},
 				};
 			}
 		} else {
@@ -193,20 +213,30 @@ export async function updateRoleUser(
 			}
 			return {
 				success: false,
+				error: {
+					code: "INVALID_OPERATION",
+					status: 403,
+				},
 			};
 		}
 	} catch (error) {
+		console.warn(error);
+
 		if (error instanceof APIError) {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.APIError"),
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
 			};
 		} else {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.unexpectedError"),
+				error: {
+					code: "UNEXPECTED_ERROR",
+					status: 500,
+				},
 			};
 		}
 	}
@@ -228,10 +258,12 @@ export async function banUser(
 		});
 
 		if (!validatedData.success) {
-			console.error(validatedData.error);
 			return {
 				success: false,
-				error: t("errors.validatedData"),
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
 			};
 		}
 		const { userId, banReason, banExpires } = validatedData.data;
@@ -246,20 +278,20 @@ export async function banUser(
 			});
 			if (result) {
 				if (currentUser) {
-					await prisma.log.create({
-						data: {
-							userId: currentUser.id,
-							action: "USER_SUSPEND",
-							targetId: userId,
-							status: "SUCCESS",
-							metadata: {
-								banReason: banReason,
-								banExpires: banExpires,
-							},
+					const { success: logSuccess, error: logError } = await createLog({
+						userId: currentUser.id,
+						action: "USER_SUSPEND",
+						targetId: userId,
+						status: "SUCCESS",
+						metadata: {
+							banReason: banReason,
+							banExpires: banExpires,
 						},
 					});
+					if (!logSuccess) {
+						console.warn(logError);
+					}
 				}
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -268,36 +300,50 @@ export async function banUser(
 			} else {
 				return {
 					success: false,
+					error: {
+						code: "USER_SUSPEND_FAILED",
+						status: 500,
+					},
 				};
 			}
 		} else {
 			if (currentUser) {
-				await prisma.log.create({
-					data: {
-						userId: currentUser.id,
-						action: "USER_SUSPEND",
-						targetId: userId,
-						status: "FAILED",
-					},
+				const { success: logSuccess, error: logError } = await createLog({
+					userId: currentUser.id,
+					action: "USER_SUSPEND",
+					targetId: userId,
+					status: "FAILED",
 				});
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
+				if (!logSuccess) {
+					console.warn(logError);
+				}
 			}
 			return {
 				success: false,
+				error: {
+					code: "INVALID_OPERATION",
+					status: 403,
+				},
 			};
 		}
 	} catch (error) {
+		console.warn(error);
+
 		if (error instanceof APIError) {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.APIError"),
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
 			};
 		} else {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.unexpectedError"),
+				error: {
+					code: "UNEXPECTED_ERROR",
+					status: 500,
+				},
 			};
 		}
 	}
@@ -317,10 +363,12 @@ export async function unBanUser(
 		});
 
 		if (!validatedData.success) {
-			console.error(validatedData.error);
 			return {
 				success: false,
-				error: t("errors.validatedData"),
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
 			};
 		}
 		const { userId } = validatedData.data;
@@ -333,16 +381,16 @@ export async function unBanUser(
 			});
 			if (result) {
 				if (currentUser) {
-					await prisma.log.create({
-						data: {
-							userId: currentUser.id,
-							action: "USER_ACTIVATE",
-							targetId: userId,
-							status: "SUCCESS",
-						},
+					const { success: logSuccess, error: logError } = await createLog({
+						userId: currentUser.id,
+						action: "USER_ACTIVATE",
+						targetId: userId,
+						status: "SUCCESS",
 					});
+					if (!logSuccess) {
+						console.warn(logError);
+					}
 				}
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
 				revalidatePath("[locale]/dashboard/admin/users", "page");
 
 				return {
@@ -351,36 +399,50 @@ export async function unBanUser(
 			} else {
 				return {
 					success: false,
+					error: {
+						code: "USER_ACTIVATE_FAILED",
+						status: 500,
+					},
 				};
 			}
 		} else {
 			if (currentUser) {
-				await prisma.log.create({
-					data: {
-						userId: currentUser.id,
-						action: "USER_ACTIVATE",
-						targetId: userId,
-						status: "FAILED",
-					},
+				const { success: logSuccess, error: logError } = await createLog({
+					userId: currentUser.id,
+					action: "USER_ACTIVATE",
+					targetId: userId,
+					status: "FAILED",
 				});
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
+				if (!logSuccess) {
+					console.warn(logError);
+				}
 			}
 			return {
 				success: false,
+				error: {
+					code: "INVALID_OPERATION",
+					status: 403,
+				},
 			};
 		}
 	} catch (error) {
+		console.warn(error);
+
 		if (error instanceof APIError) {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.APIError"),
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
 			};
 		} else {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.unexpectedError"),
+				error: {
+					code: "UNEXPECTED_ERROR",
+					status: 500,
+				},
 			};
 		}
 	}

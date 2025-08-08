@@ -53,7 +53,8 @@ export default function DeleteUsers({
 			);
 			onAlertDialogOpen(false);
 		} else if (state.success === false && state.error) {
-			toast.error(state.error || t("components.admin.users.toast.error"));
+			console.error(`${state.error.status} - ${state.error.code}`);
+			toast.error(t("components.admin.users.toast.error"));
 		}
 	}, [state, t, onAlertDialogOpen]);
 
