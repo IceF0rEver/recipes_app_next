@@ -3,12 +3,12 @@ import type { User } from "better-auth";
 import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-// biome-ignore lint/suspicious/noShadowRestrictedNames: error name
-import Error from "@/app/[locale]/dashboard/admin/(users)/users/error";
-import Loading from "@/app/[locale]/dashboard/admin/(users)/users/loading";
 import { getI18n } from "@/locales/server";
 import { getUserSessionsList } from "./_components/_serveractions/actions";
 import SessionsTable from "./_components/sessions-table";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: error name
+import Error from "./error";
+import Loading from "./loading";
 
 interface PageProps {
 	params: Promise<{ id: User["id"] }>;
