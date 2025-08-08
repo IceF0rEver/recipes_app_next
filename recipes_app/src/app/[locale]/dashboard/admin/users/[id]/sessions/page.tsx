@@ -1,4 +1,5 @@
 "use server";
+import type { User } from "better-auth";
 import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -10,7 +11,7 @@ import { getUserSessionsList } from "./_components/_serveractions/actions";
 import SessionsTable from "./_components/sessions-table";
 
 interface PageProps {
-	params: Promise<{ id: string }>;
+	params: Promise<{ id: User["id"] }>;
 }
 export default async function Page({ params }: PageProps) {
 	const t = await getI18n();

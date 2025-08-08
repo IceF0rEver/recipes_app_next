@@ -4,6 +4,7 @@ import type { ComponentType } from "react";
 export interface SessionsTableProps {
 	datasTable: Promise<{
 		sessions: SessionWithImpersonatedBy[];
+		error?: { code?: string; message?: string; status?: number };
 	}>;
 	columnsItems: ItemTableProps[];
 }
