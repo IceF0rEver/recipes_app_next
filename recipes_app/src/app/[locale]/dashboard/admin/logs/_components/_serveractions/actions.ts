@@ -6,7 +6,11 @@ export async function getLogsList(): Promise<{
 }> {
 	"use cache";
 	try {
-		const logsList = await prisma.log.findMany();
+		const logsList = await prisma.log.findMany({
+			orderBy: {
+				createdAt: "desc",
+			},
+		});
 		return { logs: logsList };
 	} catch (error) {
 		if (error instanceof Error && error.message.includes("network")) {
