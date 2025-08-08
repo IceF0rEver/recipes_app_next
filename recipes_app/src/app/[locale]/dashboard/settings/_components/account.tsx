@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
+import AuthButton from "@/components/utils/auth/auth-button";
+import AuthField from "@/components/utils/auth/auth-field";
+import AuthForm from "@/components/utils/auth/auth-form";
 import { authClient, useSession } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
-import AuthButton from "../../../auth/_components/auth-button";
-import AuthField from "../../../auth/_components/auth-field";
-import AuthForm from "../../../auth/_components/auth-form";
 import SettingsArticlePassword from "./settings-article-password";
 import SettingsItemsHeader from "./settings-items-header";
 
@@ -64,7 +64,9 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
 							});
 						},
 						onSuccess: async () => {
@@ -85,7 +87,9 @@ export default function Account() {
 						},
 						onError: (ctx) => {
 							setErrorMessage({
-								betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
 							});
 						},
 						onSuccess: async () => {
@@ -111,7 +115,11 @@ export default function Account() {
 				<SettingsArticlePassword />
 				<AuthForm form={form} onSubmit={onSubmit} className="grid gap-9">
 					{errorMessage.betterError && (
-						<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
+						<p
+							className="text-sm text-destructive"
+							aria-live="polite"
+							aria-atomic="true"
+						>
 							{errorMessage.betterError}
 						</p>
 					)}

@@ -47,13 +47,14 @@ export default function DeleteSession({
 	};
 
 	useEffect(() => {
-		if (state.success === true) {
+		if (state.success) {
 			toast.success(
 				state.message || t("components.admin.users.toast.delete.success"),
 			);
 			onAlertDialogOpen(false);
-		} else if (state.success === false && state.error) {
-			toast.error(state.error || t("components.admin.users.toast.error"));
+		} else if (!state.success && state.error) {
+			console.error(`${state.error.status} - ${state.error.code}`);
+			toast.error(t("components.admin.users.toast.error"));
 		}
 	}, [state, t, onAlertDialogOpen]);
 

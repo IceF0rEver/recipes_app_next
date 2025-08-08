@@ -7,9 +7,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
 import { getSession, getUser } from "@/lib/auth/server";
-import prisma from "@/lib/prisma";
-import { authSchemas } from "@/lib/zod/auth-schemas";
-import { getI18n } from "@/locales/server";
+import { createLog } from "@/lib/service/logs-service";
 
 export async function getUserSessionsList(
 	headers: Headers,
@@ -29,7 +27,7 @@ export async function getUserSessionsList(
 			});
 
 		if (!validatedData.success) {
-			console.error(validatedData.error);
+			throw new Error("400 - BAD_REQUEST");
 		}
 		const userSessionsList = await auth.api.listUserSessions({
 			headers,
@@ -39,16 +37,19 @@ export async function getUserSessionsList(
 		});
 		return userSessionsList;
 	} catch (error) {
-		console.error(error);
-		return {
-			sessions: [],
-		};
+		if (error instanceof z.ZodError) {
+			throw new Error("400 - BAD_REQUEST");
+		} else if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		} else {
+			throw new Error("500 - INTERNAL_SERVER_ERROR");
+		}
 	}
 }
 
 export interface SessionState {
 	success?: boolean;
-	error?: string;
+	error?: { code?: string; message?: string; status?: number };
 	message?: string;
 }
 
@@ -56,81 +57,102 @@ export async function deleteSession(
 	_prevState: SessionState,
 	formData: FormData,
 ): Promise<SessionState> {
-	const t = await getI18n();
-	const deleteSessionSchema = authSchemas(t).deleteSession;
 	const currentSession = await getSession();
 	const currentUser = await getUser();
 
 	try {
-		const validatedData = deleteSessionSchema.safeParse({
-			token: formData.get("token"),
-		});
+		const validatedData = z
+			.object({
+				token: z.string().min(1),
+			})
+			.safeParse({
+				token: formData.get("token"),
+			});
 
 		if (!validatedData.success) {
-			console.error(t("errors.userBadId"));
 			return {
 				success: false,
-				error: t("errors.userBadId"),
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
 			};
 		}
-		const { token } = validatedData.data;
-		if (token !== currentSession?.token) {
-			const result = await auth.api.revokeUserSession({
-				headers: await headers(),
-				body: {
-					sessionToken: token,
-				},
-			});
-			if (result) {
-				if (currentUser) {
-					await prisma.log.create({
-						data: {
-							userId: currentUser.id,
-							action: "SESSION_REVOKE",
-							targetId: token,
-							status: "SUCCESS",
-						},
-					});
-				}
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
-				revalidatePath("[locale]/dashboard/admin/users", "page");
 
-				return {
-					success: true,
-				};
-			} else {
-				return {
-					success: false,
-				};
-			}
-		} else {
+		const { token } = validatedData.data;
+
+		if (token === currentSession?.token) {
 			if (currentUser) {
-				await prisma.log.create({
-					data: {
-						userId: currentUser.id,
-						action: "SESSION_REVOKE",
-						targetId: token,
-						status: "FAILED",
-					},
+				const { success: logSuccess, error: logError } = await createLog({
+					userId: currentUser.id,
+					action: "SESSION_REVOKE",
+					targetId: token,
+					status: "FAILED",
 				});
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
+				if (!logSuccess) {
+					console.warn(logError);
+				}
 			}
 			return {
 				success: false,
+				error: {
+					code: "INVALID_OPERATION",
+					status: 403,
+				},
+			};
+		}
+
+		const result = await auth.api.revokeUserSession({
+			headers: await headers(),
+			body: {
+				sessionToken: token,
+			},
+		});
+
+		if (result.success) {
+			if (currentUser) {
+				const { success: logSuccess, error: logError } = await createLog({
+					userId: currentUser.id,
+					action: "SESSION_REVOKE",
+					targetId: token,
+					status: "SUCCESS",
+				});
+				if (!logSuccess) {
+					console.warn(logError);
+				}
+			}
+			revalidatePath("[locale]/dashboard/admin/users", "page");
+
+			return {
+				success: true,
+			};
+		} else {
+			return {
+				success: false,
+				error: {
+					code: "REVOKE_SESSION_FAILED",
+					status: 500,
+				},
 			};
 		}
 	} catch (error) {
+		console.warn(error);
+
 		if (error instanceof APIError) {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.APIError"),
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
 			};
 		} else {
-			console.error(error);
 			return {
 				success: false,
-				error: t("errors.unexpectedError"),
+				error: {
+					code: "UNEXPECTED_ERROR",
+					status: 500,
+				},
 			};
 		}
 	}
