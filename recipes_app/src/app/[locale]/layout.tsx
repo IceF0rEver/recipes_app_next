@@ -1,10 +1,10 @@
-import { DM_Sans, Playfair_Display, Fira_Code } from "next/font/google";
+import { DM_Sans, Fira_Code, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next";
 import type { ReactElement } from "react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { I18nProviderClient } from "@/locales/client";
-import type { Metadata } from "next";
 import { getI18n } from "@/locales/server";
 
 const dmSans = DM_Sans({
@@ -83,13 +83,23 @@ type RootLayoutProps = {
 	params: Promise<{ locale: string }>;
 	children: ReactElement;
 };
-export default async function RootLayout({ params, children }: RootLayoutProps) {
+export default async function RootLayout({
+	params,
+	children,
+}: RootLayoutProps) {
 	const { locale } = await params;
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
-			<body className={`${dmSans.variable} ${playfairDisplay.variable} ${firaCode.variable} antialiased`}>
-				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+			<body
+				className={`${dmSans.variable} ${playfairDisplay.variable} ${firaCode.variable} antialiased`}
+			>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
 					<I18nProviderClient locale={locale}>
 						{children}
 						<Toaster />

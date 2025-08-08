@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { getI18n } from "@/locales/server";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DarkMode from "@/components/utils/dark-mode";
 import SelectLang from "@/components/utils/select-lang";
+import { getI18n } from "@/locales/server";
 
 export default async function HeroPage() {
 	const t = await getI18n();
@@ -26,9 +26,13 @@ export default async function HeroPage() {
 					</div>
 					<h1 className="text-4xl md:text-5xl font-bold tracking-tight">
 						<span>{t("heroPage.title.firstPart")}</span>
-						<span className="text-primary">{t("heroPage.title.secondPart")}</span>
+						<span className="text-primary">
+							{t("heroPage.title.secondPart")}
+						</span>
 					</h1>
-					<p className="text-muted-foreground text-lg">{t("heroPage.description")}</p>
+					<p className="text-muted-foreground text-lg">
+						{t("heroPage.description")}
+					</p>
 					<div className="flex gap-4 flex-wrap">
 						<Link href="/auth/register">
 							<Button size="lg" className="shadow-md">
