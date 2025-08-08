@@ -9,9 +9,10 @@ export async function getLogsList(): Promise<{
 		const logsList = await prisma.log.findMany();
 		return { logs: logsList };
 	} catch (error) {
-		console.error(error);
-		return {
-			logs: [],
-		};
+		if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		} else {
+			throw new Error("500 - INTERNAL_SERVER_ERROR");
+		}
 	}
 }
