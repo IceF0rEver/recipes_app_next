@@ -94,6 +94,8 @@ export const dataTableColumnList = <TData extends object>(
 				return <div>{value ? t("button.yes") : t("button.no")}</div>;
 			} else if (value instanceof Date) {
 				return <div>{value.toLocaleString()}</div>;
+			} else if (typeof value === "object") {
+				return <div>{JSON.stringify(value)}</div>;
 			}
 
 			return (
