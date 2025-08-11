@@ -56,12 +56,12 @@ export function AppSidebar() {
 				items: [
 					{
 						title: t("components.appSideBar.users"),
-						url: "/admin/users",
+						url: "admin/users",
 						icon: <Users />,
 					},
 					{
 						title: t("components.appSideBar.logs"),
-						url: "/admin/logs",
+						url: "admin/logs",
 						icon: <Logs />,
 					},
 				],
@@ -97,8 +97,7 @@ export function AppSidebar() {
 										!item.items &&
 										(pathname.split("/").at(-1) ===
 											item.url?.split("/").at(-1) ||
-											(item.url === "#" &&
-												pathname.split("/").at(-1) === "dashboard"))
+											(item.url === "#" && pathname.includes("/dashboard")))
 									}
 								>
 									<a href={`/dashboard/${item.url}`}>
