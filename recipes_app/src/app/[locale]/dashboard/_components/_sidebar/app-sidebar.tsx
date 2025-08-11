@@ -2,6 +2,7 @@
 
 import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -36,45 +37,52 @@ export function AppSidebar() {
 	const t = useI18n();
 	const pathname = usePathname();
 
-	const dataSideBar = {
-		navMain: [
-			{
-				title: t("components.appSideBar.chatBot"),
-				url: "#",
-				icon: <BotMessageSquare />,
-				visibleTo: ["user", "admin", "premium"],
-			},
-			{
-				title: t("components.appSideBar.myRecipes"),
-				url: "my-recipes",
-				icon: <ReceiptText />,
-				visibleTo: ["user", "admin", "premium"],
-			},
-			{
-				title: t("components.appSideBar.admin"),
-				url: "#",
-				items: [
-					{
-						title: t("components.appSideBar.users"),
-						url: "admin/users",
-						icon: <Users />,
-					},
-					{
-						title: t("components.appSideBar.logs"),
-						url: "admin/logs",
-						icon: <Logs />,
-					},
-				],
-				visibleTo: ["admin"],
-			},
-		],
-	};
+	const dataSideBar = useMemo(
+		() => ({
+			navMain: [
+				{
+					title: t("components.appSideBar.chatBot"),
+					url: "#",
+					icon: <BotMessageSquare />,
+					visibleTo: ["user", "admin", "premium"],
+				},
+				{
+					title: t("components.appSideBar.myRecipes"),
+					url: "my-recipes",
+					icon: <ReceiptText />,
+					visibleTo: ["user", "admin", "premium"],
+				},
+				{
+					title: t("components.appSideBar.admin"),
+					url: "#",
+					items: [
+						{
+							title: t("components.appSideBar.users"),
+							url: "admin/users",
+							icon: <Users />,
+						},
+						{
+							title: t("components.appSideBar.logs"),
+							url: "admin/logs",
+							icon: <Logs />,
+						},
+					],
+					visibleTo: ["admin"],
+				},
+			],
+		}),
+		[t],
+	);
 
-	const dataUser = {
-		name: session?.user.name || "",
-		email: session?.user.email || "",
-		avatar: session?.user.image || "./",
-	};
+	const dataUser = useMemo(
+		() => ({
+			name: session?.user.name || "",
+			email: session?.user.email || "",
+			avatar: session?.user.image || "./",
+		}),
+		[session?.user.name, session?.user.email, session?.user.image],
+	);
+
 	return (
 		<Sidebar variant="inset">
 			<SidebarHeader className="p-0">
