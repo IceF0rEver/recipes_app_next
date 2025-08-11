@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
@@ -32,41 +32,44 @@ export default function Page() {
 			email: "",
 		},
 	});
-	const onSubmit = async (values: ForgotPasswordType) => {
-		try {
-			const validatedData = forgotPasswordSchema.parse({
-				email: values.email,
-			});
+	const onSubmit = useCallback(
+		async (values: ForgotPasswordType) => {
+			try {
+				const validatedData = forgotPasswordSchema.parse({
+					email: values.email,
+				});
 
-			await authClient.forgetPassword(
-				{ email: validatedData.email, redirectTo: "/auth/reset-password" },
-				{
-					onRequest: () => {
-						setLoading(true);
+				await authClient.forgetPassword(
+					{ email: validatedData.email, redirectTo: "/auth/reset-password" },
+					{
+						onRequest: () => {
+							setLoading(true);
+						},
+						onResponse: () => {
+							setLoading(false);
+						},
+						onError: (ctx) => {
+							setErrorMessage({
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
+							});
+						},
+						onSuccess: async () => {
+							toast.success(t("components.auth.forgetPassword.toast.success"));
+							router.push("/auth/login");
+						},
 					},
-					onResponse: () => {
-						setLoading(false);
-					},
-					onError: (ctx) => {
-						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
-						});
-					},
-					onSuccess: async () => {
-						toast.success(t("components.auth.forgetPassword.toast.success"));
-						router.push("/auth/login");
-					},
-				},
-			);
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
+				);
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			setLoading(false);
-		}
-	};
+		},
+		[router, t, forgotPasswordSchema],
+	);
 	return (
 		<AuthCard
 			title={t("components.auth.forgetPassword.title")}
