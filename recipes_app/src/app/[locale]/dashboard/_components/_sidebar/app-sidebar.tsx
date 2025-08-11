@@ -42,7 +42,7 @@ export function AppSidebar() {
 			navMain: [
 				{
 					title: t("components.appSideBar.chatBot"),
-					url: "#",
+					url: "chat",
 					icon: <BotMessageSquare />,
 					visibleTo: ["user", "admin", "premium"],
 				},
@@ -101,12 +101,7 @@ export function AppSidebar() {
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton
 									asChild
-									isActive={
-										!item.items &&
-										(pathname.split("/").at(-1) ===
-											item.url?.split("/").at(-1) ||
-											(item.url === "#" && pathname.includes("/dashboard")))
-									}
+									isActive={!item.items && pathname.includes(item.url)}
 								>
 									<a href={`/dashboard/${item.url}`}>
 										{item.icon}

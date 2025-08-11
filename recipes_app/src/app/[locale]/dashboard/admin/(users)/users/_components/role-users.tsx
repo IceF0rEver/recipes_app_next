@@ -5,6 +5,7 @@ import {
 	type ComponentType,
 	startTransition,
 	useActionState,
+	useCallback,
 	useEffect,
 } from "react";
 import { toast } from "sonner";
@@ -45,7 +46,7 @@ export default function RoleUsers({
 		initialState,
 	);
 
-	const handleSetRole = () => {
+	const handleSetRole = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id && selectedKey?.key) {
 				const formData = new FormData();
@@ -58,7 +59,7 @@ export default function RoleUsers({
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	};
+	}, [currentUser, formAction, t, selectedKey, userData]);
 
 	useEffect(() => {
 		if (state.success === true) {

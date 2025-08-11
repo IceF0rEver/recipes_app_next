@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
@@ -33,46 +33,49 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 		},
 	});
 
-	const onSubmit = async (values: UpdatePasswordType) => {
-		try {
-			const validatedData = updatePasswordSchema.parse({
-				password: values.password,
-				currentPassword: values.currentPassword,
-				passwordConfirmation: values.passwordConfirmation,
-			});
-			await authClient.changePassword(
-				{
-					newPassword: validatedData.password,
-					currentPassword: validatedData.currentPassword,
-					revokeOtherSessions: true,
-				},
-				{
-					onRequest: () => {
-						setLoading(true);
+	const onSubmit = useCallback(
+		async (values: UpdatePasswordType) => {
+			try {
+				const validatedData = updatePasswordSchema.parse({
+					password: values.password,
+					currentPassword: values.currentPassword,
+					passwordConfirmation: values.passwordConfirmation,
+				});
+				await authClient.changePassword(
+					{
+						newPassword: validatedData.password,
+						currentPassword: validatedData.currentPassword,
+						revokeOtherSessions: true,
 					},
-					onResponse: () => {
-						setLoading(false);
+					{
+						onRequest: () => {
+							setLoading(true);
+						},
+						onResponse: () => {
+							setLoading(false);
+						},
+						onError: (ctx) => {
+							setErrorMessage({
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
+							});
+						},
+						onSuccess: async () => {
+							toast.success(t("components.auth.resetPassword.toast.success"));
+							onOpenChange?.(false);
+						},
 					},
-					onError: (ctx) => {
-						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
-						});
-					},
-					onSuccess: async () => {
-						toast.success(t("components.auth.resetPassword.toast.success"));
-						onOpenChange?.(false);
-					},
-				},
-			);
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
+				);
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			setLoading(false);
-		}
-	};
+		},
+		[t, onOpenChange, updatePasswordSchema],
+	);
 	return (
 		<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 			{errorMessage.betterError && (

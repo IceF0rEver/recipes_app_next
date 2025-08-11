@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import DarkMode from "@/components/utils/dark-mode";
 import SelectLang from "@/components/utils/select-lang";
 import { useI18n } from "@/locales/client";
@@ -9,18 +10,21 @@ import SettingsItemsHeader from "./settings-items-header";
 export default function Appearance() {
 	const t = useI18n();
 
-	const items = [
-		{
-			label: t("components.settings.form.language.label"),
-			description: t("components.settings.form.language.description"),
-			component: <SelectLang />,
-		},
-		{
-			label: t("components.settings.form.darkMode.label"),
-			description: t("components.settings.form.darkMode.description"),
-			component: <DarkMode />,
-		},
-	];
+	const items = useMemo(
+		() => [
+			{
+				label: t("components.settings.form.language.label"),
+				description: t("components.settings.form.language.description"),
+				component: <SelectLang />,
+			},
+			{
+				label: t("components.settings.form.darkMode.label"),
+				description: t("components.settings.form.darkMode.description"),
+				component: <DarkMode />,
+			},
+		],
+		[t],
+	);
 	return (
 		<article className="max-w-3xl">
 			<SettingsItemsHeader

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type string, z } from "zod";
 import { Separator } from "@/components/ui/separator";
@@ -80,38 +80,41 @@ export default function Page() {
 		},
 	});
 
-	const onSubmit = async (values: SignInType) => {
-		try {
-			const validatedData = signInSchema.parse({
-				email: values.email,
-				password: values.password,
-			});
+	const onSubmit = useCallback(
+		async (values: SignInType) => {
+			try {
+				const validatedData = signInSchema.parse({
+					email: values.email,
+					password: values.password,
+				});
 
-			await signIn.email(validatedData, {
-				onRequest: () => {
-					setLoading(true);
-				},
-				onResponse: () => {
-					setLoading(false);
-				},
-				onError: (ctx) => {
-					setErrorMessage({
-						betterError: t(
-							`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-						),
-					});
-				},
-				onSuccess: async () => {
-					router.push(`/dashboard`);
-				},
-			});
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
+				await signIn.email(validatedData, {
+					onRequest: () => {
+						setLoading(true);
+					},
+					onResponse: () => {
+						setLoading(false);
+					},
+					onError: (ctx) => {
+						setErrorMessage({
+							betterError: t(
+								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+							),
+						});
+					},
+					onSuccess: async () => {
+						router.push(`/dashboard/chat`);
+					},
+				});
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			setLoading(false);
-		}
-	};
+		},
+		[t, signInSchema, router],
+	);
 
 	return (
 		<AuthCard

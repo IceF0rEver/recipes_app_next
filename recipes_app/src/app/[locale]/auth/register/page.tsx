@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type string, z } from "zod";
 import AuthButton from "@/components/utils/auth/auth-button";
@@ -35,50 +35,53 @@ export default function Page() {
 			image: "",
 		},
 	});
-	const onSubmit = async (values: SignUpType) => {
-		try {
-			const validatedData = signUpSchema.parse({
-				email: values.email,
-				password: values.password,
-				passwordConfirmation: values.passwordConfirmation,
-				firstName: values.firstName,
-				lastName: values.lastName,
-				image: values.image ?? "",
-			});
+	const onSubmit = useCallback(
+		async (values: SignUpType) => {
+			try {
+				const validatedData = signUpSchema.parse({
+					email: values.email,
+					password: values.password,
+					passwordConfirmation: values.passwordConfirmation,
+					firstName: values.firstName,
+					lastName: values.lastName,
+					image: values.image ?? "",
+				});
 
-			await signUp.email(
-				{
-					email: validatedData.email,
-					name: `${validatedData.firstName} ${validatedData.lastName}`,
-					password: validatedData.password,
-					image: validatedData.image,
-				},
-				{
-					onRequest: () => {
-						setLoading(true);
+				await signUp.email(
+					{
+						email: validatedData.email,
+						name: `${validatedData.firstName} ${validatedData.lastName}`,
+						password: validatedData.password,
+						image: validatedData.image,
 					},
-					onResponse: () => {
-						setLoading(false);
+					{
+						onRequest: () => {
+							setLoading(true);
+						},
+						onResponse: () => {
+							setLoading(false);
+						},
+						onError: (ctx) => {
+							setErrorMessage({
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
+							});
+						},
+						onSuccess: async () => {
+							router.push(`/dashboard/chat`);
+						},
 					},
-					onError: (ctx) => {
-						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
-						});
-					},
-					onSuccess: async () => {
-						router.push(`/dashboard`);
-					},
-				},
-			);
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
+				);
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			setLoading(false);
-		}
-	};
+		},
+		[t, router, signUpSchema],
+	);
 	return (
 		<AuthCard
 			title={t("components.auth.register.title")}

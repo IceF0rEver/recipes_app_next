@@ -3,7 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UserWithRole } from "better-auth/plugins";
 import { Loader2 } from "lucide-react";
-import { startTransition, useActionState, useCallback, useEffect } from "react";
+import {
+	startTransition,
+	useActionState,
+	useCallback,
+	useEffect,
+	useMemo,
+} from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -25,6 +31,39 @@ interface BanUsersProps {
 function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
+	const banList = useMemo(
+		() => [
+			{
+				label: t("components.admin.users.ban.duration.oneHour"),
+				value: "3600",
+			},
+			{
+				label: t("components.admin.users.ban.duration.threeHours"),
+				value: "10800",
+			},
+			{
+				label: t("components.admin.users.ban.duration.twelveHours"),
+				value: "43200",
+			},
+			{
+				label: t("components.admin.users.ban.duration.oneDay"),
+				value: "86400",
+			},
+			{
+				label: t("components.admin.users.ban.duration.sevenDays"),
+				value: "604800",
+			},
+			{
+				label: t("components.admin.users.ban.duration.oneMonth"),
+				value: "2419200",
+			},
+			{
+				label: t("components.admin.users.ban.duration.permanent"),
+				value: "-1",
+			},
+		],
+		[t],
+	);
 
 	const banUserSchema = authSchemas(t).banUser;
 	type BanUserType = z.infer<typeof banUserSchema>;
@@ -47,21 +86,24 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 		defaultValues: getDefaultValues(),
 	});
 
-	const onSubmit = (values: BanUserType) => {
-		if (userData?.id !== currentUser?.user.id) {
-			if (userData?.id) {
-				const formData = new FormData();
-				formData.append("userId", userData.id);
-				formData.append("banReason", values.banReason);
-				formData.append("banExpires", values.banExpires);
-				startTransition(() => {
-					formAction(formData);
-				});
+	const onSubmit = useCallback(
+		(values: BanUserType) => {
+			if (userData?.id !== currentUser?.user.id) {
+				if (userData?.id) {
+					const formData = new FormData();
+					formData.append("userId", userData.id);
+					formData.append("banReason", values.banReason);
+					formData.append("banExpires", values.banExpires);
+					startTransition(() => {
+						formAction(formData);
+					});
+				}
+			} else {
+				toast.error(t("components.admin.users.toast.identicalIdError"));
 			}
-		} else {
-			toast.error(t("components.admin.users.toast.identicalIdError"));
-		}
-	};
+		},
+		[currentUser, t, formAction, userData],
+	);
 
 	useEffect(() => {
 		form.reset(getDefaultValues());
@@ -96,36 +138,7 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 					fieldType="select"
 					className="w-full"
 					placeholder={t("button.choice")}
-					datas={[
-						{
-							label: t("components.admin.users.ban.duration.oneHour"),
-							value: "3600",
-						},
-						{
-							label: t("components.admin.users.ban.duration.threeHours"),
-							value: "10800",
-						},
-						{
-							label: t("components.admin.users.ban.duration.twelveHours"),
-							value: "43200",
-						},
-						{
-							label: t("components.admin.users.ban.duration.oneDay"),
-							value: "86400",
-						},
-						{
-							label: t("components.admin.users.ban.duration.sevenDays"),
-							value: "604800",
-						},
-						{
-							label: t("components.admin.users.ban.duration.oneMonth"),
-							value: "2419200",
-						},
-						{
-							label: t("components.admin.users.ban.duration.permanent"),
-							value: "-1",
-						},
-					]}
+					datas={banList}
 				/>
 				<Button
 					type="submit"
@@ -167,7 +180,7 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		defaultValues: getDefaultValues(),
 	});
 
-	const onSubmit = () => {
+	const onSubmit = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id) {
 				const formData = new FormData();
@@ -179,7 +192,7 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	};
+	}, [t, currentUser, formAction, userData]);
 
 	useEffect(() => {
 		form.reset(getDefaultValues());

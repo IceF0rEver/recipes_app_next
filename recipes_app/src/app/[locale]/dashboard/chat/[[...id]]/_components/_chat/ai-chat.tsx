@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { ChefHat, Clock, Sparkles, Users } from "lucide-react";
-import { use, useState } from "react";
+import { use, useCallback, useMemo, useState } from "react";
 import type { Chat } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/locales/client";
@@ -35,39 +35,46 @@ export default function AiChat({ id, chat }: AiChatProps) {
 	});
 	const [status, setStatus] = useState<Status>("ready");
 	const t = useI18n();
-	const handleSubmit = (text: string) => {
-		setStatus("submitted");
-		setStatus("streaming");
-		sendMessage({ text: text });
-		setStatus("ready");
-	};
 
-	const quickPrompts = [
-		{
-			icon: ChefHat,
-			title: t("quickPrompts.newRecipe.title"),
-			description: t("quickPrompts.newRecipe.description"),
-			prompt: t("quickPrompts.newRecipe.prompt"),
+	const handleSubmit = useCallback(
+		(text: string) => {
+			setStatus("submitted");
+			setStatus("streaming");
+			sendMessage({ text: text });
+			setStatus("ready");
 		},
-		{
-			icon: Clock,
-			title: t("quickPrompts.quickRecipe.title"),
-			description: t("quickPrompts.quickRecipe.description"),
-			prompt: t("quickPrompts.quickRecipe.prompt"),
-		},
-		{
-			icon: Users,
-			title: t("quickPrompts.familyRecipe.title"),
-			description: t("quickPrompts.familyRecipe.description"),
-			prompt: t("quickPrompts.familyRecipe.prompt"),
-		},
-		{
-			icon: Sparkles,
-			title: t("quickPrompts.catchRecipe.title"),
-			description: t("quickPrompts.catchRecipe.description"),
-			prompt: t("quickPrompts.catchRecipe.prompt"),
-		},
-	];
+		[sendMessage],
+	);
+
+	const quickPrompts = useMemo(
+		() => [
+			{
+				icon: ChefHat,
+				title: t("quickPrompts.newRecipe.title"),
+				description: t("quickPrompts.newRecipe.description"),
+				prompt: t("quickPrompts.newRecipe.prompt"),
+			},
+			{
+				icon: Clock,
+				title: t("quickPrompts.quickRecipe.title"),
+				description: t("quickPrompts.quickRecipe.description"),
+				prompt: t("quickPrompts.quickRecipe.prompt"),
+			},
+			{
+				icon: Users,
+				title: t("quickPrompts.familyRecipe.title"),
+				description: t("quickPrompts.familyRecipe.description"),
+				prompt: t("quickPrompts.familyRecipe.prompt"),
+			},
+			{
+				icon: Sparkles,
+				title: t("quickPrompts.catchRecipe.title"),
+				description: t("quickPrompts.catchRecipe.description"),
+				prompt: t("quickPrompts.catchRecipe.prompt"),
+			},
+		],
+		[t],
+	);
 
 	return (
 		<div

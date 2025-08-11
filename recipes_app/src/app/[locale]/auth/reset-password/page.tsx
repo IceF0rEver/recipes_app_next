@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
@@ -33,41 +33,44 @@ export default function Page() {
 		},
 	});
 
-	const onSubmit = async (values: ResetPasswordType) => {
-		try {
-			const validatedData = resetPasswordSchema.parse({
-				password: values.password,
-				passwordConfirmation: values.passwordConfirmation,
-			});
-			await authClient.resetPassword(
-				{ newPassword: validatedData.password, token: token as string },
-				{
-					onRequest: () => {
-						setLoading(true);
+	const onSubmit = useCallback(
+		async (values: ResetPasswordType) => {
+			try {
+				const validatedData = resetPasswordSchema.parse({
+					password: values.password,
+					passwordConfirmation: values.passwordConfirmation,
+				});
+				await authClient.resetPassword(
+					{ newPassword: validatedData.password, token: token as string },
+					{
+						onRequest: () => {
+							setLoading(true);
+						},
+						onResponse: () => {
+							setLoading(false);
+						},
+						onError: (ctx) => {
+							setErrorMessage({
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
+							});
+						},
+						onSuccess: async () => {
+							toast.success(t("components.auth.resetPassword.toast.success"));
+							router.push("/auth/login");
+						},
 					},
-					onResponse: () => {
-						setLoading(false);
-					},
-					onError: (ctx) => {
-						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
-						});
-					},
-					onSuccess: async () => {
-						toast.success(t("components.auth.resetPassword.toast.success"));
-						router.push("/auth/login");
-					},
-				},
-			);
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
+				);
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			setLoading(false);
-		}
-	};
+		},
+		[t, router, token, resetPasswordSchema],
+	);
 
 	return (
 		<AuthCard

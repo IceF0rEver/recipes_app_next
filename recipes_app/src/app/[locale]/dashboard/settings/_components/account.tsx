@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
@@ -32,79 +32,86 @@ export default function Account() {
 			image: session?.user.image ?? "",
 		},
 	});
-	const onSubmit = async (values: UpdateUserType) => {
-		try {
-			const validatedData = updateUserSchema.parse({
-				email: values.email,
-				firstName: values.firstName,
-				lastName: values.lastName,
-				image: values.image,
-			});
-			if (
-				validatedData.firstName !== session?.user.name.split(" ")[0] ||
-				validatedData.lastName !== session?.user.name.split(" ")[1] ||
-				validatedData.image !== session?.user.image
-			) {
-				await authClient.updateUser(
-					{
-						...((validatedData.firstName !== session?.user.name.split(" ")[0] ||
-							validatedData.lastName !== session?.user.name.split(" ")[1]) && {
-							name: `${validatedData.firstName} ${validatedData.lastName}`,
-						}),
-						...(validatedData.image !== session?.user.image && {
-							image: validatedData.image,
-						}),
-					},
-					{
-						onResponse: () => {
-							setLoading(false);
+	const onSubmit = useCallback(
+		async (values: UpdateUserType) => {
+			try {
+				const validatedData = updateUserSchema.parse({
+					email: values.email,
+					firstName: values.firstName,
+					lastName: values.lastName,
+					image: values.image,
+				});
+				if (
+					validatedData.firstName !== session?.user.name.split(" ")[0] ||
+					validatedData.lastName !== session?.user.name.split(" ")[1] ||
+					validatedData.image !== session?.user.image
+				) {
+					await authClient.updateUser(
+						{
+							...((validatedData.firstName !==
+								session?.user.name.split(" ")[0] ||
+								validatedData.lastName !==
+									session?.user.name.split(" ")[1]) && {
+								name: `${validatedData.firstName} ${validatedData.lastName}`,
+							}),
+							...(validatedData.image !== session?.user.image && {
+								image: validatedData.image,
+							}),
 						},
-						onRequest: () => {
-							setLoading(true);
+						{
+							onResponse: () => {
+								setLoading(false);
+							},
+							onRequest: () => {
+								setLoading(true);
+							},
+							onError: (ctx) => {
+								setErrorMessage({
+									betterError: t(
+										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+									),
+								});
+							},
+							onSuccess: async () => {
+								toast.success(
+									t("components.settings.toast.nameOrImageSuccess"),
+								);
+							},
 						},
-						onError: (ctx) => {
-							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
-							});
+					);
+				}
+				if (validatedData.email !== session?.user.email) {
+					await authClient.changeEmail(
+						{ newEmail: validatedData.email },
+						{
+							onResponse: () => {
+								setLoading(false);
+							},
+							onRequest: () => {
+								setLoading(true);
+							},
+							onError: (ctx) => {
+								setErrorMessage({
+									betterError: t(
+										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+									),
+								});
+							},
+							onSuccess: async () => {
+								toast.success(t("components.settings.toast.emailSuccess"));
+							},
 						},
-						onSuccess: async () => {
-							toast.success(t("components.settings.toast.nameOrImageSuccess"));
-						},
-					},
-				);
+					);
+				}
+			} catch (error) {
+				if (error instanceof z.ZodError) {
+					console.error(error);
+				}
+				setLoading(false);
 			}
-			if (validatedData.email !== session?.user.email) {
-				await authClient.changeEmail(
-					{ newEmail: validatedData.email },
-					{
-						onResponse: () => {
-							setLoading(false);
-						},
-						onRequest: () => {
-							setLoading(true);
-						},
-						onError: (ctx) => {
-							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
-							});
-						},
-						onSuccess: async () => {
-							toast.success(t("components.settings.toast.emailSuccess"));
-						},
-					},
-				);
-			}
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				console.error(error);
-			}
-			setLoading(false);
-		}
-	};
+		},
+		[session, t, updateUserSchema],
+	);
 	return (
 		<article className="max-w-3xl">
 			<SettingsItemsHeader
