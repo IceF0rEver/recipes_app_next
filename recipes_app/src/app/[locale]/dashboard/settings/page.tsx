@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Account from "@/app/[locale]/dashboard/settings/_components/account";
 import Appearance from "@/app/[locale]/dashboard/settings/_components/appearance";
 import {
@@ -18,18 +18,21 @@ export default function Page() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
-	const items = [
-		{
-			title: t("components.items.appearance.title"),
-			key: "appearance",
-			component: <Appearance />,
-		},
-		{
-			title: t("components.items.account.title"),
-			key: "account",
-			component: <Account />,
-		},
-	];
+	const items = useMemo(
+		() => [
+			{
+				title: t("components.items.appearance.title"),
+				key: "appearance",
+				component: <Appearance />,
+			},
+			{
+				title: t("components.items.account.title"),
+				key: "account",
+				component: <Account />,
+			},
+		],
+		[t],
+	);
 
 	const [settingItemSelected, setSettingItemSelected] = useState<string>(
 		searchParams.get("selected") ?? items[0].key,
@@ -66,7 +69,9 @@ export default function Page() {
 			</aside>
 			<section className="md:col-span-4 px-6">
 				{items?.map((item) => (
-					<div key={item.key}>{settingItemSelected === item.key && item.component}</div>
+					<div key={item.key}>
+						{settingItemSelected === item.key && item.component}
+					</div>
 				))}
 			</section>
 		</section>
