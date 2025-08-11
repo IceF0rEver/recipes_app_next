@@ -102,7 +102,7 @@ export default function Page() {
 					});
 				},
 				onSuccess: async () => {
-					router.push(`/dashboard`);
+					router.push(`/dashboard/chat`);
 				},
 			});
 		} catch (error) {

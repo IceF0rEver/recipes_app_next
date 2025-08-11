@@ -5,7 +5,7 @@ import {
 	streamText,
 	type UIMessage,
 } from "ai";
-import { updateMessagesChatById } from "@/app/[locale]/dashboard/_components/_serveractions/actions";
+import { updateMessagesChatById } from "@/app/[locale]/dashboard/chat/[[...id]]/_components/_serveractions/actions";
 import { getCurrentLocale } from "@/locales/server";
 
 export const maxDuration = 30;

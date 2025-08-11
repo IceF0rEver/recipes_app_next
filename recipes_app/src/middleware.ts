@@ -43,7 +43,9 @@ export async function middleware(request: NextRequest) {
 	const locale = pathname.split("/")[1];
 
 	if (sessionCookie && pathname.startsWith(`/${locale}/auth`)) {
-		return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
+		return NextResponse.redirect(
+			new URL(`/${locale}/dashboard/chat`, request.url),
+		);
 	}
 
 	if (!sessionCookie && pathname.startsWith(`/${locale}/dashboard`)) {
@@ -56,7 +58,7 @@ export async function middleware(request: NextRequest) {
 			pathname.startsWith(`/${locale}/dashboard/admin`)
 		) {
 			return NextResponse.redirect(
-				new URL(`/${locale}/dashboard`, request.url),
+				new URL(`/${locale}/dashboard/chat`, request.url),
 			);
 		}
 	}
