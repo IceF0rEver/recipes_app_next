@@ -1,9 +1,10 @@
 "use client";
 
-import { type UIMessage, useChat } from "@ai-sdk/react";
+import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { ChefHat, Clock, Sparkles, Users } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
+import type { Chat } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/locales/client";
 import AiConversation from "./ai-conversation";
@@ -11,14 +12,23 @@ import AiInput from "./ai-input";
 import AiQuickPrompts from "./ai-quick-prompts";
 
 type Status = "submitted" | "streaming" | "ready" | "error";
+
 interface AiChatProps {
 	id?: string | undefined;
-	initialMessages?: UIMessage[] | undefined;
+	chat: Promise<{
+		chat?: Chat | null;
+		error?: {
+			message?: string;
+			status?: number;
+		};
+	}>;
 }
-export default function AiChat({ id, initialMessages }: AiChatProps) {
+export default function AiChat({ id, chat }: AiChatProps) {
+	const currentChat = use(chat);
+
 	const { messages, sendMessage } = useChat({
 		id: id,
-		messages: initialMessages,
+		messages: JSON.parse(currentChat.chat?.messages as string) ?? [],
 		transport: new DefaultChatTransport({
 			api: "/api/chat",
 		}),

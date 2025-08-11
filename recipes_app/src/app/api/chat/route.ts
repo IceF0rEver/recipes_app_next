@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 		}),
 		onFinish: async ({ messages }) => {
 			const content = JSON.stringify(messages, null, 2);
-			const { status, error } = await updateMessagesChatById(id, content);
+			await updateMessagesChatById(id, content);
 		},
 	});
 }

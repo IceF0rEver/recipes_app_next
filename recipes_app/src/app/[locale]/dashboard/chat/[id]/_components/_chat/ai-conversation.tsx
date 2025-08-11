@@ -27,7 +27,7 @@ export default function AiConversation({
 	return (
 		<AIConversation className={className}>
 			<AIConversationContent>
-				{messages.map((message) => (
+				{messages?.map((message) => (
 					<AIMessage
 						from={message.role === "user" ? "user" : "assistant"}
 						key={message.id}

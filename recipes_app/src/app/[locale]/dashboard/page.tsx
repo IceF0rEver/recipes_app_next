@@ -7,9 +7,9 @@ import {
 } from "./_components/_serveractions/actions";
 
 export default async function Page() {
-	const { chat, error } = await getActiveChat();
+	const { chat } = await getActiveChat();
 	if (chat === null) {
-		const { id, status, error } = await setActiveChat();
+		const { id } = await setActiveChat();
 		redirect(`/dashboard/chat/${id}`);
 	} else {
 		redirect(`/dashboard/chat/${chat?.id}`);
