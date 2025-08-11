@@ -1,6 +1,6 @@
 "use client";
 import { GlobeIcon, MicIcon, PlusIcon } from "lucide-react";
-import { type FormEventHandler, useState } from "react";
+import { type FormEventHandler, useCallback, useState } from "react";
 import {
 	AIInput,
 	AIInputButton,
@@ -27,12 +27,15 @@ export default function AiInput({
 	const [input, setInput] = useState("");
 	const t = useI18n();
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-		e.preventDefault();
-		if (!input.trim()) return;
-		onSubmit(input);
-		setInput("");
-	};
+	const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+		(e) => {
+			e.preventDefault();
+			if (!input.trim()) return;
+			onSubmit(input);
+			setInput("");
+		},
+		[input, onSubmit],
+	);
 	return (
 		<div className={className}>
 			<AIInput onSubmit={handleSubmit}>
