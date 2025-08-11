@@ -105,7 +105,8 @@ export function AppSidebar() {
 										!item.items &&
 										(pathname.split("/").at(-1) ===
 											item.url?.split("/").at(-1) ||
-											(item.url === "#" && pathname.includes("/dashboard")))
+											(item.url === "#" &&
+												pathname.includes("/dashboard/chat")))
 									}
 								>
 									<a href={`/dashboard/${item.url}`}>
