@@ -180,7 +180,7 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		defaultValues: getDefaultValues(),
 	});
 
-	const onSubmit = () => {
+	const onSubmit = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id) {
 				const formData = new FormData();
@@ -192,7 +192,7 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	};
+	}, [t, currentUser, formAction, userData]);
 
 	useEffect(() => {
 		form.reset(getDefaultValues());
