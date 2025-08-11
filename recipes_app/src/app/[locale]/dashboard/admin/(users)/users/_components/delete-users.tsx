@@ -1,7 +1,7 @@
 "use client";
 
 import type { UserWithRole } from "better-auth/plugins";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
@@ -32,7 +32,7 @@ export default function DeleteUsers({
 		initialState,
 	);
 
-	const handleDelete = () => {
+	const handleDelete = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id) {
 				const formData = new FormData();
@@ -44,7 +44,7 @@ export default function DeleteUsers({
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	};
+	}, [currentUser, formAction, t, userData]);
 
 	useEffect(() => {
 		if (state.success === true) {

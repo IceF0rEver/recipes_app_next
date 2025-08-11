@@ -1,7 +1,7 @@
 "use client";
 
 import type { UserWithRole } from "better-auth/plugins";
-import { type ComponentType, use, useCallback, useState } from "react";
+import { type ComponentType, use, useCallback, useMemo, useState } from "react";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import { useI18n } from "@/locales/client";
@@ -32,51 +32,61 @@ export default function UsersTable({
 	const [selectedKey, setSelectedKey] = useState<Role | null>(null);
 
 	const usersList = use(datasTable);
-	const actionsItems = [
-		{
-			key: "session",
-			label: t("components.table.session"),
-			url: "/sessions",
-			type: "link" as ActionType,
-		},
-		{
-			key: "ban",
-			label: t("button.ban"),
-			type: "sheet" as ActionType,
-			onAction: useCallback((data: UserWithRole) => {
-				setOpenSheet(true);
-				setSelectedUser(data);
-			}, []),
-			separator: true,
-		},
-		{
-			key: "role",
-			label: t("components.table.role"),
-			type: "select" as ActionType,
-			subItems: [
-				{ key: "admin", label: t("components.table.roles.admin") },
-				{ key: "user", label: t("components.table.roles.user") },
-				{ key: "premium", label: t("components.table.roles.premium") },
-			],
-			onAction: useCallback((data: UserWithRole, role?: Role) => {
-				setAlertOpenDialogRole(true);
-				setSelectedUser(data);
-				if (role) {
-					setSelectedKey(role);
-				}
-			}, []),
-		},
-		{
-			key: "delete",
-			label: t("button.delete"),
-			type: "delete" as ActionType,
-			separator: true,
-			onAction: useCallback((data: UserWithRole) => {
-				setAlertOpenDialogDelete(true);
-				setSelectedUser(data);
-			}, []),
-		},
-	];
+
+	const onBanAction = useCallback((data: UserWithRole) => {
+		setOpenSheet(true);
+		setSelectedUser(data);
+	}, []);
+
+	const onRoleAction = useCallback((data: UserWithRole, role?: Role) => {
+		setAlertOpenDialogRole(true);
+		setSelectedUser(data);
+		if (role) {
+			setSelectedKey(role);
+		}
+	}, []);
+
+	const onDeleteAction = useCallback((data: UserWithRole) => {
+		setAlertOpenDialogDelete(true);
+		setSelectedUser(data);
+	}, []);
+
+	const actionsItems = useMemo(
+		() => [
+			{
+				key: "session",
+				label: t("components.table.session"),
+				url: "/sessions",
+				type: "link" as ActionType,
+			},
+			{
+				key: "ban",
+				label: t("button.ban"),
+				type: "sheet" as ActionType,
+				onAction: onBanAction,
+				separator: true,
+			},
+			{
+				key: "role",
+				label: t("components.table.role"),
+				type: "select" as ActionType,
+				subItems: [
+					{ key: "admin", label: t("components.table.roles.admin") },
+					{ key: "user", label: t("components.table.roles.user") },
+					{ key: "premium", label: t("components.table.roles.premium") },
+				],
+				onAction: onRoleAction,
+			},
+			{
+				key: "delete",
+				label: t("button.delete"),
+				type: "delete" as ActionType,
+				separator: true,
+				onAction: onDeleteAction,
+			},
+		],
+		[t, onBanAction, onDeleteAction, onRoleAction],
+	);
 
 	const columns = dataTableColumnList<UserWithRole>(columnsItems, actionsItems);
 

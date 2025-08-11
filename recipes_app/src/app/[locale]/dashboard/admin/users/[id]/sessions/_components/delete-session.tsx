@@ -1,7 +1,7 @@
 "use client";
 
 import type { SessionWithImpersonatedBy } from "better-auth/plugins";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
@@ -32,7 +32,7 @@ export default function DeleteSession({
 		initialState,
 	);
 
-	const handleDelete = () => {
+	const handleDelete = useCallback(() => {
 		if (sessionData?.token !== currentUser?.session.token) {
 			if (sessionData?.token) {
 				const formData = new FormData();
@@ -44,7 +44,7 @@ export default function DeleteSession({
 		} else {
 			toast.error(t("components.admin.users.toast.identicalSessionError"));
 		}
-	};
+	}, [t, currentUser, sessionData, formAction]);
 
 	useEffect(() => {
 		if (state.success) {

@@ -1,7 +1,7 @@
 "use client";
 
 import type { Session } from "better-auth";
-import { use, useCallback, useState } from "react";
+import { use, useCallback, useMemo, useState } from "react";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import { useI18n } from "@/locales/client";
@@ -21,17 +21,22 @@ export default function SessionsTable({
 
 	const sessionsList = use(datasTable);
 
-	const actionsItems = [
-		{
-			key: "delete",
-			label: t("button.delete"),
-			type: "delete" as ActionType,
-			onAction: useCallback((data: Session) => {
-				setAlertOpenDialogDelete(true);
-				setSelectedSession(data);
-			}, []),
-		},
-	];
+	const onDeleteAction = useCallback((data: Session) => {
+		setAlertOpenDialogDelete(true);
+		setSelectedSession(data);
+	}, []);
+
+	const actionsItems = useMemo(
+		() => [
+			{
+				key: "delete",
+				label: t("button.delete"),
+				type: "delete" as ActionType,
+				onAction: onDeleteAction,
+			},
+		],
+		[t, onDeleteAction],
+	);
 
 	const columns = dataTableColumnList<Session>(columnsItems, actionsItems);
 
