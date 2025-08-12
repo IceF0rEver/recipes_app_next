@@ -19,6 +19,7 @@ import {
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 import { NavUser } from "./nav-user";
+import Link from "next/link";
 
 const NavUserSkeleton = () => {
 	return (
@@ -103,10 +104,10 @@ export function AppSidebar() {
 									asChild
 									isActive={!item.items && pathname.includes(item.url)}
 								>
-									<a href={`/dashboard/${item.url}`}>
+									<Link href={`/dashboard/${item.url}`}>
 										{item.icon}
 										{item.title}
-									</a>
+									</Link>
 								</SidebarMenuButton>
 								{item.items?.length ? (
 									<SidebarMenuSub>
@@ -119,10 +120,10 @@ export function AppSidebar() {
 														item.url?.split("/").at(-1)
 													}
 												>
-													<a href={`/dashboard/${item.url}`}>
+													<Link href={`/dashboard/${item.url}`}>
 														{item.icon}
 														{item.title}
-													</a>
+													</Link>
 												</SidebarMenuSubButton>
 											</SidebarMenuSubItem>
 										))}
