@@ -90,11 +90,14 @@ export const dataTableColumnList = <TData extends object>(
 						<Badge variant="outline">{matched.label}</Badge>
 					</div>
 				);
-			} else if (typeof value === "boolean") {
+			}
+			if (typeof value === "boolean") {
 				return <div>{value ? t("button.yes") : t("button.no")}</div>;
-			} else if (value instanceof Date) {
+			}
+			if (value instanceof Date) {
 				return <div>{value.toLocaleString()}</div>;
-			} else if (typeof value === "object") {
+			}
+			if (typeof value === "object") {
 				return <div>{JSON.stringify(value)}</div>;
 			}
 

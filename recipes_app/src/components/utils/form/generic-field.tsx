@@ -88,7 +88,8 @@ export default function GenericField<T extends FieldValues>({
 							<FormMessage />
 						</FormItem>
 					);
-				} else if (fieldType === "date") {
+				}
+				if (fieldType === "date") {
 					return (
 						<FormItem>
 							{label && <FormLabel>{label}</FormLabel>}
@@ -122,7 +123,8 @@ export default function GenericField<T extends FieldValues>({
 							<FormMessage />
 						</FormItem>
 					);
-				} else if (fieldType === "select") {
+				}
+				if (fieldType === "select") {
 					return (
 						<FormItem>
 							{label && <FormLabel>{label}</FormLabel>}
@@ -146,23 +148,22 @@ export default function GenericField<T extends FieldValues>({
 							<FormMessage />
 						</FormItem>
 					);
-				} else {
-					return (
-						<FormItem>
-							{label && <FormLabel>{label}</FormLabel>}
-							<FormControl>
-								<Input
-									placeholder={placeholder}
-									type={type}
-									{...field}
-									className={cn(className)}
-								/>
-							</FormControl>
-							{description && <FormDescription>{description}</FormDescription>}
-							<FormMessage />
-						</FormItem>
-					);
 				}
+				return (
+					<FormItem>
+						{label && <FormLabel>{label}</FormLabel>}
+						<FormControl>
+							<Input
+								placeholder={placeholder}
+								type={type}
+								{...field}
+								className={cn(className)}
+							/>
+						</FormControl>
+						{description && <FormDescription>{description}</FormDescription>}
+						<FormMessage />
+					</FormItem>
+				);
 			}}
 		/>
 	);

@@ -48,23 +48,22 @@ export default function AiConversation({
 														if (index % 2 === 1) {
 															// biome-ignore lint/suspicious/noArrayIndexKey: key index
 															return <strong key={index}>{part}</strong>;
-														} else {
-															if (
-																part.includes("### ") ||
-																part.includes("#### ")
-															) {
-																const match = part.replace(/(#{3,4}) (.*)/, "");
-
-																return (
-																	// biome-ignore lint/suspicious/noArrayIndexKey: key index
-																	<h2 className="text-xl" key={index}>
-																		<strong>{match}</strong>
-																	</h2>
-																);
-															}
-															// biome-ignore lint/suspicious/noArrayIndexKey: key index
-															return <span key={index}>{part}</span>;
 														}
+														if (
+															part.includes("### ") ||
+															part.includes("#### ")
+														) {
+															const match = part.replace(/(#{3,4}) (.*)/, "");
+
+															return (
+																// biome-ignore lint/suspicious/noArrayIndexKey: key index
+																<h2 className="text-xl" key={index}>
+																	<strong>{match}</strong>
+																</h2>
+															);
+														}
+														// biome-ignore lint/suspicious/noArrayIndexKey: key index
+														return <span key={index}>{part}</span>;
 													})}
 											</AIMessageContent>
 											{message.role === "user" ? (

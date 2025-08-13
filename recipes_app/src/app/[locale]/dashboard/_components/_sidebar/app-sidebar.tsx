@@ -1,6 +1,7 @@
 "use client";
 
 import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import {
@@ -19,15 +20,14 @@ import {
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 import { NavUser } from "./nav-user";
-import Link from "next/link";
 
 const NavUserSkeleton = () => {
 	return (
 		<div className="flex flex-row gap-1 w-full h-12 rounded-lg bg-muted-foreground p-2">
-			<span className="w-10 aspect-square rounded-lg bg-popover-foreground"></span>
+			<span className="w-10 aspect-square rounded-lg bg-popover-foreground" />
 			<div className="grid gap-1 w-full p-1">
-				<span className="rounded-full w-3/5 bg-popover-foreground"></span>
-				<span className="rounded-full w-4/5 bg-popover-foreground"></span>
+				<span className="rounded-full w-3/5 bg-popover-foreground" />
+				<span className="rounded-full w-4/5 bg-popover-foreground" />
 			</div>
 		</div>
 	);

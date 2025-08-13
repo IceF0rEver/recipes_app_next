@@ -17,7 +17,8 @@
     "choice": "Choisir",
     "no": "Non",
     "yes": "Oui",
-    "unban": "Débannir"
+    "unban": "Débannir",
+    "accueil": "Retour à l'accueil"
   },
   "heroPage": {
     "title": {
@@ -302,6 +303,10 @@
       "targetId": "ID ciblé",
       "status": "Status",
       "metadata": "Meta data"
+    },
+    "notFound": {
+      "title": "Page introuvable",
+      "description": "La page que vous recherchez n'existe pas ou a été déplacée."
     }
   },
   "metaData": {
@@ -315,6 +320,10 @@
         "ai_assistant": "assistant cuisine IA",
         "pdf_export": "export PDF recettes"
       }
+    },
+    "notFound": {
+      "title": "404 - Page introuvable",
+      "description": "La page que vous recherchez n'existe pas."
     }
   },
   "zod": {

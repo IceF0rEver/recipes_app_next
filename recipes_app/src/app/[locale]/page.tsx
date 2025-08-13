@@ -57,9 +57,9 @@ export default async function HeroPage() {
 				<div className="relative w-full h-80 md:h-[500px] animate-fade-in">
 					<Card className="h-full py-4">
 						<CardHeader className="border-b-1 pb-4 flex gap-2 px-3">
-							<span className="size-3 rounded-full bg-red-500"></span>
-							<span className="size-3 rounded-full bg-yellow-500"></span>
-							<span className="size-3 rounded-full bg-green-500"></span>
+							<span className="size-3 rounded-full bg-red-500" />
+							<span className="size-3 rounded-full bg-yellow-500" />
+							<span className="size-3 rounded-full bg-green-500" />
 						</CardHeader>
 						<CardContent>
 							{/* <Image

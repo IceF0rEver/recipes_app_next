@@ -38,11 +38,13 @@ export default function AuthButton({
 				},
 				onError: (ctx) => {
 					console.error({
-						betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
+						betterError: t(
+							`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+						),
 					});
 				},
 				onSuccess: async () => {
-					router.push(`/dashboard`);
+					router.push("/dashboard");
 				},
 			},
 		);
@@ -59,7 +61,11 @@ export default function AuthButton({
 			disabled={loading}
 			onClick={isSocial === true ? () => handleSubmitSocial() : undefined}
 		>
-			{loading ? <Loader2 size={16} className="animate-spin" /> : <span>{label}</span>}
+			{loading ? (
+				<Loader2 size={16} className="animate-spin" />
+			) : (
+				<span>{label}</span>
+			)}
 		</Button>
 	);
 }

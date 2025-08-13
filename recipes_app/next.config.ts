@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 	},
 	experimental: {
 		useCache: true,
+		globalNotFound: true,
 	},
 };
 
