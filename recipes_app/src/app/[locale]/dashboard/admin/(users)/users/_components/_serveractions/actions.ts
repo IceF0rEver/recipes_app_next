@@ -28,9 +28,8 @@ export async function getUsersList(headers: Headers): Promise<{
 	} catch (error) {
 		if (error instanceof Error && error.message.includes("network")) {
 			throw new Error("503 - SERVICE_UNAVAILABLE");
-		} else {
-			throw new Error("500 - INTERNAL_SERVER_ERROR");
 		}
+		throw new Error("500 - INTERNAL_SERVER_ERROR");
 	}
 }
 
@@ -88,35 +87,33 @@ export async function deleteUser(
 				return {
 					success: true,
 				};
-			} else {
-				return {
-					success: false,
-					error: {
-						code: "USER_DELETE_FAILED",
-						status: 500,
-					},
-				};
-			}
-		} else {
-			if (currentUser) {
-				const { success: logSuccess, error: logError } = await createLog({
-					userId: currentUser.id,
-					action: "USER_DELETE",
-					targetId: userId,
-					status: "FAILED",
-				});
-				if (!logSuccess) {
-					console.warn(logError);
-				}
 			}
 			return {
 				success: false,
 				error: {
-					code: "INVALID_OPERATION",
-					status: 403,
+					code: "USER_DELETE_FAILED",
+					status: 500,
 				},
 			};
 		}
+		if (currentUser) {
+			const { success: logSuccess, error: logError } = await createLog({
+				userId: currentUser.id,
+				action: "USER_DELETE",
+				targetId: userId,
+				status: "FAILED",
+			});
+			if (!logSuccess) {
+				console.warn(logError);
+			}
+		}
+		return {
+			success: false,
+			error: {
+				code: "INVALID_OPERATION",
+				status: 403,
+			},
+		};
 	} catch (error) {
 		console.warn(error);
 
@@ -128,15 +125,14 @@ export async function deleteUser(
 					status: 502,
 				},
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "UNEXPECTED_ERROR",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
 	}
 }
 
@@ -179,6 +175,9 @@ export async function updateRoleUser(
 						userId: currentUser.id,
 						action: "ROLE_CHANGE",
 						targetId: userId,
+						metadata: {
+							newRole: role,
+						},
 						status: "SUCCESS",
 					});
 					if (!logSuccess) {
@@ -190,35 +189,36 @@ export async function updateRoleUser(
 				return {
 					success: true,
 				};
-			} else {
-				return {
-					success: false,
-					error: {
-						code: "ROLE_CHANGE_FAILED",
-						status: 500,
-					},
-				};
-			}
-		} else {
-			if (currentUser) {
-				await prisma.log.create({
-					data: {
-						userId: currentUser.id,
-						action: "ROLE_CHANGE",
-						targetId: userId,
-						status: "FAILED",
-					},
-				});
-				revalidatePath("[locale]/dashboard/admin/logs", "page");
 			}
 			return {
 				success: false,
 				error: {
-					code: "INVALID_OPERATION",
-					status: 403,
+					code: "ROLE_CHANGE_FAILED",
+					status: 500,
 				},
 			};
 		}
+		if (currentUser) {
+			await prisma.log.create({
+				data: {
+					userId: currentUser.id,
+					action: "ROLE_CHANGE",
+					targetId: userId,
+					metadata: {
+						newRole: role,
+					},
+					status: "FAILED",
+				},
+			});
+			revalidatePath("[locale]/dashboard/admin/logs", "page");
+		}
+		return {
+			success: false,
+			error: {
+				code: "INVALID_OPERATION",
+				status: 403,
+			},
+		};
 	} catch (error) {
 		console.warn(error);
 
@@ -230,15 +230,14 @@ export async function updateRoleUser(
 					status: 502,
 				},
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "UNEXPECTED_ERROR",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
 	}
 }
 
@@ -297,35 +296,33 @@ export async function banUser(
 				return {
 					success: true,
 				};
-			} else {
-				return {
-					success: false,
-					error: {
-						code: "USER_SUSPEND_FAILED",
-						status: 500,
-					},
-				};
-			}
-		} else {
-			if (currentUser) {
-				const { success: logSuccess, error: logError } = await createLog({
-					userId: currentUser.id,
-					action: "USER_SUSPEND",
-					targetId: userId,
-					status: "FAILED",
-				});
-				if (!logSuccess) {
-					console.warn(logError);
-				}
 			}
 			return {
 				success: false,
 				error: {
-					code: "INVALID_OPERATION",
-					status: 403,
+					code: "USER_SUSPEND_FAILED",
+					status: 500,
 				},
 			};
 		}
+		if (currentUser) {
+			const { success: logSuccess, error: logError } = await createLog({
+				userId: currentUser.id,
+				action: "USER_SUSPEND",
+				targetId: userId,
+				status: "FAILED",
+			});
+			if (!logSuccess) {
+				console.warn(logError);
+			}
+		}
+		return {
+			success: false,
+			error: {
+				code: "INVALID_OPERATION",
+				status: 403,
+			},
+		};
 	} catch (error) {
 		console.warn(error);
 
@@ -337,15 +334,14 @@ export async function banUser(
 					status: 502,
 				},
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "UNEXPECTED_ERROR",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
 	}
 }
 
@@ -396,35 +392,33 @@ export async function unBanUser(
 				return {
 					success: true,
 				};
-			} else {
-				return {
-					success: false,
-					error: {
-						code: "USER_ACTIVATE_FAILED",
-						status: 500,
-					},
-				};
-			}
-		} else {
-			if (currentUser) {
-				const { success: logSuccess, error: logError } = await createLog({
-					userId: currentUser.id,
-					action: "USER_ACTIVATE",
-					targetId: userId,
-					status: "FAILED",
-				});
-				if (!logSuccess) {
-					console.warn(logError);
-				}
 			}
 			return {
 				success: false,
 				error: {
-					code: "INVALID_OPERATION",
-					status: 403,
+					code: "USER_ACTIVATE_FAILED",
+					status: 500,
 				},
 			};
 		}
+		if (currentUser) {
+			const { success: logSuccess, error: logError } = await createLog({
+				userId: currentUser.id,
+				action: "USER_ACTIVATE",
+				targetId: userId,
+				status: "FAILED",
+			});
+			if (!logSuccess) {
+				console.warn(logError);
+			}
+		}
+		return {
+			success: false,
+			error: {
+				code: "INVALID_OPERATION",
+				status: 403,
+			},
+		};
 	} catch (error) {
 		console.warn(error);
 
@@ -436,14 +430,13 @@ export async function unBanUser(
 					status: 502,
 				},
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "UNEXPECTED_ERROR",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
 	}
 }

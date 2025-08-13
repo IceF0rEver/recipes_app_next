@@ -15,8 +15,7 @@ export async function getLogsList(): Promise<{
 	} catch (error) {
 		if (error instanceof Error && error.message.includes("network")) {
 			throw new Error("503 - SERVICE_UNAVAILABLE");
-		} else {
-			throw new Error("500 - INTERNAL_SERVER_ERROR");
 		}
+		throw new Error("500 - INTERNAL_SERVER_ERROR");
 	}
 }

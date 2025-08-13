@@ -39,11 +39,11 @@ export async function getUserSessionsList(
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			throw new Error("400 - BAD_REQUEST");
-		} else if (error instanceof Error && error.message.includes("network")) {
-			throw new Error("503 - SERVICE_UNAVAILABLE");
-		} else {
-			throw new Error("500 - INTERNAL_SERVER_ERROR");
 		}
+		if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		}
+		throw new Error("500 - INTERNAL_SERVER_ERROR");
 	}
 }
 
@@ -126,15 +126,14 @@ export async function deleteSession(
 			return {
 				success: true,
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "REVOKE_SESSION_FAILED",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "REVOKE_SESSION_FAILED",
+				status: 500,
+			},
+		};
 	} catch (error) {
 		console.warn(error);
 
@@ -146,14 +145,13 @@ export async function deleteSession(
 					status: 502,
 				},
 			};
-		} else {
-			return {
-				success: false,
-				error: {
-					code: "UNEXPECTED_ERROR",
-					status: 500,
-				},
-			};
 		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
 	}
 }

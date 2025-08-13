@@ -38,7 +38,7 @@ export const NavUser = memo(function NavUser({ user }: NavUserProps) {
 
 	const handleSignOut = useCallback(async () => {
 		await authClient.signOut();
-		router.push(`/`);
+		router.push("/");
 	}, [router]);
 
 	return (

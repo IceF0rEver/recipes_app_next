@@ -69,7 +69,7 @@ export default function Page() {
 							});
 						},
 						onSuccess: async () => {
-							router.push(`/dashboard/chat`);
+							router.push("/dashboard/chat");
 						},
 					},
 				);

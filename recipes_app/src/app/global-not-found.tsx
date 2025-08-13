@@ -22,7 +22,7 @@ export default async function GlobalNotFound() {
 					<div className="text-center space-y-8 max-w-md">
 						<div className="space-y-4">
 							<h1 className="text-8xl font-bold text-primary">404</h1>
-							<div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+							<div className="w-24 h-1 bg-primary mx-auto rounded-full" />
 						</div>
 
 						<div className="space-y-3">
