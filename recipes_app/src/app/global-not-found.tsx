@@ -16,7 +16,7 @@ export default async function GlobalNotFound() {
 	const t = await getI18n();
 
 	return (
-		<html lang={locale}>
+		<html lang={locale} suppressHydrationWarning>
 			<body className="bg-background text-foreground">
 				<div className="min-h-screen flex items-center justify-center p-4">
 					<div className="text-center space-y-8 max-w-md">
