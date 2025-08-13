@@ -1,4 +1,4 @@
-import { getCurrentLocale, getI18n } from "@/locales/server";
+import { getI18n } from "@/locales/server";
 import "./[locale]/globals.css";
 import type { Metadata } from "next";
 import { setStaticParamsLocale } from "next-international/server";
@@ -13,12 +13,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GlobalNotFound() {
-	const locale = await getCurrentLocale();
-	setStaticParamsLocale(locale);
+	setStaticParamsLocale("en");
 	const t = await getI18n();
 
 	return (
-		<html lang={locale} suppressHydrationWarning>
+		<html lang="en">
 			<body className="bg-background text-foreground">
 				<div className="min-h-screen flex items-center justify-center p-4">
 					<div className="text-center space-y-8 max-w-md">
