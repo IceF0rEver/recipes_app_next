@@ -17,7 +17,8 @@
     "choice": "Choose",
     "no": "No",
     "yes": "Yes",
-    "unban": "Unban"
+    "unban": "Unban",
+    "accueil": "Return to reception"
   },
   "heroPage": {
     "title": {
@@ -302,6 +303,10 @@
       "targetId": "Targeted ID",
       "status": "Status",
       "metadata": "Meta Data"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for does not exist or has been moved."
     }
   },
   "metaData": {
@@ -315,6 +320,10 @@
         "ai_assistant": "IA cooking assistant",
         "pdf_export": "PDF export Recipes"
       }
+    },
+    "notFound": {
+      "title": "404 - Page not found",
+      "description": "The page you are looking for does not exist."
     }
   },
   "zod": {
