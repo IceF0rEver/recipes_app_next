@@ -1,6 +1,7 @@
 import { getCurrentLocale, getI18n } from "@/locales/server";
 import "./[locale]/globals.css";
 import type { Metadata } from "next";
+import { setStaticParamsLocale } from "next-international/server";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getI18n();
@@ -13,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GlobalNotFound() {
 	const locale = await getCurrentLocale();
+	setStaticParamsLocale(locale);
 	const t = await getI18n();
 
 	return (
