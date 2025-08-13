@@ -34,14 +34,6 @@ export default async function GlobalNotFound() {
 								{t("components.notFound.description")}
 							</p>
 						</div>
-						<div className="flex flex-col sm:flex-row gap-3 justify-center">
-							<Link
-								href="/dashboard/chat"
-								className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
-							>
-								{t("button.accueil")}
-							</Link>
-						</div>
 					</div>
 				</div>
 			</body>
