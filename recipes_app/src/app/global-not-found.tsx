@@ -1,7 +1,6 @@
 import { getCurrentLocale, getI18n } from "@/locales/server";
 import "./[locale]/globals.css";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getI18n();
