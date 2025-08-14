@@ -1,4 +1,4 @@
-import { getCurrentLocale, getI18n, getStaticParams } from "@/locales/server";
+import { getCurrentLocale, getI18n } from "@/locales/server";
 import "./[locale]/globals.css";
 import type { Metadata } from "next";
 import { DM_Sans, Fira_Code, Playfair_Display } from "next/font/google";
