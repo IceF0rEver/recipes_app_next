@@ -33,9 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GlobalNotFound() {
+	setStaticParamsLocale("en");
 	const locale = await getCurrentLocale();
 	const t = await getI18n();
-	setStaticParamsLocale(locale);
 	return (
 		<html lang={locale} suppressHydrationWarning>
 			<body
