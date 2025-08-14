@@ -79,10 +79,10 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-type RootLayoutProps = {
+interface RootLayoutProps {
 	params: Promise<{ locale: string }>;
 	children: ReactElement;
-};
+}
 export default async function RootLayout({
 	params,
 	children,
