@@ -68,7 +68,7 @@ export default function AiConversation({
 											</AIMessageContent>
 											{message.role === "user" ? (
 												<AIMessageAvatar
-													name={session?.user.name}
+													name={"ME"}
 													src={session?.user.image ?? ""}
 												/>
 											) : (
