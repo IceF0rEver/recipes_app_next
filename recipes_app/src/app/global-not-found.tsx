@@ -1,8 +1,7 @@
-import { getCurrentLocale, getI18n } from "@/locales/server";
+import { getCurrentLocale, getI18n, getStaticParams } from "@/locales/server";
 import "./[locale]/globals.css";
 import type { Metadata } from "next";
 import { DM_Sans, Fira_Code, Playfair_Display } from "next/font/google";
-import { setStaticParamsLocale } from "next-international/server";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { I18nProviderClient } from "@/locales/client";
 
@@ -33,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GlobalNotFound() {
-	setStaticParamsLocale("en");
+	getStaticParams();
 	const locale = await getCurrentLocale();
 	const t = await getI18n();
 	return (
