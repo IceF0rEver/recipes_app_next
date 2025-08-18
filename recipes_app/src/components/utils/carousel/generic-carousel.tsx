@@ -28,24 +28,24 @@ export default function GenericCarousel<T>({
 	options,
 }: GenericCarouselProps<T>) {
 	return data.length > 0 ? (
-		<div className={className}>
+		<div>
 			{title && (
-				<h2 className="text-2xl font-semibold text-foreground py-2 flex">
-					{title}
-				</h2>
+				<h2 className="text-2xl font-semibold text-foreground py-2">{title}</h2>
 			)}
-			<Carousel opts={options} orientation={orientation} className="grid">
-				<CarouselContent>
-					{data.map((item, index) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey: index for key
-						<CarouselItem key={index} className="p-2 md:p-4 basis-auto">
-							{itemComponent(item)}
-						</CarouselItem>
-					))}
-				</CarouselContent>
-				<CarouselNext className="hidden md:flex" />
-				<CarouselPrevious className="hidden md:flex" />
-			</Carousel>
+			<div className={className}>
+				<Carousel opts={options} orientation={orientation} className="grid">
+					<CarouselContent>
+						{data.map((item, index) => (
+							// biome-ignore lint/suspicious/noArrayIndexKey: index for key
+							<CarouselItem key={index} className="p-2 md:p-4 basis-auto">
+								{itemComponent(item)}
+							</CarouselItem>
+						))}
+					</CarouselContent>
+					<CarouselNext className="hidden md:flex" />
+					<CarouselPrevious className="hidden md:flex" />
+				</Carousel>
+			</div>
 		</div>
 	) : null;
 }
