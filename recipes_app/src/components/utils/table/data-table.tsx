@@ -44,8 +44,7 @@ export function DataTable<TData, TValue>({
 				visibility[col.id] = true;
 			} else if ("accessorKey" in col && col.accessorKey) {
 				const vis = col.meta?.initialStateVisibility;
-				// @ts-ignore
-				visibility[col.accessorKey] = vis !== undefined ? vis : true;
+				visibility[col.accessorKey.toString()] = vis !== undefined ? vis : true;
 			} else if (col.id) {
 				visibility[col.id] = col.enableHiding !== false;
 			}
@@ -82,6 +81,7 @@ export function DataTable<TData, TValue>({
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 	});
+
 	return (
 		<div className="space-y-4">
 			<DataTableToolbar table={table} />
