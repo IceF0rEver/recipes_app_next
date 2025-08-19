@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
@@ -32,6 +32,18 @@ export default function Account() {
 			image: session?.user.image ?? "",
 		},
 	});
+
+	useEffect(() => {
+		if (session?.user) {
+			form.reset({
+				email: session.user.email ?? "",
+				firstName: session?.user.name.split(" ")[0] ?? "",
+				lastName: session?.user.name.split(" ")[1] ?? "",
+				image: session.user.image ?? "",
+			});
+		}
+	}, [session]);
+
 	const onSubmit = useCallback(
 		async (values: UpdateUserType) => {
 			try {
@@ -48,10 +60,8 @@ export default function Account() {
 				) {
 					await authClient.updateUser(
 						{
-							...((validatedData.firstName !==
-								session?.user.name.split(" ")[0] ||
-								validatedData.lastName !==
-									session?.user.name.split(" ")[1]) && {
+							...((validatedData.firstName !== session?.user.name.split(" ")[0] ||
+								validatedData.lastName !== session?.user.name.split(" ")[1]) && {
 								name: `${validatedData.firstName} ${validatedData.lastName}`,
 							}),
 							...(validatedData.image !== session?.user.image && {
@@ -67,15 +77,11 @@ export default function Account() {
 							},
 							onError: (ctx) => {
 								setErrorMessage({
-									betterError: t(
-										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-									),
+									betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 								});
 							},
 							onSuccess: async () => {
-								toast.success(
-									t("components.settings.toast.nameOrImageSuccess"),
-								);
+								toast.success(t("components.settings.toast.nameOrImageSuccess"));
 							},
 						},
 					);
@@ -92,9 +98,7 @@ export default function Account() {
 							},
 							onError: (ctx) => {
 								setErrorMessage({
-									betterError: t(
-										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-									),
+									betterError: t(`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string),
 								});
 							},
 							onSuccess: async () => {
@@ -122,11 +126,7 @@ export default function Account() {
 				<SettingsArticlePassword />
 				<AuthForm form={form} onSubmit={onSubmit} className="grid gap-9">
 					{errorMessage.betterError && (
-						<p
-							className="text-sm text-destructive"
-							aria-live="polite"
-							aria-atomic="true"
-						>
+						<p className="text-sm text-destructive" aria-live="polite" aria-atomic="true">
 							{errorMessage.betterError}
 						</p>
 					)}
