@@ -36,18 +36,28 @@ export function CardsList<T>({
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
-	const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
-	const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
-	const [pageSize, setPageSize] = useState(Number(searchParams.get("pageSize")) || 10);
+	const [searchTerm, setSearchTerm] = useState(
+		searchParams.get("search") || "",
+	);
+	const [currentPage, setCurrentPage] = useState(
+		Number(searchParams.get("page")) || 1,
+	);
+	const [pageSize, setPageSize] = useState(
+		Number(searchParams.get("pageSize")) || 10,
+	);
 
 	useEffect(() => {
 		const params = new URLSearchParams(searchParams.toString());
 
 		searchTerm ? params.set("search", searchTerm) : params.delete("search");
 
-		currentPage !== 0 ? params.set("page", String(currentPage)) : params.delete("page");
+		currentPage !== 0
+			? params.set("page", String(currentPage))
+			: params.delete("page");
 
-		pageSize !== 0 ? params.set("pageSize", String(pageSize)) : params.delete("pageSize");
+		pageSize !== 0
+			? params.set("pageSize", String(pageSize))
+			: params.delete("pageSize");
 
 		router.replace(`?${params.toString()}`, { scroll: false });
 	}, [searchTerm, currentPage, pageSize, router, searchParams]);
@@ -55,7 +65,9 @@ export function CardsList<T>({
 	const filteredData = useMemo(() => {
 		if (!searchTerm.trim()) return data;
 
-		return data.filter((item) => JSON.stringify(item).toLowerCase().includes(searchTerm.toLowerCase()));
+		return data.filter((item) =>
+			JSON.stringify(item).toLowerCase().includes(searchTerm.toLowerCase()),
+		);
 	}, [data, searchTerm]);
 
 	const paginatedData = useMemo(() => {
@@ -65,7 +77,8 @@ export function CardsList<T>({
 		return filteredData.slice(startIndex, startIndex + pageSize);
 	}, [filteredData, currentPage, pageSize, enablePagination]);
 
-	const totalPages = filteredData.length > 0 ? Math.ceil(filteredData.length / pageSize) : 1;
+	const totalPages =
+		filteredData.length > 0 ? Math.ceil(filteredData.length / pageSize) : 1;
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -77,16 +90,23 @@ export function CardsList<T>({
 		<List>
 			<ListHeader>
 				<ListHeaderTitle>{title}</ListHeaderTitle>
-				{enableToolBar && <CardListToolbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />}
+				{enableToolBar && (
+					<CardListToolbar
+						searchTerm={searchTerm}
+						onSearchChange={setSearchTerm}
+					/>
+				)}
 			</ListHeader>
 
 			<ListBody cardWidth={cardWidth}>
 				{displayData.length > 0 ? (
-					// biome-ignore lint/suspicious/noArrayIndexKey: index for key
-					displayData.map((item, index) => <ListItem key={index}>{card(item)}</ListItem>)
+					displayData.map((item, index) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: index for key
+						<ListItem key={index}>{card(item)}</ListItem>
+					))
 				) : (
 					<ListItem>
-						<p className="text-muted-foreground">{emptyMessage}</p>
+						<p className="text-muted-foreground text-center">{emptyMessage}</p>
 					</ListItem>
 				)}
 			</ListBody>
