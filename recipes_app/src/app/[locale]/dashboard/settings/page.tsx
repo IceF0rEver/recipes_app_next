@@ -55,7 +55,9 @@ export default function Page() {
 												setSettingItemSelected(item.key);
 												const params = new URLSearchParams(searchParams);
 												params.set("selected", item.key);
-												router.replace(`?${params.toString()}`);
+												router.replace(`?${params.toString()}`, {
+													scroll: false,
+												});
 											}}
 										>
 											<span>{item.title}</span>
