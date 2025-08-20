@@ -2,7 +2,6 @@
 
 import {
 	type ColumnDef,
-	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
 	getFacetedRowModel,
@@ -10,19 +9,13 @@ import {
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	type SortingState,
 	useReactTable,
 	type VisibilityState,
 } from "@tanstack/react-table";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { useTableSearchParams } from "tanstack-table-search-params";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useI18n } from "@/locales/client";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
@@ -32,13 +25,12 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 }
 
-export function DataTable<TData, TValue>({
-	columns,
-	data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const t = useI18n();
+	const router = useRouter();
+
 	const initialColumnVisibility = React.useMemo(() => {
-		const visibility: Record<string, boolean> = {};
+		const visibility: VisibilityState = {};
 		columns.forEach((col) => {
 			if (col.id === "select") {
 				visibility[col.id] = true;
@@ -52,28 +44,32 @@ export function DataTable<TData, TValue>({
 		return visibility;
 	}, [columns]);
 
-	const [rowSelection, setRowSelection] = React.useState({});
-	const [columnVisibility, setColumnVisibility] =
-		React.useState<VisibilityState>(initialColumnVisibility);
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[],
+	const stateAndOnChanges = useTableSearchParams(
+		{
+			pathname: usePathname(),
+			query: useSearchParams(),
+			replace: (query) => router.replace(query, { scroll: false }),
+		},
+		{
+			debounceMilliseconds: {
+				globalFilter: 200,
+				columnFilters: 0,
+				rowSelection: 0,
+				sorting: 0,
+				columnOrder: 0,
+				pagination: 0,
+			},
+		},
 	);
-	const [sorting, setSorting] = React.useState<SortingState>([]);
 
 	const table = useReactTable({
+		...stateAndOnChanges,
+		initialState: {
+			columnVisibility: initialColumnVisibility,
+		},
 		data,
 		columns,
-		state: {
-			sorting,
-			columnVisibility,
-			rowSelection,
-			columnFilters,
-		},
 		enableRowSelection: true,
-		onRowSelectionChange: setRowSelection,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
-		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -95,10 +91,7 @@ export function DataTable<TData, TValue>({
 										<TableHead key={header.id} colSpan={header.colSpan}>
 											{header.isPlaceholder
 												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
+												: flexRender(header.column.columnDef.header, header.getContext())}
 										</TableHead>
 									);
 								})}
@@ -108,26 +101,17 @@ export function DataTable<TData, TValue>({
 					<TableBody>
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
+								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext(),
-											)}
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
 										</TableCell>
 									))}
 								</TableRow>
 							))
 						) : (
 							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
+								<TableCell colSpan={columns.length} className="h-24 text-center">
 									{t("components.table.table.noResults")}
 								</TableCell>
 							</TableRow>
