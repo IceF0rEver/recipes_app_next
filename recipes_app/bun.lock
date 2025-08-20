@@ -54,6 +54,7 @@
         "shiki": "^3.9.2",
         "sonner": "^2.0.5",
         "tailwind-merge": "^3.3.1",
+        "tanstack-table-search-params": "^0.9.0",
         "tsx": "^4.20.3",
         "use-stick-to-bottom": "^1.1.1",
         "zod": "^3.25.67",
@@ -913,6 +914,8 @@
     "tailwind-merge": ["tailwind-merge@3.3.1", "", {}, "sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g=="],
 
     "tailwindcss": ["tailwindcss@4.1.11", "", {}, "sha512-2E9TBm6MDD/xKYe+dvJZAmg3yxIEDNRc0jwlNyDg/4Fil2QcSLjFKGVff0lAf1jjeaArlG/M75Ey/EYr/OJtBA=="],
+
+    "tanstack-table-search-params": ["tanstack-table-search-params@0.9.0", "", { "peerDependencies": { "@tanstack/react-table": ">=8.21.3", "react": ">=19.1.0" } }, "sha512-ty5ntIrLNVASR/RsvPvp4cvTdIEOtVg7Ucs0VMxidxMDxZxfz/qMolkyAEjAU217YfiBFrVjupYdLDCfPxGPmw=="],
 
     "tapable": ["tapable@2.2.2", "", {}, "sha512-Re10+NauLTMCudc7T5WLFLAwDhQ0JWdrMK+9B2M8zR5hRExKmsRDCBA7/aV/pNJFltmBFO5BAMlQFi/vq3nKOg=="],
 
