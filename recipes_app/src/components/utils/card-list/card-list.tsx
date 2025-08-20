@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 import {
 	List,
 	ListBody,
@@ -39,6 +40,9 @@ export function CardsList<T>({
 	const [searchTerm, setSearchTerm] = useState(
 		searchParams.get("search") || "",
 	);
+
+	useDebounce(searchTerm, 300);
+
 	const [currentPage, setCurrentPage] = useState(
 		Number(searchParams.get("page")) || 1,
 	);
@@ -80,6 +84,7 @@ export function CardsList<T>({
 	const totalPages =
 		filteredData.length > 0 ? Math.ceil(filteredData.length / pageSize) : 1;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: build component
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [searchTerm]);
