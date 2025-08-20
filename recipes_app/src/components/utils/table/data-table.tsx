@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 		},
 		{
 			debounceMilliseconds: {
-				globalFilter: 200,
+				globalFilter: 300,
 				columnFilters: 0,
 				rowSelection: 0,
 				sorting: 0,
