@@ -307,6 +307,35 @@
     "notFound": {
       "title": "Page not found",
       "description": "The page you are looking for does not exist or has been moved."
+    },
+    "myRecipes": {
+      "title": "My recipes",
+      "description": "Explore your favorite recipes, organize your favorite dishes easily and discover your recipes in one place.",
+      "carousel": {
+        "title": "Your favorite recipes"
+      },
+      "cardList": {
+        "title": "All your recipes",
+        "noResult": "No recipes corresponding to your search!"
+      }
+    },
+    "cardList": {
+      "pagination": {
+        "lastPage": "Last page",
+        "nextPage": "Next page",
+        "previousPage": "Previous page",
+        "firstPage": "First page",
+        "perPage": "Per page",
+        "total": " in total",
+        "pageIndex": "Page {thisPage} on {pagecount}",
+        "thisPage": "Page {thisPage}",
+        "totalPage": "on {pagecount}",
+        "page": "Page ",
+        "on": " on "
+      },
+      "toolbar": {
+        "search": "Research..."
+      }
     }
   },
   "metaData": {

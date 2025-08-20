@@ -307,6 +307,32 @@
     "notFound": {
       "title": "Page introuvable",
       "description": "La page que vous recherchez n'existe pas ou a été déplacée."
+    },
+    "myRecipes": {
+      "title": "Mes recettes",
+      "description": "Explorez vos recettes préférées, organisez vos plats favoris facilement et découvrez vos recettes en un seul endroit.",
+      "carousel": {
+        "title": "Vos recettes favorites"
+      },
+      "cardList": {
+        "title": "Toutes vos recettes",
+        "noResult": "Aucunes recettes correspondantes à votre recherche !"
+      }
+    },
+    "cardList": {
+      "pagination": {
+        "lastPage": "Dernière page",
+        "nextPage": "Page suivante",
+        "previousPage": "Page précédente",
+        "firstPage": "Première page",
+        "perPage": "Par page",
+        "total": " au total",
+        "page": "Page ",
+        "on": " sur "
+      },
+      "toolbar": {
+        "search": "Rechercher..."
+      }
     }
   },
   "metaData": {
