@@ -130,6 +130,7 @@ model Recipe {
   instructions    Json
   difficulty      recipeDifficulty @default(STANDARD)
   tip             String?
+  isFavorite      Boolean          @default(false)
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime         @updatedAt @db.Timestamptz(6)
 
