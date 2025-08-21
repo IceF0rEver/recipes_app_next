@@ -85,8 +85,8 @@ export function AppSidebar() {
 	);
 
 	return (
-		<Sidebar variant="inset">
-			<SidebarHeader className="p-0">
+		<Sidebar variant="inset" className="p-1">
+			<SidebarHeader>
 				<div className="w-full flex flex-row justify-center items-center gap-2 bg-sidebar-accent py-8 rounded-lg">
 					<h1 className="text-2xl font-bold whitespace-nowrap">
 						<span className="text-primary">Recipes </span>
@@ -96,13 +96,14 @@ export function AppSidebar() {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup />
-				<SidebarMenu>
+				<SidebarMenu className="p-1">
 					{dataSideBar.navMain.map((item) =>
 						item.visibleTo.includes(session?.user.role ?? "") ? (
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton
 									asChild
 									isActive={!item.items && pathname.includes(item.url)}
+									className="transition-shadow data-[active=true]:shadow data-[active=true]:hover:shadow-2xl"
 								>
 									<Link href={`/dashboard/${item.url}`}>
 										{item.icon}
@@ -119,6 +120,7 @@ export function AppSidebar() {
 														pathname.split("/").at(-1) ===
 														item.url?.split("/").at(-1)
 													}
+													className="transition-shadow data-[active=true]:shadow data-[active=true]:hover:shadow-2xl"
 												>
 													<Link href={`/dashboard/${item.url}`}>
 														{item.icon}
