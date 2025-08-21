@@ -27,7 +27,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
   chats         Chat[]
-  logs			Log[]
+  logs          Log[]
+  recipes       Recipe[]
 
   role       String?
   banned     Boolean?
@@ -86,29 +87,62 @@ model Verification {
 }
 
 model Log {
-  id          String      @id @default(uuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  action      LogAction
-  targetId    String
-  status      LogStatus   @default(PENDING)
-  metadata    Json?
-  createdAt   DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime    @updatedAt @db.Timestamptz(6)
-  
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    LogAction
+  targetId  String
+  status    LogStatus @default(PENDING)
+  metadata  Json?
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+
   @@map("log")
 }
 
 model Chat {
-  id          String       @id @default(uuid())
-  userId      String
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title       String?                
-  messages    Json?
-  isActive    Boolean      @default(false)
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime     @updatedAt @db.Timestamptz(6)
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  messages  Json?
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  Recipe    Recipe[]
 
+  @@map("chat")
+}
+
+model Recipe {
+  id              String           @id @default(uuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatId          String
+  chat            Chat             @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  image           String
+  title           String
+  description     String
+  serving         String
+  preparationTime String
+  cookingTime     String
+  ingredients     Json
+  instructions    Json
+  difficulty      recipeDifficulty @default(STANDARD)
+  tip             String?
+  isFavorite      Boolean          @default(false)
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime         @updatedAt @db.Timestamptz(6)
+
+  @@map("recipe")
+}
+
+enum recipeDifficulty {
+  EASY
+  STANDARD
+  DIFFICULT
+
+  @@map("recipe_difficulty")
 }
 
 enum LogAction {
@@ -117,7 +151,7 @@ enum LogAction {
   USER_ACTIVATE
   ROLE_CHANGE
   SESSION_REVOKE
-  
+
   @@map("log_actions")
 }
 
@@ -125,7 +159,6 @@ enum LogStatus {
   SUCCESS
   FAILED
   PENDING
-  
+
   @@map("log_status")
 }
-
