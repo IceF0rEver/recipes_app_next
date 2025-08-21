@@ -26,7 +26,7 @@ export default function AiQuickPrompts({
 					<Card
 						// biome-ignore lint/suspicious/noArrayIndexKey: <index for key>
 						key={index}
-						className="w-full cursor-pointer transition-shadow shadow hover:shadow-xl rounded-xl py-5"
+						className="w-full cursor-pointer transition-shadow hover:shadow shadow-xl rounded-xl py-5"
 						onClick={() => onSubmit(prompt.prompt)}
 					>
 						<CardContent className="px-4">
