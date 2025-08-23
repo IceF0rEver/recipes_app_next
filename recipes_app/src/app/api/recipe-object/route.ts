@@ -7,11 +7,8 @@ import { getCurrentLocale } from "@/locales/server";
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-	const {
-		chatId,
-	}: {
-		chatId: string;
-	} = await req.json();
+	"use server";
+	await req.json();
 
 	const { chat } = await getActiveChat();
 	const locale = await getCurrentLocale();
@@ -42,7 +39,7 @@ export async function POST(req: Request) {
 		output: "array",
 		system:
 			`You will reply in ${locale === "fr" ? "French" : "English"} only.` +
-			`Strictly follow the schema below (respect key names, use camelCase, no extra fields, no spaces in keys):` +
+			"Strictly follow the schema below (respect key names, use camelCase, no extra fields, no spaces in keys):" +
 			`{
 				title: string, // catchy recipe title
 				description: string, // appetizing description in 2-3 sentences
