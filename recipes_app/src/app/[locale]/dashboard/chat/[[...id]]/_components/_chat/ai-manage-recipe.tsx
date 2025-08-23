@@ -1,16 +1,17 @@
 "use client";
 import { experimental_useObject as useObject } from "@ai-sdk/react";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+
 import { Archive, EllipsisVertical, RefreshCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { startTransition, useActionState, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { AIInputButton } from "@/components/ui/kibo-ui/ai/input";
 import { recipeSchema } from "@/lib/zod/recipe-schemas";
 import { useI18n } from "@/locales/client";
@@ -113,11 +114,11 @@ export default function AiManageRecipe({ status, onloading, chatId }: ManageReci
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-full" align="start">
-						<DropdownMenuItem disabled={disabledCondition} onClick={handleReset}>
+						<DropdownMenuItem disabled={disabledCondition} onClick={() => handleReset()}>
 							<RefreshCcw size={16} />
 							{t("button.reset")}
 						</DropdownMenuItem>
-						<DropdownMenuItem disabled={disabledCondition} onClick={handleArchive}>
+						<DropdownMenuItem disabled={disabledCondition} onClick={() => handleArchive()}>
 							<Archive size={16} />
 							{t("button.addRecipe")}
 						</DropdownMenuItem>
