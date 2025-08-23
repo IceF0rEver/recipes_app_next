@@ -11,6 +11,7 @@ import { getCurrentLocale, getI18n } from "@/locales/server";
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+	"use server";
 	const { messages, id }: { messages: UIMessage[]; id: string } =
 		await req.json();
 
