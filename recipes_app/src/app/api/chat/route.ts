@@ -6,15 +6,17 @@ import {
 	type UIMessage,
 } from "ai";
 import { updateMessagesChatById } from "@/app/[locale]/dashboard/chat/[[...id]]/_components/_serveractions/actions";
-import { getCurrentLocale } from "@/locales/server";
+import { getCurrentLocale, getI18n } from "@/locales/server";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+	"use server";
 	const { messages, id }: { messages: UIMessage[]; id: string } =
 		await req.json();
 
 	const locale = await getCurrentLocale();
+	const t = await getI18n();
 
 	const result = streamText({
 		model: mistral("ministral-3b-latest"),
@@ -24,15 +26,15 @@ export async function POST(req: Request) {
 			"If the user asks a question that is not related to cooking, politely inform them that you can only assist with culinary questions and suggest they ask a cooking-related question instead. " +
 			"Before providing a recipe, always rephrase the user's request to confirm your understanding, then propose the recipe. " +
 			"**Mandatory structure for each recipe:** " +
-			"1. **Recipe title**: A catchy and descriptive name. " +
-			"2. **Description**: A brief, appetizing description (2-3 sentences). " +
-			`3. **Preparation time**: Always in the format "X min" (never "X minutes" or other variations). ` +
-			`4. **Cooking time**: Always in the format "X min". ` +
-			"5. **Number of servings**: Exact number of people served." +
-			"6. **Difficulty level**: Easy, Standard, or Difficult only. " +
-			`7. **Ingredients list**: Format as "quantity + unit + ingredient name" (e.g., "200g flour", "2 tablespoons olive oil"). Always use metric units (grams, ml, etc.) and be precise with quantities. ` +
-			"8. **Step-by-step instructions**: Detailed instructions suitable for beginners but concise, clearly numbered. " +
-			"9. **Tips and tricks**: At least one practical tip to successfully prepare the recipe. " +
+			`1. **${t("components.recipe.title")}**: A catchy and descriptive name. ` +
+			`2. **${t("components.recipe.description")}**: A brief, appetizing description (2-3 sentences). ` +
+			`3. **${t("components.recipe.preparationTime")}**: Always in the format "X min" (never "X minutes" or other variations). ` +
+			`4. **${t("components.recipe.cookingTime")}**: Always in the format "X min". ` +
+			`5. **${t("components.recipe.serving")}**: Exact number of people served. ` +
+			`6. **${t("components.recipe.difficulty")}**: Easy, Standard, or Difficult only. ` +
+			`7. **${t("components.recipe.ingredientsList")}**: Format as "quantity + unit + ingredient name" (e.g., "200g flour", "2 tablespoons olive oil"). Always use metric units (grams, ml, etc.) and be precise with quantities. ` +
+			`8. **${t("components.recipe.instructions")}**: Detailed instructions suitable for beginners but concise, clearly numbered. ` +
+			`9. **${t("components.recipe.tips")}**: At least one practical tip to successfully prepare the recipe. ` +
 			"**Important constraints:**" +
 			"- Use only ingredients easily found in supermarkets. " +
 			"- Provide realistic and achievable recipes, never vague or fanciful. " +

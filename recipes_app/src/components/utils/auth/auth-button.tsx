@@ -27,7 +27,7 @@ export default function AuthButton({
 		await signIn.social(
 			{
 				provider: socialProvider,
-				callbackURL: "/dashboard",
+				callbackURL: "/dashboard/chat",
 			},
 			{
 				onRequest: () => {
@@ -44,7 +44,7 @@ export default function AuthButton({
 					});
 				},
 				onSuccess: async () => {
-					router.push("/dashboard");
+					router.push("/dashboard/chat");
 				},
 			},
 		);
