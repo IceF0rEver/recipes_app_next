@@ -6,19 +6,13 @@ import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
-import { deleteSession, type SessionState } from "./_serveractions/actions";
+import { deleteSession } from "./_serveractions/actions";
 
 interface DeleteSessionProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (alertDialogOpen: boolean) => void;
 	sessionData: SessionWithImpersonatedBy | null;
 }
-
-const initialState: SessionState = {
-	success: undefined,
-	error: undefined,
-	message: undefined,
-};
 
 export default function DeleteSession({
 	alertDialogOpen,
@@ -27,24 +21,22 @@ export default function DeleteSession({
 }: DeleteSessionProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
-	const [state, formAction, isPending] = useActionState(
+	const [state, deleteSessionAction, isPending] = useActionState(
 		deleteSession,
-		initialState,
+		{ success: false },
 	);
 
 	const handleDelete = useCallback(() => {
 		if (sessionData?.token !== currentUser?.session.token) {
 			if (sessionData?.token) {
-				const formData = new FormData();
-				formData.append("token", sessionData.token);
 				startTransition(() => {
-					formAction(formData);
+					deleteSessionAction(sessionData.token);
 				});
 			}
 		} else {
 			toast.error(t("components.admin.users.toast.identicalSessionError"));
 		}
-	}, [t, currentUser, sessionData, formAction]);
+	}, [t, currentUser, sessionData, deleteSessionAction]);
 
 	useEffect(() => {
 		if (state.success) {

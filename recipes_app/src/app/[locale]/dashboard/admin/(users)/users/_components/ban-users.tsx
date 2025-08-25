@@ -77,7 +77,7 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 		[userData?.id],
 	);
 
-	const [state, formAction, isPending] = useActionState(banUser, {
+	const [state, banFormAction, isPending] = useActionState(banUser, {
 		success: false,
 	});
 
@@ -95,14 +95,14 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 					formData.append("banReason", values.banReason);
 					formData.append("banExpires", values.banExpires);
 					startTransition(() => {
-						formAction(formData);
+						banFormAction(formData);
 					});
 				}
 			} else {
 				toast.error(t("components.admin.users.toast.identicalIdError"));
 			}
 		},
-		[currentUser, t, formAction, userData],
+		[currentUser, t, banFormAction, userData],
 	);
 
 	useEffect(() => {
@@ -171,7 +171,7 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		[userData?.id],
 	);
 
-	const [state, formAction, isPending] = useActionState(unBanUser, {
+	const [state, unBanUserAction, isPending] = useActionState(unBanUser, {
 		success: false,
 	});
 
@@ -183,16 +183,14 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 	const onSubmit = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id) {
-				const formData = new FormData();
-				formData.append("userId", userData?.id);
 				startTransition(() => {
-					formAction(formData);
+					unBanUserAction(userData?.id);
 				});
 			}
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	}, [t, currentUser, formAction, userData]);
+	}, [t, currentUser, unBanUserAction, userData]);
 
 	useEffect(() => {
 		form.reset(getDefaultValues());

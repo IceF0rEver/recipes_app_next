@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
-import { type UserState, updateRoleUser } from "./_serveractions/actions";
+import { updateRoleUser } from "./_serveractions/actions";
 
 interface Role {
 	key: string;
@@ -27,12 +27,6 @@ interface RoleUsersProps {
 	selectedKey: Role | null;
 }
 
-const initialState: UserState = {
-	success: undefined,
-	error: undefined,
-	message: undefined,
-};
-
 export default function RoleUsers({
 	alertDialogOpen,
 	onAlertDialogOpen,
@@ -41,25 +35,21 @@ export default function RoleUsers({
 }: RoleUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
-	const [state, formAction, isPending] = useActionState(
-		updateRoleUser,
-		initialState,
-	);
+	const [state, updateRoleAction, isPending] = useActionState(updateRoleUser, {
+		success: false,
+	});
 
 	const handleSetRole = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id && selectedKey?.key) {
-				const formData = new FormData();
-				formData.append("userId", userData.id);
-				formData.append("role", selectedKey?.key);
 				startTransition(() => {
-					formAction(formData);
+					updateRoleAction({ userId: userData.id, role: selectedKey?.key });
 				});
 			}
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	}, [currentUser, formAction, t, selectedKey, userData]);
+	}, [currentUser, updateRoleAction, t, selectedKey, userData]);
 
 	useEffect(() => {
 		if (state.success === true) {

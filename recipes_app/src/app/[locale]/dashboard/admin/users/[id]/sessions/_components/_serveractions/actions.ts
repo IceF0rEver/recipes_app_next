@@ -1,5 +1,6 @@
 "use server";
 
+import type { Session } from "better-auth";
 import { APIError } from "better-auth/api";
 import type { SessionWithImpersonatedBy } from "better-auth/plugins";
 import { revalidatePath } from "next/cache";
@@ -55,7 +56,7 @@ export interface SessionState {
 
 export async function deleteSession(
 	_prevState: SessionState,
-	formData: FormData,
+	token: Session["token"],
 ): Promise<SessionState> {
 	const currentSession = await getSession();
 	const currentUser = await getUser();
@@ -66,7 +67,7 @@ export async function deleteSession(
 				token: z.string().min(1),
 			})
 			.safeParse({
-				token: formData.get("token"),
+				token: token,
 			});
 
 		if (!validatedData.success) {
@@ -78,8 +79,6 @@ export async function deleteSession(
 				},
 			};
 		}
-
-		const { token } = validatedData.data;
 
 		if (token === currentSession?.token) {
 			if (currentUser) {
