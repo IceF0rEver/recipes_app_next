@@ -106,6 +106,7 @@ model Chat {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String?
   messages  String?
+  metadata  Json?
   isActive  Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
