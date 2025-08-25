@@ -7,6 +7,7 @@ import { z } from "zod";
 import { type Chat, Prisma } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
+import { recipeSchema } from "@/lib/zod/recipe-schemas";
 
 export async function getActiveChat(): Promise<{
 	chat?: Chat | null;
@@ -174,11 +175,127 @@ export async function resetActiveChat(
 				isActive: true,
 			},
 		});
-		revalidatePath("[locale]/dashboard/chat/[[...id]]", "page");
+		revalidatePath("[locale]/dashboard/chat/[[...id]]");
 		if (result) {
 			return {
 				success: true,
 			};
+		}
+
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
+	} catch (error) {
+		console.warn(error);
+
+		if (error instanceof APIError) {
+			return {
+				success: false,
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
+			};
+		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
+	}
+}
+
+export async function archiveActiveChat(
+	_prevState: ChatState,
+	chatId: Chat["id"],
+): Promise<ChatState> {
+	try {
+		const currentUser = await getUser();
+
+		const validatedData = z
+			.object({
+				chatId: z.string().min(1),
+				userId: z.string().min(1),
+			})
+			.safeParse({
+				chatId: chatId,
+				userId: currentUser?.id,
+			});
+
+		if (!validatedData.success) {
+			return {
+				success: false,
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
+			};
+		}
+		const { userId } = validatedData.data;
+
+		const { chat } = await getChatById(chatId);
+		if (!chat) {
+			return {
+				success: false,
+				error: { code: "NOT_FOUND", status: 404 },
+			};
+		}
+
+		if (chat?.isActive && chat?.metadata) {
+			const metadata = recipeSchema.parse(chat.metadata);
+			const id = generateId();
+
+			const createChat = await prisma.chat.create({
+				data: {
+					id: id,
+					userId: userId,
+					title: metadata.title,
+					messages: chat.messages,
+					metadata: chat.metadata,
+				},
+			});
+
+			const [createRecipe, resetChat] = await Promise.all([
+				prisma.recipe.create({
+					data: {
+						userId: userId,
+						chatId: id,
+						title: metadata.title,
+						description: metadata.description,
+						serving: metadata.serving,
+						image: "",
+						preparationTime: metadata.preparationTime,
+						cookingTime: metadata.cookingTime,
+						ingredients: metadata.ingredients,
+						instructions: metadata.instructions,
+						difficulty: metadata.difficulty,
+						tip: metadata.tip ?? null,
+					},
+				}),
+				prisma.chat.update({
+					data: {
+						messages: null,
+						metadata: Prisma.DbNull,
+					},
+					where: {
+						id: chatId,
+						userId: userId,
+						isActive: true,
+					},
+				}),
+			]);
+			revalidatePath("[locale]/dashboard/chat/[[...id]]");
+			if (createChat && createRecipe && resetChat) {
+				return {
+					success: true,
+				};
+			}
 		}
 
 		return {

@@ -18,15 +18,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AIInputButton } from "@/components/ui/kibo-ui/ai/input";
+import type { Chat } from "@/generated/prisma";
 import { useI18n } from "@/locales/client";
-import { resetActiveChat } from "../_serveractions/actions";
+import { archiveActiveChat, resetActiveChat } from "../_serveractions/actions";
 
 type Status = "submitted" | "streaming" | "ready" | "error";
 
 interface ManageRecipeProps {
 	status: Status;
 	onloading: () => void;
-	chatId: string;
+	chatId: Chat["id"];
 }
 export default function AiManageRecipe({
 	status,
@@ -35,15 +36,14 @@ export default function AiManageRecipe({
 }: ManageRecipeProps) {
 	const t = useI18n();
 	const router = useRouter();
+	const toastArchiveChat = useRef<string | number | null>(null);
 	const toastResetChat = useRef<string | number | null>(null);
 	const disabledCondition = status === "error" || status === "streaming";
 
-	const [state, resetActiveChatAction, isPending] = useActionState(
-		resetActiveChat,
-		{
-			success: false,
-		},
-	);
+	const [resetActiveState, resetActiveChatAction, isPendingResetActive] =
+		useActionState(resetActiveChat, { success: false });
+	const [archiveActiveState, archiveActiveChatAction, isPendingArchiveActive] =
+		useActionState(archiveActiveChat, { success: false });
 
 	const handleReset = useCallback(() => {
 		startTransition(() => {
@@ -51,26 +51,49 @@ export default function AiManageRecipe({
 		});
 	}, [chatId, resetActiveChatAction]);
 
-	const handleArchive = useCallback(() => {}, []);
+	const handleArchive = useCallback(() => {
+		startTransition(() => {
+			archiveActiveChatAction(chatId);
+		});
+	}, [archiveActiveChatAction, chatId]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and router
 	useEffect(() => {
-		if (state.success === true) {
+		if (resetActiveState.success === true) {
 			if (toastResetChat.current) {
 				toast.success(t("components.recipe.toast.success.resetActiveChat"), {
 					id: toastResetChat.current,
 				});
 			}
 			router.push("/dashboard/chat");
-		} else if (state.success === false && state.error) {
-			console.error(`${state.error.status} - ${state.error.code}`);
+		} else if (resetActiveState.success === false && resetActiveState.error) {
+			console.error(
+				`${resetActiveState.error.status} - ${resetActiveState.error.code}`,
+			);
 			toast.error(t("components.admin.users.toast.error"));
 		}
-	}, [state]);
+
+		if (archiveActiveState.success === true) {
+			if (toastArchiveChat.current) {
+				toast.success(t("components.recipe.toast.success.resetActiveChat"), {
+					id: toastArchiveChat.current,
+				});
+			}
+			router.push("/dashboard/chat");
+		} else if (
+			archiveActiveState.success === false &&
+			archiveActiveState.error
+		) {
+			console.error(
+				`${archiveActiveState.error.status} - ${archiveActiveState.error.code}`,
+			);
+			toast.error(t("components.admin.users.toast.error"));
+		}
+	}, [resetActiveState, archiveActiveState]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and onloading
 	useEffect(() => {
-		if (isPending) {
+		if (isPendingResetActive) {
 			toastResetChat.current = toast.loading(
 				t("components.recipe.toast.loading.resetActiveChat"),
 			);
@@ -78,8 +101,16 @@ export default function AiManageRecipe({
 			toastResetChat.current = null;
 		}
 
+		if (isPendingArchiveActive) {
+			toastArchiveChat.current = toast.loading(
+				t("components.recipe.toast.loading.createRecipe"),
+			);
+		} else if (toastArchiveChat.current) {
+			toastArchiveChat.current = null;
+		}
+
 		onloading();
-	}, [isPending]);
+	}, [isPendingResetActive, isPendingArchiveActive]);
 
 	return (
 		<>
