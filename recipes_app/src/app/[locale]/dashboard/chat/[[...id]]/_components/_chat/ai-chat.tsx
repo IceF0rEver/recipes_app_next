@@ -45,6 +45,7 @@ export default function AiChat({ id, chat }: AiChatProps) {
 		stop();
 	}, [stop]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n
 	useEffect(() => {
 		if (error !== undefined) {
 			toast.error(t("errors.unexpectedError"));
@@ -82,9 +83,13 @@ export default function AiChat({ id, chat }: AiChatProps) {
 	);
 
 	return (
-		<div className={cn(messages.length > 1 && "h-[90vh]", "flex justify-center")}>
+		<div
+			className={cn(messages.length > 1 && "h-[90vh]", "flex justify-center")}
+		>
 			<div className="grid md:w-2/3 p-2 ">
-				{messages.length <= 1 && <AiQuickPrompts prompts={quickPrompts} onSubmit={handleSubmit} />}
+				{messages.length <= 1 && (
+					<AiQuickPrompts prompts={quickPrompts} onSubmit={handleSubmit} />
+				)}
 				<AiConversation messages={messages} />
 				<AiInput
 					onSubmit={handleSubmit}
@@ -92,7 +97,9 @@ export default function AiChat({ id, chat }: AiChatProps) {
 					chatId={id ?? ""}
 					status={status}
 					placeholder={t("aiChat.aiInput.placehoder")}
-					className={cn(messages.length > 1 && "sticky bottom-0 md:pb-5 bg-background")}
+					className={cn(
+						messages.length > 1 && "sticky bottom-0 md:pb-5 bg-background",
+					)}
 				/>
 			</div>
 		</div>
