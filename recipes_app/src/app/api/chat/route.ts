@@ -22,7 +22,7 @@ async function updateActiveChatById(
 		const validatedData = z
 			.object({
 				chatId: z.string().min(1),
-				messages: z.any(),
+				messages: z.string(),
 				userId: z.string().min(1),
 				metadata: recipeSchema,
 			})
@@ -33,7 +33,6 @@ async function updateActiveChatById(
 				metadata: metadata,
 			});
 		if (!validatedData.success) {
-			console.log(validatedData.error);
 			throw new Error("400 - BAD_REQUEST");
 		}
 
@@ -121,7 +120,6 @@ export async function POST(req: Request) {
 					}`,
 				prompt: `Convert the following recipe into a structured JSON object:\n${content}`,
 			});
-			console.log(JSON.parse(JSON.stringify(messages)));
 			await updateActiveChatById(id, content, object);
 		},
 	});
