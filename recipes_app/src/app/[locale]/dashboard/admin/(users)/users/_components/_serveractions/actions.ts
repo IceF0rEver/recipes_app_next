@@ -4,6 +4,7 @@ import { APIError } from "better-auth/api";
 import type { UserWithRole } from "better-auth/plugins";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import type { User } from "@/generated/prisma";
 import { auth } from "@/lib/auth/auth";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
@@ -41,7 +42,7 @@ export interface UserState {
 
 export async function deleteUser(
 	_prevState: UserState,
-	formData: FormData,
+	userId: User["id"],
 ): Promise<UserState> {
 	const t = await getI18n();
 	const deleteUserSchema = authSchemas(t).deleteUser;
@@ -49,7 +50,7 @@ export async function deleteUser(
 
 	try {
 		const validatedData = deleteUserSchema.safeParse({
-			userId: formData.get("userId"),
+			userId: userId,
 		});
 
 		if (!validatedData.success) {
@@ -61,7 +62,6 @@ export async function deleteUser(
 				},
 			};
 		}
-		const { userId } = validatedData.data;
 
 		if (userId !== currentUser?.id) {
 			const result = await auth.api.removeUser({
@@ -138,7 +138,7 @@ export async function deleteUser(
 
 export async function updateRoleUser(
 	_prevState: UserState,
-	formData: FormData,
+	{ userId, role }: { userId: User["id"]; role: User["role"] },
 ): Promise<UserState> {
 	const t = await getI18n();
 	const roleUserSchema = authSchemas(t).roleUser;
@@ -146,8 +146,8 @@ export async function updateRoleUser(
 
 	try {
 		const validatedData = roleUserSchema.safeParse({
-			userId: formData.get("userId"),
-			role: formData.get("role"),
+			userId: userId,
+			role: role,
 		});
 
 		if (!validatedData.success) {
@@ -159,14 +159,12 @@ export async function updateRoleUser(
 				},
 			};
 		}
-		const { userId, role } = validatedData.data;
-
 		if (userId !== currentUser?.id) {
 			const result = await auth.api.setRole({
 				headers: await headers(),
 				body: {
 					userId: userId,
-					role: role,
+					role: role as "admin" | "user" | "premium",
 				},
 			});
 			if (result) {
@@ -347,7 +345,7 @@ export async function banUser(
 
 export async function unBanUser(
 	_prevState: UserState,
-	formData: FormData,
+	userId: User["id"],
 ): Promise<UserState> {
 	const t = await getI18n();
 	const unBanUserSchema = authSchemas(t).unBanUser;
@@ -355,7 +353,7 @@ export async function unBanUser(
 
 	try {
 		const validatedData = unBanUserSchema.safeParse({
-			userId: formData.get("userId"),
+			userId: userId,
 		});
 
 		if (!validatedData.success) {
@@ -367,7 +365,6 @@ export async function unBanUser(
 				},
 			};
 		}
-		const { userId } = validatedData.data;
 		if (userId !== currentUser?.id) {
 			const result = await auth.api.unbanUser({
 				headers: await headers(),

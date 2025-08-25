@@ -6,19 +6,13 @@ import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
-import { deleteUser, type UserState } from "./_serveractions/actions";
+import { deleteUser } from "./_serveractions/actions";
 
 interface DeleteUsersProps {
 	alertDialogOpen: boolean;
 	onAlertDialogOpen: (alertDialogOpen: boolean) => void;
 	userData: UserWithRole | null;
 }
-
-const initialState: UserState = {
-	success: undefined,
-	error: undefined,
-	message: undefined,
-};
 
 export default function DeleteUsers({
 	alertDialogOpen,
@@ -27,24 +21,21 @@ export default function DeleteUsers({
 }: DeleteUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
-	const [state, formAction, isPending] = useActionState(
-		deleteUser,
-		initialState,
-	);
+	const [state, deleteUserAction, isPending] = useActionState(deleteUser, {
+		success: false,
+	});
 
 	const handleDelete = useCallback(() => {
 		if (userData?.id !== currentUser?.user.id) {
 			if (userData?.id) {
-				const formData = new FormData();
-				formData.append("userId", userData.id);
 				startTransition(() => {
-					formAction(formData);
+					deleteUserAction(userData.id);
 				});
 			}
 		} else {
 			toast.error(t("components.admin.users.toast.identicalIdError"));
 		}
-	}, [currentUser, formAction, t, userData]);
+	}, [currentUser, deleteUserAction, t, userData]);
 
 	useEffect(() => {
 		if (state.success === true) {
