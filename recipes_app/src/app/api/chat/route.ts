@@ -9,7 +9,7 @@ import { getCurrentLocale, getI18n } from "@/locales/server";
 
 export const maxDuration = 30;
 
-export async function updateActiveChatById(
+async function updateActiveChatById(
 	chatId: Chat["id"],
 	messages: Chat["messages"],
 	metadata: Chat["metadata"],
