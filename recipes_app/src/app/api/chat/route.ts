@@ -1,19 +1,68 @@
 import { mistral } from "@ai-sdk/mistral";
-import {
-	convertToModelMessages,
-	createIdGenerator,
-	streamText,
-	type UIMessage,
-} from "ai";
-import { updateMessagesChatById } from "@/app/[locale]/dashboard/chat/[[...id]]/_components/_serveractions/actions";
+import { convertToModelMessages, createIdGenerator, generateObject, streamText, type UIMessage } from "ai";
+import z from "zod";
+import type { Chat, Prisma } from "@/generated/prisma";
+import { getUser } from "@/lib/auth/server";
+import prisma from "@/lib/prisma";
+import { recipeSchema } from "@/lib/zod/recipe-schemas";
 import { getCurrentLocale, getI18n } from "@/locales/server";
 
 export const maxDuration = 30;
 
+export async function updateActiveChatById(
+	chatId: Chat["id"],
+	messages: Chat["messages"],
+	metadata: Chat["metadata"],
+): Promise<{
+	status?: number;
+}> {
+	"use server";
+	try {
+		const currentUser = await getUser();
+		const validatedData = z
+			.object({
+				chatId: z.string().min(1),
+				messages: z.any(),
+				userId: z.string().min(1),
+				metadata: recipeSchema,
+			})
+			.safeParse({
+				chatId: chatId,
+				messages: messages,
+				userId: currentUser?.id,
+				metadata: metadata,
+			});
+		if (!validatedData.success) {
+			console.log(validatedData.error);
+			throw new Error("400 - BAD_REQUEST");
+		}
+
+		await prisma.chat.update({
+			data: {
+				messages: messages,
+				metadata: metadata as Prisma.InputJsonValue,
+			},
+			where: {
+				id: chatId,
+				userId: currentUser?.id,
+			},
+		});
+
+		return { status: 200 };
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			throw new Error("400 - BAD_REQUEST");
+		}
+		if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		}
+		throw new Error("500 - INTERNAL_SERVER_ERROR");
+	}
+}
+
 export async function POST(req: Request) {
 	"use server";
-	const { messages, id }: { messages: UIMessage[]; id: string } =
-		await req.json();
+	const { messages, id }: { messages: UIMessage[]; id: string } = await req.json();
 
 	const locale = await getCurrentLocale();
 	const t = await getI18n();
@@ -53,7 +102,27 @@ export async function POST(req: Request) {
 		}),
 		onFinish: async ({ messages }) => {
 			const content = JSON.stringify(messages, null, 2);
-			await updateMessagesChatById(id, content);
+			const { object } = await generateObject({
+				model: mistral("ministral-3b-latest"),
+				schema: recipeSchema,
+				system:
+					`You will reply in ${locale === "fr" ? "French" : "English"} only.` +
+					"Strictly follow the schema below (respect key names, use camelCase, no extra fields, no spaces in keys)" +
+					`{
+					title: string, // catchy recipe title
+					description: string, // appetizing description in 2-3 sentences
+					preparationTime: string, // format 'X' only
+					cookingTime: string, // format 'X' only
+					serving: string, // number of servings (e.g., "4")
+					difficulty: "EASY" | "STANDARD" | "DIFFICULT",
+					ingredients: [{ "quantity": string (e.g., "400" | ""), "unit": string (e.g., "g" | "ml" | ""), "name": string (e.g., "pasta" | "") }],
+					instructions: [{ "step": number, "instruction": string }],
+					tip?: string // optional practical tip
+					}`,
+				prompt: `Convert the following recipe into a structured JSON object:\n${content}`,
+			});
+			console.log(JSON.parse(JSON.stringify(messages)));
+			await updateActiveChatById(id, content, object);
 		},
 	});
 }

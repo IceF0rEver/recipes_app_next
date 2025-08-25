@@ -1,9 +1,14 @@
 "use client";
-import { experimental_useObject as useObject } from "@ai-sdk/react";
 
 import { Archive, EllipsisVertical, RefreshCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { startTransition, useActionState, useCallback, useEffect, useRef } from "react";
+import {
+	startTransition,
+	useActionState,
+	useCallback,
+	useEffect,
+	useRef,
+} from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +18,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AIInputButton } from "@/components/ui/kibo-ui/ai/input";
-import { recipeSchema } from "@/lib/zod/recipe-schemas";
 import { useI18n } from "@/locales/client";
 import { resetActiveChat } from "../_serveractions/actions";
 
@@ -24,56 +28,32 @@ interface ManageRecipeProps {
 	onloading: () => void;
 	chatId: string;
 }
-export default function AiManageRecipe({ status, onloading, chatId }: ManageRecipeProps) {
+export default function AiManageRecipe({
+	status,
+	onloading,
+	chatId,
+}: ManageRecipeProps) {
 	const t = useI18n();
 	const router = useRouter();
-	const toastArchiveRecipe = useRef<string | number | null>(null);
 	const toastResetChat = useRef<string | number | null>(null);
+	const disabledCondition = status === "error" || status === "streaming";
 
-	const [state, deleteAction, isPending] = useActionState(resetActiveChat, { success: false });
-
-	const { submit, isLoading } = useObject({
-		api: "/api/recipe-object",
-		schema: recipeSchema,
-		id: chatId,
-		onFinish({ object, error }) {
-			if (object) {
-				if (toastArchiveRecipe.current) {
-					toast.success(t("components.recipe.toast.success.create"), {
-						id: toastArchiveRecipe.current,
-					});
-				}
-			}
-			console.log("Object generation completed:", object);
-			if (error) {
-				console.log(error);
-				toast.error(t("errors.unexpectedError"));
-			}
+	const [state, resetActiveChatAction, isPending] = useActionState(
+		resetActiveChat,
+		{
+			success: false,
 		},
-		onError(error) {
-			if (error) {
-				console.log(error);
-				toast.error(t("errors.unexpectedError"));
-			}
-		},
-	});
-
-	const disabledCondition = status === "error" || status === "streaming" || isLoading;
+	);
 
 	const handleReset = useCallback(() => {
-		const formData = new FormData();
-		formData.append("chatId", String(chatId));
 		startTransition(() => {
-			deleteAction(formData);
+			resetActiveChatAction(chatId);
 		});
-	}, []);
+	}, [chatId, resetActiveChatAction]);
 
-	const handleArchive = useCallback(() => {
-		submit({
-			chatId: chatId,
-		});
-	}, [chatId]);
+	const handleArchive = useCallback(() => {}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and router
 	useEffect(() => {
 		if (state.success === true) {
 			if (toastResetChat.current) {
@@ -88,21 +68,18 @@ export default function AiManageRecipe({ status, onloading, chatId }: ManageReci
 		}
 	}, [state]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and onloading
 	useEffect(() => {
-		if (isLoading) {
-			toastArchiveRecipe.current = toast.loading(t("components.recipe.toast.loading.createRecipe"));
-		} else if (toastArchiveRecipe.current) {
-			toastArchiveRecipe.current = null;
-		}
-
 		if (isPending) {
-			toastResetChat.current = toast.loading(t("components.recipe.toast.loading.resetActiveChat"));
+			toastResetChat.current = toast.loading(
+				t("components.recipe.toast.loading.resetActiveChat"),
+			);
 		} else if (toastResetChat.current) {
 			toastResetChat.current = null;
 		}
 
 		onloading();
-	}, [isLoading, isPending]);
+	}, [isPending]);
 
 	return (
 		<>
@@ -114,11 +91,17 @@ export default function AiManageRecipe({ status, onloading, chatId }: ManageReci
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-full" align="start">
-						<DropdownMenuItem disabled={disabledCondition} onClick={() => handleReset()}>
+						<DropdownMenuItem
+							disabled={disabledCondition}
+							onClick={() => handleReset()}
+						>
 							<RefreshCcw size={16} />
 							{t("button.reset")}
 						</DropdownMenuItem>
-						<DropdownMenuItem disabled={disabledCondition} onClick={() => handleArchive()}>
+						<DropdownMenuItem
+							disabled={disabledCondition}
+							onClick={() => handleArchive()}
+						>
 							<Archive size={16} />
 							{t("button.addRecipe")}
 						</DropdownMenuItem>

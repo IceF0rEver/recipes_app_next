@@ -4,7 +4,7 @@ import { generateId } from "ai";
 import { APIError } from "better-auth/api";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import type { Chat } from "@/generated/prisma";
+import { type Chat, Prisma } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 
@@ -129,51 +129,6 @@ export async function getChatById(chatId: Chat["id"]): Promise<{
 	}
 }
 
-export async function updateMessagesChatById(
-	chatId: Chat["id"],
-	messages: Chat["messages"],
-): Promise<{
-	status?: number;
-}> {
-	try {
-		const currentUser = await getUser();
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				messages: z.any(),
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				chatId: chatId,
-				messages: messages,
-				userId: currentUser?.id,
-			});
-		if (!validatedData.success) {
-			throw new Error("400 - BAD_REQUEST");
-		}
-
-		await prisma.chat.update({
-			data: {
-				messages: messages,
-			},
-			where: {
-				id: chatId,
-				userId: currentUser?.id,
-			},
-		});
-
-		return { status: 200 };
-	} catch (error) {
-		if (error instanceof z.ZodError) {
-			throw new Error("400 - BAD_REQUEST");
-		}
-		if (error instanceof Error && error.message.includes("network")) {
-			throw new Error("503 - SERVICE_UNAVAILABLE");
-		}
-		throw new Error("500 - INTERNAL_SERVER_ERROR");
-	}
-}
-
 export interface ChatState {
 	success?: boolean;
 	error?: { code?: string; message?: string; status?: number };
@@ -182,7 +137,7 @@ export interface ChatState {
 
 export async function resetActiveChat(
 	_prevState: ChatState,
-	formData: FormData,
+	chatId: Chat["id"],
 ): Promise<ChatState> {
 	try {
 		const currentUser = await getUser();
@@ -193,7 +148,7 @@ export async function resetActiveChat(
 				userId: z.string().min(1),
 			})
 			.safeParse({
-				chatId: formData.get("chatId"),
+				chatId: chatId,
 				userId: currentUser?.id,
 			});
 
@@ -206,11 +161,12 @@ export async function resetActiveChat(
 				},
 			};
 		}
-		const { userId, chatId } = validatedData.data;
+		const { userId } = validatedData.data;
 
 		const result = await prisma.chat.update({
 			data: {
 				messages: null,
+				metadata: Prisma.DbNull,
 			},
 			where: {
 				id: chatId,
@@ -228,7 +184,7 @@ export async function resetActiveChat(
 		return {
 			success: false,
 			error: {
-				code: "USER_SUSPEND_FAILED",
+				code: "UNEXPECTED_ERROR",
 				status: 500,
 			},
 		};
