@@ -45,10 +45,7 @@ export default function RecipeCard({
 				dialogOpen={dialogOpen}
 				onDialogOpen={setDialogOpen}
 			/>
-			<Card
-				className="group hover:shadow-lg transition-shadow duration-200 flex-shrink-0 w-80 py-0 pb-6"
-				onClick={() => setDialogOpen(true)}
-			>
+			<Card className="group hover:shadow-lg transition-shadow duration-200 flex-shrink-0 w-80 py-0 pb-6">
 				<div className="relative">
 					<Image
 						width={300}
@@ -56,6 +53,7 @@ export default function RecipeCard({
 						src={"/images/placeholder.svg"}
 						alt={recipe.title ?? "title"}
 						className="w-full h-48 object-cover rounded-t-lg"
+						onClick={() => setDialogOpen(true)}
 					/>
 					<div className="absolute top-2 right-2 flex gap-2">
 						<Button
@@ -84,13 +82,13 @@ export default function RecipeCard({
 						</Button>
 					</div>
 				</div>
-				<CardHeader className="pb-3">
+				<CardHeader className="pb-3" onClick={() => setDialogOpen(true)}>
 					<CardTitle className="text-lg line-clamp-1">{recipe.title}</CardTitle>
 					<p className="text-sm text-muted-foreground line-clamp-2">
 						{recipe.description}
 					</p>
 				</CardHeader>
-				<CardContent className="pt-0">
+				<CardContent className="pt-0" onClick={() => setDialogOpen(true)}>
 					<div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
 						<div className="flex items-center gap-1">
 							<Clock className="h-4 w-4" />
