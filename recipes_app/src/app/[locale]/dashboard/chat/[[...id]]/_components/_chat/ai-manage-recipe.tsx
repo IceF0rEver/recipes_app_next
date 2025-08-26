@@ -53,17 +53,24 @@ export default function AiManageRecipe({
 	const toastResetChat = useRef<string | number | null>(null);
 
 	const [resetActiveState, resetActiveChatAction, isPendingResetActive] =
-		useActionState(resetActiveChat, { success: false });
+		useActionState(resetActiveChat, {
+			success: false,
+		});
 	const [archiveActiveState, archiveActiveChatAction, isPendingArchiveActive] =
-		useActionState(archiveActiveChat, { success: false });
+		useActionState(archiveActiveChat, {
+			success: false,
+		});
 	const [updateArchiveState, updateArchiveChatAction, isPendingUpdateArchive] =
-		useActionState(updateArchiveChat, { success: false });
+		useActionState(updateArchiveChat, {
+			success: false,
+		});
 
 	const disabledCondition =
 		status === "error" ||
 		status === "streaming" ||
 		isPendingResetActive ||
-		isPendingArchiveActive;
+		isPendingArchiveActive ||
+		currentChat?.chat?.messages?.length === undefined;
 
 	const handleReset = useCallback(() => {
 		startTransition(() => {
