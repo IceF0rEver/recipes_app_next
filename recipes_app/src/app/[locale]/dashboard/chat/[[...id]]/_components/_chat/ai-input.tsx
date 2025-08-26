@@ -9,19 +9,33 @@ import {
 	AIInputToolbar,
 	AIInputTools,
 } from "@/components/ui/kibo-ui/ai/input";
+import type { Chat } from "@/generated/prisma";
 import { useI18n } from "@/locales/client";
 import AiManageRecipe from "./ai-manage-recipe";
 
 type Status = "submitted" | "streaming" | "ready" | "error";
 interface AiInputProps {
-	chatId: string;
 	status: Status;
 	onSubmit: (text: string) => void;
 	onStop: () => void;
 	className?: string;
 	placeholder?: string;
+	chat: Promise<{
+		chat?: Chat | null;
+		error?: {
+			message?: string;
+			status?: number;
+		};
+	}>;
 }
-export default function AiInput({ onSubmit, onStop, status, className, placeholder, chatId }: AiInputProps) {
+export default function AiInput({
+	onSubmit,
+	onStop,
+	status,
+	className,
+	placeholder,
+	chat,
+}: AiInputProps) {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [input, setInput] = useState<string>("");
 	const t = useI18n();
@@ -36,11 +50,17 @@ export default function AiInput({ onSubmit, onStop, status, className, placehold
 		[input, onSubmit],
 	);
 
-	const disabledCondition = !(status === "streaming" || (input.trim() && status !== "error")) || isLoading;
+	const disabledCondition =
+		!(status === "streaming" || (input.trim() && status !== "error")) ||
+		isLoading;
 	return (
 		<div className={className}>
 			<AIInput onSubmit={handleSubmit}>
-				<AIInputTextarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={placeholder} />
+				<AIInputTextarea
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+					placeholder={placeholder}
+				/>
 				<AIInputToolbar className="border-t">
 					<AIInputTools>
 						<AIInputButton disabled={true}>
@@ -48,7 +68,11 @@ export default function AiInput({ onSubmit, onStop, status, className, placehold
 						</AIInputButton>
 					</AIInputTools>
 					<div className="flex gap-2">
-						<AiManageRecipe status={status} onloading={() => setIsLoading} chatId={chatId} />
+						<AiManageRecipe
+							chat={chat}
+							status={status}
+							onloading={() => setIsLoading}
+						/>
 						<AIInputSubmit
 							variant={status === "error" ? "destructive" : undefined}
 							disabled={disabledCondition}
@@ -62,7 +86,9 @@ export default function AiInput({ onSubmit, onStop, status, className, placehold
 					</div>
 				</AIInputToolbar>
 			</AIInput>
-			<p className="text-xs text-muted-foreground mt-2 text-center">{t("aiChat.aiInput.warning")}</p>
+			<p className="text-xs text-muted-foreground mt-2 text-center">
+				{t("aiChat.aiInput.warning")}
+			</p>
 		</div>
 	);
 }

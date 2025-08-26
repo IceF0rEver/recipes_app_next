@@ -363,11 +363,13 @@
       "toast": {
         "success": {
           "create": "Recipe successfully created!",
-          "resetActiveChat": "Conversation successfully reset!"
+          "resetActiveChat": "Conversation successfully reset!",
+          "update": "Recipe modify successfully!"
         },
         "loading": {
           "createRecipe": "Creation of the recipe ...",
-          "resetActiveChat": "Resetting the conversation ..."
+          "resetActiveChat": "Resetting the conversation ...",
+          "updateActiveChat": "Modification of the recipe ..."
         }
       }
     },

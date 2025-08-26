@@ -326,3 +326,101 @@ export async function archiveActiveChat(
 		};
 	}
 }
+
+export async function updateArchiveChat(
+	_prevState: ChatState,
+	chatId: Chat["id"],
+): Promise<ChatState> {
+	try {
+		const currentUser = await getUser();
+
+		const validatedData = z
+			.object({
+				chatId: z.string().min(1),
+				userId: z.string().min(1),
+			})
+			.safeParse({
+				chatId: chatId,
+				userId: currentUser?.id,
+			});
+
+		if (!validatedData.success) {
+			return {
+				success: false,
+				error: {
+					code: "BAD_REQUEST",
+					status: 400,
+				},
+			};
+		}
+		const { userId } = validatedData.data;
+
+		const { chat } = await getChatById(chatId);
+		if (!chat) {
+			return {
+				success: false,
+				error: { code: "NOT_FOUND", status: 404 },
+			};
+		}
+
+		if (!chat?.isActive && chat?.metadata) {
+			const metadata = recipeSchema.parse(chat.metadata);
+
+			const result = await prisma.recipe.update({
+				data: {
+					title: metadata.title,
+					description: metadata.description,
+					serving: metadata.serving,
+					image: "",
+					preparationTime: metadata.preparationTime,
+					cookingTime: metadata.cookingTime,
+					ingredients: metadata.ingredients,
+					instructions: metadata.instructions,
+					difficulty: metadata.difficulty,
+					tip: metadata.tip ?? null,
+				},
+				where: {
+					userId_chatId: {
+						userId: userId,
+						chatId: chat.id,
+					},
+				},
+			});
+
+			if (result) {
+				revalidatePath("[locale]/dashboard/chat/[[...id]]", "page");
+				revalidatePath("[locale]/dashboard/my-recipes", "page");
+				return {
+					success: true,
+				};
+			}
+		}
+
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
+	} catch (error) {
+		console.warn(error);
+
+		if (error instanceof APIError) {
+			return {
+				success: false,
+				error: {
+					code: "API_ERROR",
+					status: 502,
+				},
+			};
+		}
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
+	}
+}

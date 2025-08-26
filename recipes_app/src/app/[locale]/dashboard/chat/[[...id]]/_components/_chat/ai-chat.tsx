@@ -92,9 +92,9 @@ export default function AiChat({ id, chat }: AiChatProps) {
 				)}
 				<AiConversation messages={messages} />
 				<AiInput
+					chat={chat}
 					onSubmit={handleSubmit}
 					onStop={handleStop}
-					chatId={id ?? ""}
 					status={status}
 					placeholder={t("aiChat.aiInput.placehoder")}
 					className={cn(

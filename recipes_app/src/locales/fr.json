@@ -360,11 +360,13 @@
       "toast": {
         "success": {
           "create": "Recette créée avec succès !",
-          "resetActiveChat": "Conversation réinitialiser avec succès !"
+          "resetActiveChat": "Conversation réinitialiser avec succès !",
+          "update": "Recette modifier avec succès !"
         },
         "loading": {
           "createRecipe": "Création de la recette...",
-          "resetActiveChat": "Réinitialisation de la conversation..."
+          "resetActiveChat": "Réinitialisation de la conversation...",
+          "updateActiveChat": "Modification de la recette..."
         }
       }
     },
