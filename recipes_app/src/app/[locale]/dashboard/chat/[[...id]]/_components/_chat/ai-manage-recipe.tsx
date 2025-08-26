@@ -2,14 +2,7 @@
 
 import { Archive, EllipsisVertical, FileInput, RefreshCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {
-	startTransition,
-	use,
-	useActionState,
-	useCallback,
-	useEffect,
-	useRef,
-} from "react";
+import { startTransition, use, useActionState, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,11 +14,7 @@ import {
 import { AIInputButton } from "@/components/ui/kibo-ui/ai/input";
 import type { Chat } from "@/generated/prisma";
 import { useI18n } from "@/locales/client";
-import {
-	archiveActiveChat,
-	resetActiveChat,
-	updateArchiveChat,
-} from "../_serveractions/actions";
+import { archiveActiveChat, resetActiveChat, updateArchiveChat } from "../_serveractions/actions";
 
 type Status = "submitted" | "streaming" | "ready" | "error";
 
@@ -40,11 +29,7 @@ interface ManageRecipeProps {
 		};
 	}>;
 }
-export default function AiManageRecipe({
-	status,
-	onloading,
-	chat,
-}: ManageRecipeProps) {
+export default function AiManageRecipe({ status, onloading, chat }: ManageRecipeProps) {
 	const t = useI18n();
 	const router = useRouter();
 	const currentChat = use(chat);
@@ -52,18 +37,22 @@ export default function AiManageRecipe({
 	const toastUpdateArchiveChat = useRef<string | number | null>(null);
 	const toastResetChat = useRef<string | number | null>(null);
 
-	const [resetActiveState, resetActiveChatAction, isPendingResetActive] =
-		useActionState(resetActiveChat, { success: false });
-	const [archiveActiveState, archiveActiveChatAction, isPendingArchiveActive] =
-		useActionState(archiveActiveChat, { success: false });
-	const [updateArchiveState, updateArchiveChatAction, isPendingUpdateArchive] =
-		useActionState(updateArchiveChat, { success: false });
+	const [resetActiveState, resetActiveChatAction, isPendingResetActive] = useActionState(resetActiveChat, {
+		success: false,
+	});
+	const [archiveActiveState, archiveActiveChatAction, isPendingArchiveActive] = useActionState(archiveActiveChat, {
+		success: false,
+	});
+	const [updateArchiveState, updateArchiveChatAction, isPendingUpdateArchive] = useActionState(updateArchiveChat, {
+		success: false,
+	});
 
 	const disabledCondition =
 		status === "error" ||
 		status === "streaming" ||
 		isPendingResetActive ||
-		isPendingArchiveActive;
+		isPendingArchiveActive ||
+		(currentChat?.chat?.messages?.length ?? 0) > 2;
 
 	const handleReset = useCallback(() => {
 		startTransition(() => {
@@ -98,9 +87,7 @@ export default function AiManageRecipe({
 					id: toastResetChat.current,
 				});
 			}
-			console.error(
-				`${resetActiveState.error.status} - ${resetActiveState.error.code}`,
-			);
+			console.error(`${resetActiveState.error.status} - ${resetActiveState.error.code}`);
 		}
 
 		if (archiveActiveState.success === true) {
@@ -110,18 +97,13 @@ export default function AiManageRecipe({
 				});
 			}
 			router.push("/dashboard/chat");
-		} else if (
-			archiveActiveState.success === false &&
-			archiveActiveState.error
-		) {
+		} else if (archiveActiveState.success === false && archiveActiveState.error) {
 			if (toastArchiveChat.current) {
 				toast.error(t("components.admin.users.toast.error"), {
 					id: toastArchiveChat.current,
 				});
 			}
-			console.error(
-				`${archiveActiveState.error.status} - ${archiveActiveState.error.code}`,
-			);
+			console.error(`${archiveActiveState.error.status} - ${archiveActiveState.error.code}`);
 		}
 
 		if (updateArchiveState.success === true) {
@@ -130,43 +112,32 @@ export default function AiManageRecipe({
 					id: toastUpdateArchiveChat.current,
 				});
 			}
-		} else if (
-			updateArchiveState.success === false &&
-			updateArchiveState.error
-		) {
+		} else if (updateArchiveState.success === false && updateArchiveState.error) {
 			if (toastUpdateArchiveChat.current) {
 				toast.error(t("components.admin.users.toast.error"), {
 					id: toastUpdateArchiveChat.current,
 				});
 			}
-			console.error(
-				`${updateArchiveState.error.status} - ${updateArchiveState.error.code}`,
-			);
+			console.error(`${updateArchiveState.error.status} - ${updateArchiveState.error.code}`);
 		}
 	}, [resetActiveState, archiveActiveState, updateArchiveState]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and onloading
 	useEffect(() => {
 		if (isPendingResetActive) {
-			toastResetChat.current = toast.loading(
-				t("components.recipe.toast.loading.resetActiveChat"),
-			);
+			toastResetChat.current = toast.loading(t("components.recipe.toast.loading.resetActiveChat"));
 		} else if (toastResetChat.current) {
 			toastResetChat.current = null;
 		}
 
 		if (isPendingArchiveActive) {
-			toastArchiveChat.current = toast.loading(
-				t("components.recipe.toast.loading.createRecipe"),
-			);
+			toastArchiveChat.current = toast.loading(t("components.recipe.toast.loading.createRecipe"));
 		} else if (toastArchiveChat.current) {
 			toastArchiveChat.current = null;
 		}
 
 		if (isPendingUpdateArchive) {
-			toastUpdateArchiveChat.current = toast.loading(
-				t("components.recipe.toast.loading.updateActiveChat"),
-			);
+			toastUpdateArchiveChat.current = toast.loading(t("components.recipe.toast.loading.updateActiveChat"));
 		} else if (toastUpdateArchiveChat.current) {
 			toastUpdateArchiveChat.current = null;
 		}
@@ -186,26 +157,17 @@ export default function AiManageRecipe({
 					<DropdownMenuContent className="w-full" align="start">
 						{currentChat.chat?.isActive ? (
 							<div>
-								<DropdownMenuItem
-									disabled={disabledCondition}
-									onClick={handleReset}
-								>
+								<DropdownMenuItem disabled={disabledCondition} onClick={handleReset}>
 									<RefreshCcw size={16} />
 									{t("button.reset")}
 								</DropdownMenuItem>
-								<DropdownMenuItem
-									disabled={disabledCondition}
-									onClick={handleArchive}
-								>
+								<DropdownMenuItem disabled={disabledCondition} onClick={handleArchive}>
 									<Archive size={16} />
 									{t("button.addRecipe")}
 								</DropdownMenuItem>
 							</div>
 						) : (
-							<DropdownMenuItem
-								disabled={disabledCondition}
-								onClick={handleUpdate}
-							>
+							<DropdownMenuItem disabled={disabledCondition} onClick={handleUpdate}>
 								<FileInput size={16} />
 								{t("button.update")}
 							</DropdownMenuItem>
