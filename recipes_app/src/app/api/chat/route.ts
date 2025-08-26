@@ -1,5 +1,11 @@
 import { mistral } from "@ai-sdk/mistral";
-import { convertToModelMessages, createIdGenerator, generateObject, streamText, type UIMessage } from "ai";
+import {
+	convertToModelMessages,
+	createIdGenerator,
+	generateObject,
+	streamText,
+	type UIMessage,
+} from "ai";
 import z from "zod";
 import type { Chat, Prisma } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
@@ -9,7 +15,7 @@ import { getCurrentLocale, getI18n } from "@/locales/server";
 
 export const maxDuration = 30;
 
-async function updateActiveChatById(
+async function updateChatById(
 	chatId: Chat["id"],
 	messages: Chat["messages"],
 	metadata: Chat["metadata"],
@@ -61,7 +67,8 @@ async function updateActiveChatById(
 
 export async function POST(req: Request) {
 	"use server";
-	const { messages, id }: { messages: UIMessage[]; id: string } = await req.json();
+	const { messages, id }: { messages: UIMessage[]; id: string } =
+		await req.json();
 
 	const locale = await getCurrentLocale();
 	const t = await getI18n();
@@ -120,7 +127,7 @@ export async function POST(req: Request) {
 					}`,
 				prompt: `Convert the following recipe into a structured JSON object:\n${content}`,
 			});
-			await updateActiveChatById(id, content, object);
+			await updateChatById(id, content, object);
 		},
 	});
 }
