@@ -36,7 +36,7 @@ export const auth = betterAuth({
 		enabled: true,
 		async sendResetPassword(data) {
 			await resend.emails.send({
-				from: "noreply@RecipesMaster.ovh",
+				from: "noreply@mybudget.ovh",
 				to: data.user.email,
 				subject: "Reset Password",
 				text: `Reset password : ${data.url}`,
