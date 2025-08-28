@@ -11,12 +11,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import type { Recipe } from "@/generated/prisma";
+import type { Chat, Recipe } from "@/generated/prisma";
 import { useI18n } from "@/locales/client";
 import RecipePdf from "./_pdf/recipe-pdf";
 
 interface RecipeDialogProps {
-	recipe: Recipe;
+	recipe: Recipe & {
+		chat: Chat | null;
+	};
 	dialogOpen: boolean;
 	onDialogOpen: (dialogOpen: boolean) => void;
 }
@@ -165,7 +167,7 @@ export default function RecipeDialog({
 						<Button
 							type="button"
 							variant={"outline"}
-							onClick={() => router.push(`/dashboard/chat/${recipe.chatId}`)}
+							onClick={() => router.push(`/dashboard/chat/${recipe.chat?.id}`)}
 						>
 							<Pen className="size-4" />
 						</Button>

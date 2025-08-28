@@ -110,7 +110,8 @@ model Chat {
   isActive  Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
-  Recipe    Recipe[]
+  recipeId  String?  @unique
+  recipe    Recipe?  @relation("ChatRecipe", fields: [recipeId], references: [id], onDelete: Cascade)
 
   @@map("chat")
 }
@@ -119,8 +120,7 @@ model Recipe {
   id              String           @id @default(uuid())
   userId          String
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chatId          String
-  chat            Chat             @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chat            Chat?            @relation("ChatRecipe")
   image           String
   title           String
   description     String
@@ -135,7 +135,6 @@ model Recipe {
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime         @updatedAt @db.Timestamptz(6)
 
-  @@unique([userId, chatId])
   @@map("recipe")
 }
 
