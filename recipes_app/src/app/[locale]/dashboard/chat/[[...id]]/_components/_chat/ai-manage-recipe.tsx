@@ -192,7 +192,7 @@ export default function AiManageRecipe({
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-full" align="start">
 						{currentChat.chat?.isActive ? (
-							<div>
+							<>
 								<DropdownMenuItem
 									disabled={disabledCondition}
 									onClick={handleReset}
@@ -207,7 +207,7 @@ export default function AiManageRecipe({
 									<Archive size={16} />
 									{t("button.addRecipe")}
 								</DropdownMenuItem>
-							</div>
+							</>
 						) : (
 							<DropdownMenuItem
 								disabled={disabledCondition}
@@ -222,7 +222,7 @@ export default function AiManageRecipe({
 			</div>
 			<div className="hidden md:flex gap-2">
 				{currentChat.chat?.isActive ? (
-					<div>
+					<>
 						<AIInputButton disabled={disabledCondition} onClick={handleReset}>
 							<RefreshCcw size={16} />
 							<span>{t("button.reset")}</span>
@@ -231,7 +231,7 @@ export default function AiManageRecipe({
 							<Archive size={16} />
 							<span> {t("button.addRecipe")}</span>
 						</AIInputButton>
-					</div>
+					</>
 				) : (
 					<AIInputButton disabled={disabledCondition} onClick={handleUpdate}>
 						<FileInput size={16} />

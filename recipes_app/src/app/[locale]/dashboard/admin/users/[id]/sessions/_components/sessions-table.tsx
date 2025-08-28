@@ -41,13 +41,13 @@ export default function SessionsTable({
 	const columns = dataTableColumnList<Session>(columnsItems, actionsItems);
 
 	return (
-		<div>
+		<>
 			<DeleteSession
 				alertDialogOpen={openAlertDialogDelete}
 				onAlertDialogOpen={setAlertOpenDialogDelete}
 				sessionData={selectedSession}
 			/>
 			<DataTable columns={columns} data={sessionsList.sessions} />
-		</div>
+		</>
 	);
 }

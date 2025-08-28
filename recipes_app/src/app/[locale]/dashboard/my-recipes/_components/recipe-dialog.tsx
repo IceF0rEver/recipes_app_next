@@ -113,12 +113,12 @@ export default function RecipeDialog({
 					</div>
 
 					{recipe.tip && (
-						<div>
+						<>
 							<h3 className="text-lg font-semibold mb-2">
 								{t("components.myRecipes.tip")}
 							</h3>
 							<p className="text-sm">{recipe.tip}</p>
-						</div>
+						</>
 					)}
 					<Button
 						type="button"
