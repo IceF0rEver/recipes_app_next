@@ -374,6 +374,9 @@
       "serving": "Portions : ",
       "preparationTime": "Préparation : ",
       "cookingTime": "Cuisson : "
+    },
+    "chat": {
+      "title": "Assistant"
     }
   },
   "metaData": {
