@@ -1,4 +1,5 @@
 "use client";
+import type { UIDataTypes, UIMessage, UITools } from "ai";
 import { PlusIcon } from "lucide-react";
 import { type FormEventHandler, useCallback, useState } from "react";
 import {
@@ -27,6 +28,7 @@ interface AiInputProps {
 			status?: number;
 		};
 	}>;
+	messages: UIMessage<unknown, UIDataTypes, UITools>[] | null;
 }
 export default function AiInput({
 	onSubmit,
@@ -35,6 +37,7 @@ export default function AiInput({
 	className,
 	placeholder,
 	chat,
+	messages,
 }: AiInputProps) {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [input, setInput] = useState<string>("");
@@ -69,6 +72,7 @@ export default function AiInput({
 					</AIInputTools>
 					<div className="flex gap-2">
 						<AiManageRecipe
+							messages={messages}
 							chat={chat}
 							status={status}
 							onloading={() => setIsLoading}

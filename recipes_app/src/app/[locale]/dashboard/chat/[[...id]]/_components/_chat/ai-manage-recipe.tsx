@@ -1,5 +1,6 @@
 "use client";
 
+import type { UIDataTypes, UIMessage, UITools } from "ai";
 import { Archive, EllipsisVertical, FileInput, RefreshCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
@@ -8,6 +9,7 @@ import {
 	useActionState,
 	useCallback,
 	useEffect,
+	useMemo,
 	useRef,
 } from "react";
 import { toast } from "sonner";
@@ -39,11 +41,13 @@ interface ManageRecipeProps {
 			status?: number;
 		};
 	}>;
+	messages: UIMessage<unknown, UIDataTypes, UITools>[] | null;
 }
 export default function AiManageRecipe({
 	status,
 	onloading,
 	chat,
+	messages,
 }: ManageRecipeProps) {
 	const t = useI18n();
 	const router = useRouter();
@@ -65,12 +69,15 @@ export default function AiManageRecipe({
 			success: false,
 		});
 
-	const disabledCondition =
-		status === "error" ||
-		status === "streaming" ||
-		isPendingResetActive ||
-		isPendingArchiveActive ||
-		currentChat?.chat?.messages?.length === undefined;
+	const disabledCondition = useMemo(() => {
+		return (
+			status === "error" ||
+			status === "streaming" ||
+			isPendingResetActive ||
+			isPendingArchiveActive ||
+			messages?.length === 0
+		);
+	}, [status, isPendingResetActive, isPendingArchiveActive, messages?.length]);
 
 	const handleReset = useCallback(() => {
 		startTransition(() => {

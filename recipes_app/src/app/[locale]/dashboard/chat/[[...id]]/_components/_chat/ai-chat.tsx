@@ -93,6 +93,7 @@ export default function AiChat({ id, chat }: AiChatProps) {
 				<AiConversation messages={messages} />
 				<AiInput
 					chat={chat}
+					messages={messages}
 					onSubmit={handleSubmit}
 					onStop={handleStop}
 					status={status}
