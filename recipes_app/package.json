@@ -31,6 +31,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
+    "@react-pdf/renderer": "^4.3.0",
     "@shikijs/transformers": "^3.9.2",
     "@tanstack/react-table": "^8.21.3",
     "ai": "^5.0.1",

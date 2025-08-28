@@ -464,9 +464,9 @@
       "title": "Quick recipe"
     },
     "familyRecipe": {
-      "title": "Family meal",
+      "title": "Family recipe",
       "description": "For 6 to 8 people.",
-      "prompt": "Offer me a full menu for a family meal of 6 to 8 people."
+      "prompt": "Offer me a recipe for a family meal of 6 to 8 people."
     },
     "catchRecipe": {
       "title": "Catch me!",

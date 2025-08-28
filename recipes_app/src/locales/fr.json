@@ -461,9 +461,9 @@
       "title": "Recette rapide"
     },
     "familyRecipe": {
-      "title": "Repas de famille",
+      "title": "Recette de famille",
       "description": "Pour 6 à 8 personnes.",
-      "prompt": "Propose-moi un menu complet pour un repas de famille de 6 à 8 personnes."
+      "prompt": "Propose-moi une recette pour un repas de famille de 6 à 8 personnes."
     },
     "catchRecipe": {
       "title": "Surprend moi !",
