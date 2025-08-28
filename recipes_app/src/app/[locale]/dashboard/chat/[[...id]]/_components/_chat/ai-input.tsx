@@ -63,7 +63,7 @@ export default function AiInput({
 				/>
 				<AIInputToolbar className="border-t">
 					<AIInputTools>
-						<AIInputButton disabled={true}>
+						<AIInputButton disabled={true} className="hidden">
 							<PlusIcon size={16} />
 						</AIInputButton>
 					</AIInputTools>
