@@ -91,7 +91,7 @@ export default function UsersTable({
 	const columns = dataTableColumnList<UserWithRole>(columnsItems, actionsItems);
 
 	return (
-		<div>
+		<>
 			<DataTable columns={columns} data={usersList.users} />
 			<BanUsers
 				sheetOpen={openSheet}
@@ -109,6 +109,6 @@ export default function UsersTable({
 				userData={selectedUser}
 				selectedKey={selectedKey}
 			/>
-		</div>
+		</>
 	);
 }

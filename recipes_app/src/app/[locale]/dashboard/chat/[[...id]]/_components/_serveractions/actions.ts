@@ -249,33 +249,33 @@ export async function archiveActiveChat(
 
 		if (chat?.isActive && chat?.metadata) {
 			const metadata = recipeSchema.parse(chat.metadata);
-			const id = generateId();
+			const recipeId = generateId();
 
-			const createChat = await prisma.chat.create({
+			const createRecipe = await prisma.recipe.create({
 				data: {
-					id: id,
+					id: recipeId,
 					userId: userId,
 					title: metadata.title,
-					messages: chat.messages,
-					metadata: chat.metadata,
+					description: metadata.description,
+					serving: metadata.serving,
+					image: "",
+					preparationTime: metadata.preparationTime,
+					cookingTime: metadata.cookingTime,
+					ingredients: metadata.ingredients,
+					instructions: metadata.instructions,
+					difficulty: metadata.difficulty,
+					tip: metadata.tip ?? null,
 				},
 			});
 
-			const [createRecipe, resetChat] = await Promise.all([
-				prisma.recipe.create({
+			const [createChat, resetChat] = await Promise.all([
+				prisma.chat.create({
 					data: {
 						userId: userId,
-						chatId: id,
 						title: metadata.title,
-						description: metadata.description,
-						serving: metadata.serving,
-						image: "",
-						preparationTime: metadata.preparationTime,
-						cookingTime: metadata.cookingTime,
-						ingredients: metadata.ingredients,
-						instructions: metadata.instructions,
-						difficulty: metadata.difficulty,
-						tip: metadata.tip ?? null,
+						messages: chat.messages,
+						metadata: chat.metadata,
+						recipeId: recipeId,
 					},
 				}),
 				prisma.chat.update({
@@ -380,10 +380,8 @@ export async function updateArchiveChat(
 					tip: metadata.tip ?? null,
 				},
 				where: {
-					userId_chatId: {
-						userId: userId,
-						chatId: chat.id,
-					},
+					userId: userId,
+					id: chat.recipeId ?? "",
 				},
 			});
 

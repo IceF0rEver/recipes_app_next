@@ -1,5 +1,7 @@
 "use client";
 
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Download, Pen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +11,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import type { Recipe } from "@/generated/prisma";
+import type { Chat, Recipe } from "@/generated/prisma";
 import { useI18n } from "@/locales/client";
+import RecipePdf from "./_pdf/recipe-pdf";
 
 interface RecipeDialogProps {
-	recipe: Recipe;
+	recipe: Recipe & {
+		chat: Chat | null;
+	};
 	dialogOpen: boolean;
 	onDialogOpen: (dialogOpen: boolean) => void;
 }
@@ -113,19 +118,60 @@ export default function RecipeDialog({
 					</div>
 
 					{recipe.tip && (
-						<div>
+						<>
 							<h3 className="text-lg font-semibold mb-2">
 								{t("components.myRecipes.tip")}
 							</h3>
 							<p className="text-sm">{recipe.tip}</p>
-						</div>
+						</>
 					)}
-					<Button
-						type="button"
-						onClick={() => router.push(`/dashboard/chat/${recipe.chatId}`)}
-					>
-						{t("button.update")}
-					</Button>
+					<div className="flex gap-2">
+						<PDFDownloadLink
+							document={
+								<RecipePdf
+									recipe={recipe}
+									labels={{
+										serving: t("components.myrecipes.serving"),
+										preparationTime: t("components.myrecipes.preparationTime"),
+										cookingTime: t("components.myrecipes.cookingTime"),
+										difficulty: t("components.myRecipes.difficulty.label"),
+										difficultyValues: {
+											EASY: t("components.myRecipes.difficulty.EASY"),
+											STANDARD: t("components.myRecipes.difficulty.STANDARD"),
+											DIFFICULT: t("components.myRecipes.difficulty.DIFFICULT"),
+										},
+										ingredients: t("components.myRecipes.ingredients"),
+										noIngredients: t(
+											"components.myRecipes.nullableIngredients",
+										),
+										instructions: t("components.myRecipes.instructions"),
+										noInstructions: t(
+											"components.myRecipes.nullableInstructions",
+										),
+										tip: t("components.myRecipes.tip"),
+									}}
+								/>
+							}
+							fileName={`${recipe.title}.pdf`}
+						>
+							<Button
+								type="button"
+								variant="default"
+								size="icon"
+								className=" cursor-pointer"
+								onClick={(e) => e.stopPropagation()}
+							>
+								<Download className="size-4" />
+							</Button>
+						</PDFDownloadLink>
+						<Button
+							type="button"
+							variant={"outline"}
+							onClick={() => router.push(`/dashboard/chat/${recipe.chat?.id}`)}
+						>
+							<Pen className="size-4" />
+						</Button>
+					</div>
 				</div>
 			</DialogContent>
 		</Dialog>

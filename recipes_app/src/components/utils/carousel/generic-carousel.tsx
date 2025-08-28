@@ -28,7 +28,7 @@ export default function GenericCarousel<T>({
 	options,
 }: GenericCarouselProps<T>) {
 	return data.length > 0 ? (
-		<div>
+		<>
 			{title && (
 				<h2 className="text-2xl font-semibold text-foreground py-2">{title}</h2>
 			)}
@@ -46,6 +46,6 @@ export default function GenericCarousel<T>({
 					<CarouselPrevious className="hidden md:flex" />
 				</Carousel>
 			</div>
-		</div>
+		</>
 	) : null;
 }

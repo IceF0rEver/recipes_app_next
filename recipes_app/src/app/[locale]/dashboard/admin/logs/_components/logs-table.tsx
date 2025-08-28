@@ -14,9 +14,5 @@ export default function LogsTable({
 
 	const columns = dataTableColumnList<Log>(columnsItems, []);
 
-	return (
-		<div>
-			<DataTable columns={columns} data={logsList.logs} />
-		</div>
-	);
+	return <DataTable columns={columns} data={logsList.logs} />;
 }

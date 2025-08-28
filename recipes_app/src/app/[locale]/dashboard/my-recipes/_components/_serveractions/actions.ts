@@ -2,12 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import z from "zod";
-import type { Recipe } from "@/generated/prisma";
+import type { Chat, Recipe } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 
-export async function getRecipesList(): Promise<{
-	recipes: Recipe[];
+type RecipeWithChat = Recipe & {
+	chat: Chat | null;
+};
+
+export async function getRecipesListWithChat(): Promise<{
+	recipesWithChat: RecipeWithChat[];
 }> {
 	try {
 		const currentUser = await getUser();
@@ -23,12 +27,15 @@ export async function getRecipesList(): Promise<{
 			throw new Error("400 - BAD_REQUEST");
 		}
 
-		const recipes = await prisma.recipe.findMany({
+		const recipesWithChat = await prisma.recipe.findMany({
 			where: {
 				userId: currentUser?.id,
 			},
+			include: {
+				chat: true,
+			},
 		});
-		return { recipes: recipes ?? [] };
+		return { recipesWithChat: recipesWithChat ?? [] };
 	} catch (error) {
 		if (error instanceof Error && error.message.includes("network")) {
 			throw new Error("503 - SERVICE_UNAVAILABLE");
@@ -43,12 +50,12 @@ interface RecipeState {
 	message?: string;
 }
 
-export async function setFavorite(
+export async function setFavoriteRecipe(
 	_prevState: RecipeState,
 	{
-		chatId,
+		recipeId,
 		isFavorite,
-	}: { chatId: Recipe["id"]; isFavorite: Recipe["isFavorite"] },
+	}: { recipeId: Recipe["id"]; isFavorite: Recipe["isFavorite"] },
 ): Promise<RecipeState> {
 	try {
 		const currentUser = await getUser();
@@ -61,7 +68,7 @@ export async function setFavorite(
 			})
 			.safeParse({
 				userId: currentUser?.id,
-				chatId: chatId,
+				chatId: recipeId,
 				isFavorite: isFavorite,
 			});
 
@@ -74,7 +81,60 @@ export async function setFavorite(
 				isFavorite: isFavorite,
 			},
 			where: {
-				id: chatId,
+				id: recipeId,
+				userId: currentUser?.id,
+			},
+		});
+
+		if (result) {
+			revalidatePath("[locale]/dashboard/my-recipes", "page");
+			return {
+				success: true,
+			};
+		}
+
+		return {
+			success: false,
+			error: {
+				code: "UNEXPECTED_ERROR",
+				status: 500,
+			},
+		};
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			throw new Error("400 - BAD_REQUEST");
+		}
+		if (error instanceof Error && error.message.includes("network")) {
+			throw new Error("503 - SERVICE_UNAVAILABLE");
+		}
+		throw new Error("500 - INTERNAL_SERVER_ERROR");
+	}
+}
+
+export async function deleteRecipeById(
+	_prevState: RecipeState,
+	recipeId: Recipe["id"],
+): Promise<RecipeState> {
+	try {
+		const currentUser = await getUser();
+
+		const validatedData = z
+			.object({
+				userId: z.string().min(1),
+				chatId: z.string().min(1),
+			})
+			.safeParse({
+				userId: currentUser?.id,
+				chatId: recipeId,
+			});
+
+		if (!validatedData.success) {
+			throw new Error("400 - BAD_REQUEST");
+		}
+
+		const result = await prisma.recipe.delete({
+			where: {
+				id: recipeId,
 				userId: currentUser?.id,
 			},
 		});
