@@ -36,10 +36,20 @@ export const auth = betterAuth({
 		enabled: true,
 		async sendResetPassword(data) {
 			await resend.emails.send({
-				from: "noreply@mybudget.ovh",
+				from: "noreply@RecipesMaster.ovh",
 				to: data.user.email,
 				subject: "Reset Password",
 				text: `Reset password : ${data.url}`,
+				html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <h2>Réinitialisation du mot de passe</h2>
+                    <p>Bonjour ${data.user.email},</p>
+                    <p>Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour continuer :</p>
+                    <a href="${data.url}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
+                    <p>Si vous n’avez pas demandé cette réinitialisation, ignorez simplement cet email.</p>
+                    <p>Merci,<br>L’équipe Recipes Master</p>
+                </div>
+            `,
 			});
 		},
 	},
