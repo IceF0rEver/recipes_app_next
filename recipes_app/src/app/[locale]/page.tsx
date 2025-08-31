@@ -28,10 +28,14 @@ export default async function HeroPage() {
 						</div>
 						<h1 className="text-4xl md:text-5xl font-bold tracking-tight">
 							<span>{t("heroPage.title.firstPart")}</span>
-							<span className="text-primary">{t("heroPage.title.secondPart")}</span>
+							<span className="text-primary">
+								{t("heroPage.title.secondPart")}
+							</span>
 						</h1>
-						<p className="text-muted-foreground text-lg">{t("heroPage.description")}</p>
-						<div className="space-x-4">
+						<p className="text-muted-foreground text-lg">
+							{t("heroPage.description")}
+						</p>
+						<div className="flex gap-2">
 							<Link href="/auth/register">
 								<Button size="lg" className="shadow-md">
 									{t("button.register")}

@@ -1,6 +1,7 @@
 "use client";
 
 import { BotMessageSquare, Logs, ReceiptText, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -8,7 +9,6 @@ import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
-	SidebarGroup,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
@@ -87,15 +87,17 @@ export function AppSidebar() {
 	return (
 		<Sidebar variant="inset" className="p-1">
 			<SidebarHeader>
-				<div className="w-full flex flex-row justify-center items-center gap-2 bg-sidebar-accent py-8 rounded-lg">
-					<h1 className="text-2xl font-bold whitespace-nowrap">
-						<span className="text-primary">Recipes </span>
-						<span className="text-secondary">Master</span>
-					</h1>
+				<div className="flex justify-center items-center bg-sidebar-accent rounded-lg w-full">
+					<Image
+						width={300}
+						height={200}
+						src="/images/logo-recipes-master.webp"
+						alt="Recipes Master"
+						className="p-2"
+					/>
 				</div>
 			</SidebarHeader>
 			<SidebarContent>
-				<SidebarGroup />
 				<SidebarMenu className="p-1">
 					{dataSideBar.navMain.map((item) =>
 						item.visibleTo.includes(session?.user.role ?? "") ? (
@@ -135,7 +137,6 @@ export function AppSidebar() {
 						) : null,
 					)}
 				</SidebarMenu>
-				<SidebarGroup />
 			</SidebarContent>
 			<SidebarFooter>
 				{isPending ? <NavUserSkeleton /> : <NavUser user={dataUser} />}
