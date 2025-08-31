@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-// import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,24 +56,22 @@ export default async function HeroPage() {
 							))}
 						</ul>
 					</div>
-					<div className="h-full">
-						<Card className="h-full pt-4 pb-0 gap-0">
-							<CardHeader className="border-b-1 pb-4 flex gap-2 px-3">
-								<span className="size-3 rounded-full bg-red-500" />
-								<span className="size-3 rounded-full bg-yellow-500" />
-								<span className="size-3 rounded-full bg-green-500" />
-							</CardHeader>
-							<CardContent className="p-0 m-0">
-								{/* <Image
-									width={500}
-									height={400}
-									src="/images/placeholder.svg"
-									alt="Illustration IA et cuisine"
-									className="rounded-b-lg w-full"
-								/> */}
-							</CardContent>
-						</Card>
-					</div>
+					<Card className="pt-4 pb-0 gap-0">
+						<CardHeader className="border-b-1 pb-4 flex gap-2 px-3">
+							<span className="size-3 rounded-full bg-red-500" />
+							<span className="size-3 rounded-full bg-yellow-500" />
+							<span className="size-3 rounded-full bg-green-500" />
+						</CardHeader>
+						<CardContent className="p-0 m-0">
+							<Image
+								width={1919}
+								height={916}
+								src="/images/image-hero-page.webp"
+								alt="Illustration IA et cuisine"
+								className="rounded-b-xl w-full"
+							/>
+						</CardContent>
+					</Card>
 				</div>
 				<div className="w-full">
 					<DarkMode className="float-end" />
