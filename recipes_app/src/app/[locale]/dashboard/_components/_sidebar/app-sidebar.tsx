@@ -89,8 +89,8 @@ export function AppSidebar() {
 			<SidebarHeader>
 				<div className="flex justify-center items-center bg-sidebar-accent rounded-lg w-full">
 					<Image
-						width={300}
-						height={200}
+						width={600}
+						height={400}
 						src="/images/logo-recipes-master.webp"
 						alt="Recipes Master"
 						className="p-2"
