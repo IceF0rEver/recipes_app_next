@@ -20,7 +20,9 @@
     "unban": "Débannir",
     "accueil": "Retour à l'accueil",
     "reset": "Réinitialiser",
-    "addRecipe": "Ajouter la recette"
+    "addRecipe": "Ajouter la recette",
+    "liked": "Aimé",
+    "like": "Aimer"
   },
   "heroPage": {
     "title": {
