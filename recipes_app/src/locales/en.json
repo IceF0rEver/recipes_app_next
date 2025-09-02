@@ -20,7 +20,9 @@
     "unban": "Unban",
     "accueil": "Return to reception",
     "reset": "Reset",
-    "addRecipe": "Add the recipe"
+    "addRecipe": "Add the recipe",
+    "liked": "Liked",
+    "like": "Like"
   },
   "heroPage": {
     "title": {
