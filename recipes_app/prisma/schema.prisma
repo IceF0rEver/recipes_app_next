@@ -35,6 +35,8 @@ model User {
   banReason  String?
   banExpires DateTime?
 
+  stripeCustomerId String?
+
   @@unique([email])
   @@map("user")
 }
