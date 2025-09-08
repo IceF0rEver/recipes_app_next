@@ -1,12 +1,19 @@
+import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { admin as adminPlugin } from "better-auth/plugins";
+import Stripe from "stripe";
 import { PrismaClient } from "@/generated/prisma";
 import { resend } from "../resend";
 import { ac, admin, premium, user } from "./permissions";
 
 const prisma = new PrismaClient();
+
+// biome-ignore lint/style/noNonNullAssertion: .env
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+	apiVersion: "2025-08-27.basil",
+});
 
 export const auth = betterAuth({
 	trustedOrigins: [
@@ -80,6 +87,12 @@ export const auth = betterAuth({
 				user,
 				premium,
 			},
+		}),
+		stripe({
+			stripeClient,
+			// biome-ignore lint/style/noNonNullAssertion: .env
+			stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+			createCustomerOnSignUp: true,
 		}),
 		nextCookies(),
 	],

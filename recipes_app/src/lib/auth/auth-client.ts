@@ -1,6 +1,7 @@
-import { createAuthClient } from "better-auth/react";
+import { stripeClient } from "@better-auth/stripe/client";
 import { adminClient } from "better-auth/client/plugins";
-import { premium, user, admin, ac } from "./permissions";
+import { createAuthClient } from "better-auth/react";
+import { ac, admin, premium, user } from "./permissions";
 
 export const authClient = createAuthClient({
 	baseURL: process.env.NEXT_PUBLIC_APP_URL,
@@ -13,7 +14,12 @@ export const authClient = createAuthClient({
 				premium,
 			},
 		}),
+		stripeClient({
+			subscription: false,
+		}),
 	],
 });
 
 export const { signIn, signOut, signUp, useSession } = authClient;
+
+export type ErrorCode = keyof typeof authClient.$ERROR_CODES;
