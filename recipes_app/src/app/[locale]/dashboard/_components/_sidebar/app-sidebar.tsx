@@ -80,8 +80,14 @@ export function AppSidebar() {
 			name: session?.user.name || "",
 			email: session?.user.email || "",
 			avatar: session?.user.image || "./",
+			role: session?.user.role || "user",
 		}),
-		[session?.user.name, session?.user.email, session?.user.image],
+		[
+			session?.user.name,
+			session?.user.email,
+			session?.user.image,
+			session?.user.role,
+		],
 	);
 
 	return (

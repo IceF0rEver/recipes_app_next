@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, Settings2 } from "lucide-react";
+import { ChevronsUpDown, LogOut, Settings2, Star } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo, useCallback } from "react";
@@ -28,6 +28,7 @@ interface NavUserProps {
 		name: string;
 		email: string;
 		avatar: string;
+		role: string;
 	};
 }
 
@@ -87,6 +88,28 @@ export const NavUser = memo(function NavUser({ user }: NavUserProps) {
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
+						{user.role !== "premium" ? (
+							<>
+								<DropdownMenuGroup>
+									<Link href={"/dashboard/plan"}>
+										<DropdownMenuItem variant="default">
+											<Star />
+											{t("button.plan")}
+										</DropdownMenuItem>
+									</Link>
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+							</>
+						) : (
+							<>
+								<DropdownMenuGroup>
+									<DropdownMenuLabel>
+										{t("components.navUser.premiumStatus")}
+									</DropdownMenuLabel>
+								</DropdownMenuGroup>
+								<DropdownMenuSeparator />
+							</>
+						)}
 						<DropdownMenuGroup>
 							<Link href={"/dashboard/settings"}>
 								<DropdownMenuItem variant="default">

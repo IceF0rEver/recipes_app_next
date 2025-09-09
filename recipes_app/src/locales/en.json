@@ -24,7 +24,8 @@
     "liked": "Liked",
     "like": "Like",
     "premium": "Become Premium",
-    "currentPlan": "Current plan"
+    "currentPlan": "Current plan",
+    "plan": "Plan"
   },
   "heroPage": {
     "title": {
@@ -408,6 +409,9 @@
     },
     "badge": {
       "recommended": "Recommended"
+    },
+    "navUser": {
+      "premiumStatus": "Plan: Premium"
     }
   },
   "metaData": {
