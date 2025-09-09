@@ -21,8 +21,16 @@ export default async function Page() {
 			value: t("components.table.id"),
 			subItems: [],
 			enableSorting: false,
-			enableHiding: false,
+			enableHiding: true,
 			initialStateVisibility: true,
+		},
+		{
+			key: "stripeCustomerId",
+			value: t("components.table.stripeCustomerId"),
+			subItems: [],
+			enableSorting: false,
+			enableHiding: true,
+			initialStateVisibility: false,
 		},
 		{
 			key: "email",

@@ -306,7 +306,8 @@
       "userIdAuthor": "Author's ID",
       "targetId": "Targeted ID",
       "status": "Status",
-      "metadata": "Meta Data"
+      "metadata": "Meta Data",
+      "stripeCustomerId": "Id Stripe"
     },
     "notFound": {
       "title": "Page not found",

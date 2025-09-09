@@ -18,6 +18,10 @@ interface Role {
 	icon?: ComponentType<{ className?: string }>;
 }
 
+interface UserWithRoleAndStripe extends UserWithRole {
+	stripeCustomerId?: string | null;
+}
+
 export default function UsersTable({
 	datasTable,
 	columnsItems,
@@ -28,25 +32,29 @@ export default function UsersTable({
 		useState<boolean>(false);
 	const [openAlertDialogRole, setAlertOpenDialogRole] =
 		useState<boolean>(false);
-	const [selectedUser, setSelectedUser] = useState<UserWithRole | null>(null);
+	const [selectedUser, setSelectedUser] =
+		useState<UserWithRoleAndStripe | null>(null);
 	const [selectedKey, setSelectedKey] = useState<Role | null>(null);
 
 	const usersList = use(datasTable);
 
-	const onBanAction = useCallback((data: UserWithRole) => {
+	const onBanAction = useCallback((data: UserWithRoleAndStripe) => {
 		setOpenSheet(true);
 		setSelectedUser(data);
 	}, []);
 
-	const onRoleAction = useCallback((data: UserWithRole, role?: Role) => {
-		setAlertOpenDialogRole(true);
-		setSelectedUser(data);
-		if (role) {
-			setSelectedKey(role);
-		}
-	}, []);
+	const onRoleAction = useCallback(
+		(data: UserWithRoleAndStripe, role?: Role) => {
+			setAlertOpenDialogRole(true);
+			setSelectedUser(data);
+			if (role) {
+				setSelectedKey(role);
+			}
+		},
+		[],
+	);
 
-	const onDeleteAction = useCallback((data: UserWithRole) => {
+	const onDeleteAction = useCallback((data: UserWithRoleAndStripe) => {
 		setAlertOpenDialogDelete(true);
 		setSelectedUser(data);
 	}, []);
@@ -88,7 +96,10 @@ export default function UsersTable({
 		[t, onBanAction, onDeleteAction, onRoleAction],
 	);
 
-	const columns = dataTableColumnList<UserWithRole>(columnsItems, actionsItems);
+	const columns = dataTableColumnList<UserWithRoleAndStripe>(
+		columnsItems,
+		actionsItems,
+	);
 
 	return (
 		<>
