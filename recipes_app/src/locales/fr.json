@@ -22,7 +22,9 @@
     "reset": "Réinitialiser",
     "addRecipe": "Ajouter la recette",
     "liked": "Aimé",
-    "like": "Aimer"
+    "like": "Aimer",
+    "premium": "Passer au Premium",
+    "currentPlan": "Plan actuel"
   },
   "heroPage": {
     "title": {
@@ -380,6 +382,29 @@
     },
     "chat": {
       "title": "Assistant"
+    },
+    "plan": {
+      "layout": {
+        "title": "Choisissez votre plan",
+        "description": "Commencez gratuitement et évoluez selon vos besoins."
+      },
+      "features": {
+        "chatBot": "Accès à l'assistant culinaire",
+        "limit3": "Jusqu'à 3 recettes",
+        "limit25": "Jusqu'à 25 recettes",
+        "pdfExport": "Exports en PDF"
+      },
+      "free": {
+        "title": "Plan Gratuit",
+        "description": "Parfait pour commencer et tester nos fonctionnalités"
+      },
+      "premium": {
+        "title": "Plan Premium",
+        "description": "Passez au niveau supérieur en cuisine avec le plan premium."
+      }
+    },
+    "badge": {
+      "recommended": "Recommandé"
     }
   },
   "metaData": {

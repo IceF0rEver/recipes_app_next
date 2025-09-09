@@ -22,7 +22,9 @@
     "reset": "Reset",
     "addRecipe": "Add the recipe",
     "liked": "Liked",
-    "like": "Like"
+    "like": "Like",
+    "premium": "Become Premium",
+    "currentPlan": "Current plan"
   },
   "heroPage": {
     "title": {
@@ -383,6 +385,29 @@
     },
     "chat": {
       "title": "Assistant"
+    },
+    "plan": {
+      "layout": {
+        "title": "Choose your plan",
+        "description": "Start free of charge and evolve according to your needs."
+      },
+      "features": {
+        "chatBot": "Access to the culinary assistant",
+        "limit3": "Up to 3 recipes",
+        "limit25": "Up to 25 recipes",
+        "pdfExport": "Exports in PDF"
+      },
+      "free": {
+        "title": "Free plan",
+        "description": "Perfect to start and test our features"
+      },
+      "premium": {
+        "title": "Premium plan",
+        "description": "Go to the upper level in the kitchen with the premium plan."
+      }
+    },
+    "badge": {
+      "recommended": "Recommended"
     }
   },
   "metaData": {
