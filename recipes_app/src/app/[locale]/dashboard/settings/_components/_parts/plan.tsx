@@ -25,11 +25,9 @@ function PlanSkeleton() {
 
 function PlanContent() {
 	const t = useI18n();
-	const [userWithSubscription, setUserWithSubscription] =
-		useState<UserWithSubscriptionResponse | null>(null);
+	const [userWithSubscription, setUserWithSubscription] = useState<UserWithSubscriptionResponse | null>(null);
 	const [_isLoading, setIsLoading] = useState(true);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n
 	const fetchData = useCallback(async () => {
 		try {
 			setIsLoading(true);
@@ -58,10 +56,7 @@ function PlanContent() {
 		fetchData();
 	}, [fetchData]);
 
-	const freeFeatures = [
-		t("components.plan.features.chatBot"),
-		t("components.plan.features.limit3"),
-	];
+	const freeFeatures = [t("components.plan.features.chatBot"), t("components.plan.features.limit3")];
 
 	const premiumFeatures = [
 		t("components.plan.features.chatBot"),
@@ -71,7 +66,7 @@ function PlanContent() {
 
 	return (
 		<>
-			{userWithSubscription ? (
+			{userWithSubscription?.subscription?.status === "active" ? (
 				<div>Vous êtes premium</div>
 			) : (
 				<div className="container mx-auto space-y-4">
