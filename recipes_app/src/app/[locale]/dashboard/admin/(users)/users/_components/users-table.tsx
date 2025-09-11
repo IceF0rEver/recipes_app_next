@@ -81,7 +81,6 @@ export default function UsersTable({
 				subItems: [
 					{ key: "admin", label: t("components.table.roles.admin") },
 					{ key: "user", label: t("components.table.roles.user") },
-					{ key: "premium", label: t("components.table.roles.premium") },
 				],
 				onAction: onRoleAction,
 			},

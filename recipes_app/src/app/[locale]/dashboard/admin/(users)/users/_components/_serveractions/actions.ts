@@ -168,7 +168,7 @@ export async function updateRoleUser(
 				headers: await headers(),
 				body: {
 					userId: userId,
-					role: role as "admin" | "user" | "premium",
+					role: role as "admin" | "user",
 				},
 			});
 			if (result) {

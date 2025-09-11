@@ -45,13 +45,13 @@ export function AppSidebar() {
 					title: t("components.appSideBar.chatBot"),
 					url: "chat",
 					icon: <BotMessageSquare />,
-					visibleTo: ["user", "admin", "premium"],
+					visibleTo: ["user", "admin"],
 				},
 				{
 					title: t("components.appSideBar.myRecipes"),
 					url: "my-recipes",
 					icon: <ReceiptText />,
-					visibleTo: ["user", "admin", "premium"],
+					visibleTo: ["user", "admin"],
 				},
 				{
 					title: t("components.appSideBar.admin"),
