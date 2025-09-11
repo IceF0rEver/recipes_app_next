@@ -6,7 +6,7 @@ import { admin as adminPlugin } from "better-auth/plugins";
 import Stripe from "stripe";
 import { PrismaClient } from "@/generated/prisma";
 import { resend } from "../resend";
-import { ac, admin, premium, user } from "./permissions";
+import { ac, admin, user } from "./permissions";
 
 const prisma = new PrismaClient();
 
@@ -16,11 +16,7 @@ const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export const auth = betterAuth({
-	trustedOrigins: [
-		"http://localhost:3000",
-		"http://192.168.0.11:3000",
-		"https://recipes-app-next-ten.vercel.app/",
-	],
+	trustedOrigins: ["http://localhost:3000", "http://192.168.0.11:3000", "https://recipes-app-next-ten.vercel.app/"],
 	databaseHooks: {
 		user: {
 			create: {
@@ -85,7 +81,6 @@ export const auth = betterAuth({
 			roles: {
 				admin,
 				user,
-				premium,
 			},
 		}),
 		stripe({
@@ -93,6 +88,32 @@ export const auth = betterAuth({
 			// biome-ignore lint/style/noNonNullAssertion: .env
 			stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
 			createCustomerOnSignUp: true,
+			getCustomerCreateParams: async ({ user }, _request) => {
+				return {
+					metadata: {
+						userId: user.id,
+					},
+				};
+			},
+			subscription: {
+				enabled: true,
+				plans: [
+					{
+						name: "basic",
+						limits: {
+							recipes: 3,
+						},
+					},
+					{
+						name: "premium",
+						// biome-ignore lint/style/noNonNullAssertion: .env
+						priceId: process.env.STRIPE_PLAN_PREMIUM_ID!,
+						limits: {
+							recipes: 25,
+						},
+					},
+				],
+			},
 		}),
 		nextCookies(),
 	],
