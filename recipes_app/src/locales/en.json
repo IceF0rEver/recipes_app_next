@@ -137,6 +137,9 @@
       },
       "appearance": {
         "title": "Appearance"
+      },
+      "plan": {
+        "title": "Plan"
       }
     },
     "settings": {
@@ -276,7 +279,6 @@
       },
       "roles": {
         "user": "User",
-        "premium": "Premium",
         "admin": "Admin"
       },
       "faceted": {
@@ -405,13 +407,15 @@
       "premium": {
         "title": "Premium plan",
         "description": "Go to the upper level in the kitchen with the premium plan."
+      },
+      "month": "/month",
+      "toast": {
+        "error": "An error occurred!",
+        "success": "Premium plan successfully subscribed!"
       }
     },
     "badge": {
       "recommended": "Recommended"
-    },
-    "navUser": {
-      "premiumStatus": "Plan: Premium"
     }
   },
   "metaData": {

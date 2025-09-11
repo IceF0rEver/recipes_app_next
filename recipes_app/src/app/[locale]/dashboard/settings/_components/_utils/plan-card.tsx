@@ -2,7 +2,6 @@
 
 import { Check, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -12,29 +11,27 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/locales/client";
 
 interface PlanCardProps {
 	title: string;
 	description: string;
+	amount: string;
 	itemsContent?: string[] | null;
 	enableBadge?: boolean;
 	badgeLabel?: string;
-	buttonLabel?: string;
-	disableButton?: boolean;
-	buttonHandleAction?: () => void;
 	children: React.ReactNode;
 }
 export default function PlanCard({
 	title,
+	amount,
 	description,
 	itemsContent,
 	enableBadge = false,
 	badgeLabel,
-	buttonLabel,
-	disableButton = false,
-	buttonHandleAction,
 	children,
 }: PlanCardProps) {
+	const t = useI18n();
 	return (
 		<Card
 			className={cn(
@@ -51,7 +48,12 @@ export default function PlanCard({
 			<CardHeader>
 				<CardTitle className="text-2xl">{title}</CardTitle>
 				<CardDescription>{description}</CardDescription>
-				{children}
+				<div className="mt-4">
+					<span className="text-4xl font-bold">{amount}</span>
+					<span className="text-muted-foreground">
+						{t("components.plan.month")}
+					</span>
+				</div>
 			</CardHeader>
 			<CardContent className="h-full">
 				<ul className="space-y-3">
@@ -64,17 +66,7 @@ export default function PlanCard({
 					))}
 				</ul>
 			</CardContent>
-			<CardFooter>
-				<Button
-					variant={!enableBadge ? "outline" : "default"}
-					disabled={disableButton}
-					className="w-full"
-					size="lg"
-					onClick={buttonHandleAction}
-				>
-					{buttonLabel}
-				</Button>
-			</CardFooter>
+			<CardFooter>{children}</CardFooter>
 		</Card>
 	);
 }

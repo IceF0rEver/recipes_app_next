@@ -137,6 +137,9 @@
       },
       "appearance": {
         "title": "Apparence"
+      },
+      "plan": {
+        "title": "Plan"
       }
     },
     "settings": {
@@ -276,7 +279,6 @@
       },
       "roles": {
         "user": "Utilisateur",
-        "premium": "Premium",
         "admin": "Administrateur"
       },
       "faceted": {
@@ -402,13 +404,15 @@
       "premium": {
         "title": "Plan Premium",
         "description": "Passez au niveau supérieur en cuisine avec le plan premium."
+      },
+      "month": "/mois",
+      "toast": {
+        "error": "Une erreur s'est produite !",
+        "success": "Abonnement Premium souscrit avec succès !"
       }
     },
     "badge": {
       "recommended": "Recommandé"
-    },
-    "navUser": {
-      "premiumStatus": "Plan: Premium"
     }
   },
   "metaData": {
