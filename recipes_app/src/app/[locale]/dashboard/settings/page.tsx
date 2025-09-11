@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import Account from "@/app/[locale]/dashboard/settings/_components/_parts/account";
 import Appearance from "@/app/[locale]/dashboard/settings/_components/_parts/appearance";
+import Plan from "@/app/[locale]/dashboard/settings/_components/_parts/plan";
 import {
 	SidebarContent,
 	SidebarGroup,
@@ -12,7 +13,6 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useI18n } from "@/locales/client";
-import Plan from "./_components/_parts/plan";
 
 export default function Page() {
 	const t = useI18n();
