@@ -1,8 +1,9 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import Account from "@/app/[locale]/dashboard/settings/_components/account";
-import Appearance from "@/app/[locale]/dashboard/settings/_components/appearance";
+import Account from "@/app/[locale]/dashboard/settings/_components/_parts/account";
+import Appearance from "@/app/[locale]/dashboard/settings/_components/_parts/appearance";
+import Plan from "@/app/[locale]/dashboard/settings/_components/_parts/plan";
 import {
 	SidebarContent,
 	SidebarGroup,
@@ -29,6 +30,11 @@ export default function Page() {
 				title: t("components.items.account.title"),
 				key: "account",
 				component: <Account />,
+			},
+			{
+				title: t("components.items.plan.title"),
+				key: "plan",
+				component: <Plan />,
 			},
 		],
 		[t],

@@ -45,13 +45,13 @@ export function AppSidebar() {
 					title: t("components.appSideBar.chatBot"),
 					url: "chat",
 					icon: <BotMessageSquare />,
-					visibleTo: ["user", "admin", "premium"],
+					visibleTo: ["user", "admin"],
 				},
 				{
 					title: t("components.appSideBar.myRecipes"),
 					url: "my-recipes",
 					icon: <ReceiptText />,
-					visibleTo: ["user", "admin", "premium"],
+					visibleTo: ["user", "admin"],
 				},
 				{
 					title: t("components.appSideBar.admin"),
@@ -80,8 +80,14 @@ export function AppSidebar() {
 			name: session?.user.name || "",
 			email: session?.user.email || "",
 			avatar: session?.user.image || "./",
+			role: session?.user.role || "user",
 		}),
-		[session?.user.name, session?.user.email, session?.user.image],
+		[
+			session?.user.name,
+			session?.user.email,
+			session?.user.image,
+			session?.user.role,
+		],
 	);
 
 	return (

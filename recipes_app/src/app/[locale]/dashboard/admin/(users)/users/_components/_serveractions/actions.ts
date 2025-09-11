@@ -12,8 +12,12 @@ import { createLog } from "@/lib/service/logs-service";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
+interface UserWithRoleAndStripe extends UserWithRole {
+	stripeCustomerId?: string | null;
+}
+
 export async function getUsersList(headers: Headers): Promise<{
-	users: UserWithRole[];
+	users: UserWithRoleAndStripe[];
 	total: number;
 	limit?: number;
 	offset?: number;
@@ -164,7 +168,7 @@ export async function updateRoleUser(
 				headers: await headers(),
 				body: {
 					userId: userId,
-					role: role as "admin" | "user" | "premium",
+					role: role as "admin" | "user",
 				},
 			});
 			if (result) {

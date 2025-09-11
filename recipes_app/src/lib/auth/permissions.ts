@@ -11,9 +11,6 @@ export const ac = createAccessControl(statement);
 export const user = ac.newRole({
 	...userAc.statements,
 });
-export const premium = ac.newRole({
-	...userAc.statements,
-});
 export const admin = ac.newRole({
 	...adminAc.statements,
 });

@@ -4,8 +4,8 @@ import { useMemo } from "react";
 import DarkMode from "@/components/utils/dark-mode";
 import SelectLang from "@/components/utils/select-lang";
 import { useI18n } from "@/locales/client";
-import SettingsArticle from "./settings-article";
-import SettingsItemsHeader from "./settings-items-header";
+import SettingsArticle from "../_utils/settings-article";
+import SettingsItemsHeader from "../_utils/settings-items-header";
 
 export default function Appearance() {
 	const t = useI18n();

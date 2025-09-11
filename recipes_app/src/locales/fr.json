@@ -22,7 +22,10 @@
     "reset": "Réinitialiser",
     "addRecipe": "Ajouter la recette",
     "liked": "Aimé",
-    "like": "Aimer"
+    "like": "Aimer",
+    "premium": "Passer au Premium",
+    "currentPlan": "Plan actuel",
+    "plan": "Plan"
   },
   "heroPage": {
     "title": {
@@ -134,6 +137,9 @@
       },
       "appearance": {
         "title": "Apparence"
+      },
+      "plan": {
+        "title": "Plan"
       }
     },
     "settings": {
@@ -273,7 +279,6 @@
       },
       "roles": {
         "user": "Utilisateur",
-        "premium": "Premium",
         "admin": "Administrateur"
       },
       "faceted": {
@@ -306,7 +311,8 @@
       "userIdAuthor": "ID de l'auteur",
       "targetId": "ID ciblé",
       "status": "Status",
-      "metadata": "Meta data"
+      "metadata": "Meta data",
+      "stripeCustomerId": "Id Stripe"
     },
     "notFound": {
       "title": "Page introuvable",
@@ -379,6 +385,34 @@
     },
     "chat": {
       "title": "Assistant"
+    },
+    "plan": {
+      "layout": {
+        "title": "Choisissez votre plan",
+        "description": "Commencez gratuitement et évoluez selon vos besoins."
+      },
+      "features": {
+        "chatBot": "Accès à l'assistant culinaire",
+        "limit3": "Jusqu'à 3 recettes",
+        "limit25": "Jusqu'à 25 recettes",
+        "pdfExport": "Exports en PDF"
+      },
+      "free": {
+        "title": "Plan Gratuit",
+        "description": "Parfait pour commencer et tester nos fonctionnalités"
+      },
+      "premium": {
+        "title": "Plan Premium",
+        "description": "Passez au niveau supérieur en cuisine avec le plan premium."
+      },
+      "month": "/mois",
+      "toast": {
+        "error": "Une erreur s'est produite !",
+        "success": "Abonnement Premium souscrit avec succès !"
+      }
+    },
+    "badge": {
+      "recommended": "Recommandé"
     }
   },
   "metaData": {
