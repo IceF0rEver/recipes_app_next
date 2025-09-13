@@ -4,16 +4,21 @@ import { cn } from "@/lib/utils";
 
 interface SettingsArticleProps {
 	children: React.ReactNode;
-	label: string;
+	label?: string;
 	description?: string;
 	className?: string;
 }
 
-export default function SettingsArticle({ children, label, description, className }: SettingsArticleProps) {
+export default function SettingsArticle({
+	children,
+	label,
+	description,
+	className,
+}: SettingsArticleProps) {
 	return (
 		<article className={cn(className)}>
 			<div className="flex gap-2 flex-wrap">
-				<p className="my-auto whitespace-nowrap">{label} :</p>
+				{label && <p className="my-auto whitespace-nowrap">{label} :</p>}
 				{children}
 			</div>
 			<p className="text-sm opacity-60">{description}</p>
