@@ -8,7 +8,15 @@ import Loading from "@/app/[locale]/dashboard/settings/loading";
 
 function PlanContent({ userWithSubscription }: PlanProps) {
 	const { subscription } = use(userWithSubscription) ?? {};
-	return <>{subscription?.status === "active" ? <PlanContentActive /> : <PlanContentDefault />}</>;
+	return (
+		<>
+			{subscription?.status === "active" ? (
+				<PlanContentActive subscription={subscription} />
+			) : (
+				<PlanContentDefault />
+			)}
+		</>
+	);
 }
 
 export default function Plan({ userWithSubscription }: PlanProps) {
