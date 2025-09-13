@@ -3,6 +3,23 @@ import "@tanstack/react-table";
 declare module "@tanstack/react-table" {
 	interface ColumnMeta<_TData, _TValue> {
 		label?: string;
-		subItems?: { value: string; label: string; icon?: ComponentType<{ className?: string }> }[];
+		subItems?: {
+			value: string;
+			label: string;
+			icon?: ComponentType<{ className?: string }>;
+		}[];
 	}
+}
+
+export interface ItemTableProps {
+	key: string;
+	value: string;
+	subItems?: {
+		value: string;
+		label: string;
+		icon?: ComponentType<{ className?: string }>;
+	}[];
+	enableSorting: boolean;
+	enableHiding: boolean;
+	initialStateVisibility: boolean;
 }

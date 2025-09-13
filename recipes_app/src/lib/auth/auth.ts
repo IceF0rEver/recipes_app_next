@@ -16,7 +16,11 @@ const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export const auth = betterAuth({
-	trustedOrigins: ["http://localhost:3000", "http://192.168.0.11:3000", "https://recipes-app-next-ten.vercel.app/"],
+	trustedOrigins: [
+		"http://localhost:3000",
+		"http://192.168.0.11:3000",
+		"https://recipes-app-next-ten.vercel.app/",
+	],
 	databaseHooks: {
 		user: {
 			create: {
@@ -46,7 +50,7 @@ export const auth = betterAuth({
 				html: `
                 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                     <h2>Réinitialisation du mot de passe</h2>
-                    <p>Bonjour ${data.user.email},</p>
+                    <p>Bonjour ${data.user.name},</p>
                     <p>Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour continuer :</p>
                     <a href="${data.url}" style="display: inline-block; padding: 10px 20px; margin: 10px 0; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
                     <p>Si vous n’avez pas demandé cette réinitialisation, ignorez simplement cet email.</p>

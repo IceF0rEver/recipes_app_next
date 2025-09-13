@@ -2,10 +2,10 @@
 
 import type { UserWithRole } from "better-auth/plugins";
 import { type ComponentType, use, useCallback, useMemo, useState } from "react";
+import type { UsersTableProps } from "@/app/[locale]/dashboard/admin/(users)/users/_components/_types/users-types";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import { useI18n } from "@/locales/client";
-import type { UsersTableProps } from "@/types/users-types";
 import BanUsers from "./ban-users";
 import DeleteUsers from "./delete-users";
 import RoleUsers from "./role-users";
