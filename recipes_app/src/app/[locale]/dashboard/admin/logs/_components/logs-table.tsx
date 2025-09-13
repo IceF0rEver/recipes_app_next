@@ -1,10 +1,10 @@
 "use client";
 
 import { use } from "react";
+import type { LogsTableProps } from "@/app/[locale]/dashboard/admin/logs/_components/_types/logs-types";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import type { Log } from "@/generated/prisma";
-import type { LogsTableProps } from "@/types/logs-types";
 
 export default function LogsTable({
 	datasTable,
