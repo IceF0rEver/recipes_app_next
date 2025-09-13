@@ -2,10 +2,10 @@
 
 import type { Session } from "better-auth";
 import { use, useCallback, useMemo, useState } from "react";
+import type { SessionsTableProps } from "@/app/[locale]/dashboard/admin/users/[id]/sessions/_components/_types/sessions-types";
 import { DataTable } from "@/components/utils/table/data-table";
 import { dataTableColumnList } from "@/components/utils/table/data-table-columns-list";
 import { useI18n } from "@/locales/client";
-import type { SessionsTableProps } from "@/types/sessions-types";
 import DeleteSession from "./delete-session";
 
 type ActionType = "sheet" | "delete" | "link" | "select";
