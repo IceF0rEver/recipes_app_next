@@ -22,6 +22,7 @@ export const getUserWithSubscription = async () => {
 		const subscription = await prisma.subscription.findFirst({
 			where: {
 				stripeCustomerId: userWithStripe?.stripeCustomerId,
+				status: "active",
 			},
 		});
 		return { user: userWithStripe, subscription: subscription };

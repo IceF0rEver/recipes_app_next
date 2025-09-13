@@ -1,18 +1,18 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import PlanCard from "@/app/[locale]/dashboard/settings/_components/_utils/plan-card";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/auth-client";
-import { useI18n } from "@/locales/client";
+import { useCurrentLocale, useI18n } from "@/locales/client";
 
 export default function PlanContentDefault() {
 	const t = useI18n();
+	const locale = useCurrentLocale();
+	const router = useRouter();
 
-	const freeFeatures = [
-		t("components.plan.features.chatBot"),
-		t("components.plan.features.limit3"),
-	];
+	const freeFeatures = [t("components.plan.features.chatBot"), t("components.plan.features.limit3")];
 
 	const premiumFeatures = [
 		t("components.plan.features.chatBot"),
@@ -56,12 +56,14 @@ export default function PlanContentDefault() {
 						formAction={async () => {
 							const { error } = await authClient.subscription.upgrade({
 								plan: "premium",
-								disableRedirect: true,
+								successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/settings?selected=plan`,
+								cancelUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard/settings?selected=plan`,
 							});
 							if (error) {
 								toast.error(t("components.plan.toast.error"));
 							} else {
 								toast.success(t("components.plan.toast.success"));
+								router.refresh();
 							}
 						}}
 					>
