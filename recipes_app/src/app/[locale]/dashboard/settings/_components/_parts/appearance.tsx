@@ -32,9 +32,10 @@ export default function Appearance() {
 				description={t("components.settings.items.appearance.description")}
 			/>
 			<section className="flex flex-col w-full gap-9">
-				{items?.map((item) => (
+				{items?.map((item, index) => (
 					<SettingsArticle
-						key={item.label}
+						// biome-ignore lint/suspicious/noArrayIndexKey: index for key
+						key={index}
 						className={"flex flex-col gap-2"}
 						label={item.label}
 						description={item.description}
