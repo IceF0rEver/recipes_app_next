@@ -12,7 +12,9 @@ interface PlanContentActiveProps {
 	subscription: Subscription;
 }
 
-export default function PlanContentActive({ subscription }: PlanContentActiveProps) {
+export default function PlanContentActive({
+	subscription,
+}: PlanContentActiveProps) {
 	const t = useI18n();
 	const locale = useCurrentLocale();
 	const router = useRouter();
@@ -27,7 +29,9 @@ export default function PlanContentActive({ subscription }: PlanContentActivePro
 				{subscription.cancelAtPeriodEnd ? (
 					<SettingsArticle
 						className="flex flex-col gap-2"
-						description={t("components.settings.form.plan.description.restorePlan")}
+						description={t(
+							"components.settings.form.plan.description.restorePlan",
+						)}
 					>
 						<form>
 							<Button
@@ -40,7 +44,9 @@ export default function PlanContentActive({ subscription }: PlanContentActivePro
 									if (error) {
 										toast.error(t("components.plan.toast.restorePlan.error"));
 									} else {
-										toast.success(t("components.plan.toast.restorePlan.success"));
+										toast.success(
+											t("components.plan.toast.restorePlan.success"),
+										);
 										router.refresh();
 									}
 								}}
@@ -52,7 +58,9 @@ export default function PlanContentActive({ subscription }: PlanContentActivePro
 				) : (
 					<SettingsArticle
 						className="flex flex-col gap-2"
-						description={t("components.settings.form.plan.description.cancelPlan")}
+						description={t(
+							"components.settings.form.plan.description.cancelPlan",
+						)}
 					>
 						<form>
 							<Button
@@ -66,7 +74,9 @@ export default function PlanContentActive({ subscription }: PlanContentActivePro
 									if (error) {
 										toast.error(t("components.plan.toast.cancelPlan.error"));
 									} else {
-										toast.success(t("components.plan.toast.cancelPlan.success"));
+										toast.success(
+											t("components.plan.toast.cancelPlan.success"),
+										);
 										router.refresh();
 									}
 								}}
