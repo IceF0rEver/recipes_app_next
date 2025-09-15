@@ -235,11 +235,11 @@ export async function archiveActiveChat(
 		]);
 		const recipesLimit =
 			subscriptions.find((sub) => sub.status === "active")?.limits?.recipes ||
-			5;
+			3;
 
 		if (recipesUserCount >= recipesLimit) {
 			const errorCode =
-				recipesLimit > 5 ? "LIMIT_REACHED_PREMIUM" : "LIMIT_REACHED_BASIC";
+				recipesLimit > 3 ? "LIMIT_REACHED_PREMIUM" : "LIMIT_REACHED_BASIC";
 			return {
 				success: false,
 				error: {
