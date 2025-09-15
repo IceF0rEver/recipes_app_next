@@ -12,7 +12,11 @@ export default function PlanContentDefault() {
 	const locale = useCurrentLocale();
 	const router = useRouter();
 
-	const freeFeatures = [t("components.plan.features.chatBot"), t("components.plan.features.limit3")];
+	const freeFeatures = [
+		t("components.plan.features.chatBot"),
+		t("components.plan.features.limit3"),
+		t("components.plan.features.pdfExport"),
+	];
 
 	const premiumFeatures = [
 		t("components.plan.features.chatBot"),
