@@ -99,60 +99,68 @@ export default function AiManageRecipe({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: i18n and router
 	useEffect(() => {
-		if (resetActiveState.success === true) {
-			if (toastResetChat.current) {
-				toast.success(t("components.recipe.toast.success.resetActiveChat"), {
-					id: toastResetChat.current,
-				});
-			}
+		if (resetActiveState.success === true && toastResetChat.current) {
+			toast.success(t("components.recipe.toast.success.resetActiveChat"), {
+				id: toastResetChat.current,
+			});
 			router.push("/dashboard/chat");
-		} else if (resetActiveState.success === false && resetActiveState.error) {
-			if (toastResetChat.current) {
-				toast.error(t("components.admin.users.toast.error"), {
-					id: toastResetChat.current,
-				});
-			}
+		} else if (
+			resetActiveState.success === false &&
+			resetActiveState.error &&
+			toastResetChat.current
+		) {
+			toast.error(t("components.admin.users.toast.error"), {
+				id: toastResetChat.current,
+			});
 			console.error(
 				`${resetActiveState.error.status} - ${resetActiveState.error.code}`,
 			);
 		}
 
-		if (archiveActiveState.success === true) {
-			if (toastArchiveChat.current) {
-				toast.success(t("components.recipe.toast.success.create"), {
-					id: toastArchiveChat.current,
-				});
-			}
+		if (archiveActiveState.success === true && toastArchiveChat.current) {
+			toast.success(t("components.recipe.toast.success.create"), {
+				id: toastArchiveChat.current,
+			});
 			router.push("/dashboard/chat");
 		} else if (
 			archiveActiveState.success === false &&
-			archiveActiveState.error
+			archiveActiveState.error &&
+			toastArchiveChat.current
 		) {
-			if (toastArchiveChat.current) {
+			if (archiveActiveState.error.code === "LIMIT_REACHED_PREMIUM") {
+				toast.error(t("components.myRecipes.toast.limit.premium"), {
+					id: toastArchiveChat.current,
+				});
+			} else if (archiveActiveState.error.code === "LIMIT_REACHED_BASIC") {
+				toast.error(t("components.myRecipes.toast.limit.basic"), {
+					id: toastArchiveChat.current,
+				});
+				setTimeout(() => {
+					toastArchiveChat.current = null;
+				}, 150);
+				router.push("/dashboard/settings?selected=plan");
+			} else {
 				toast.error(t("components.admin.users.toast.error"), {
 					id: toastArchiveChat.current,
 				});
+				console.error(
+					`${archiveActiveState.error.status} - ${archiveActiveState.error.code}`,
+				);
 			}
-			console.error(
-				`${archiveActiveState.error.status} - ${archiveActiveState.error.code}`,
-			);
 		}
 
-		if (updateArchiveState.success === true) {
-			if (toastUpdateArchiveChat.current) {
-				toast.success(t("components.recipe.toast.success.update"), {
-					id: toastUpdateArchiveChat.current,
-				});
-			}
+		if (updateArchiveState.success === true && toastUpdateArchiveChat.current) {
+			toast.success(t("components.recipe.toast.success.update"), {
+				id: toastUpdateArchiveChat.current,
+			});
 		} else if (
 			updateArchiveState.success === false &&
-			updateArchiveState.error
+			updateArchiveState.error &&
+			toastUpdateArchiveChat.current
 		) {
-			if (toastUpdateArchiveChat.current) {
-				toast.error(t("components.admin.users.toast.error"), {
-					id: toastUpdateArchiveChat.current,
-				});
-			}
+			toast.error(t("components.admin.users.toast.error"), {
+				id: toastUpdateArchiveChat.current,
+			});
 			console.error(
 				`${updateArchiveState.error.status} - ${updateArchiveState.error.code}`,
 			);

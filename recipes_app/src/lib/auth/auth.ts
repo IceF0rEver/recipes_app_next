@@ -103,17 +103,12 @@ export const auth = betterAuth({
 				enabled: true,
 				plans: [
 					{
-						name: "basic",
-						limits: {
-							recipes: 3,
-						},
-					},
-					{
 						name: "premium",
 						// biome-ignore lint/style/noNonNullAssertion: .env
 						priceId: process.env.STRIPE_PLAN_PREMIUM_ID!,
 						limits: {
 							recipes: 25,
+							exportPdt: 1,
 						},
 					},
 				],
