@@ -45,8 +45,8 @@ export const auth = betterAuth({
 			await resend.emails.send({
 				from: "noreply@mybudget.ovh",
 				to: data.user.email,
-				subject: "Reset Password",
-				text: `Reset password : ${data.url}`,
+				subject: "Réinitialisation du mot de passe",
+				text: `Réinitialisation du mot de passe : ${data.url}`,
 				html: `
                 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                     <h2>Réinitialisation du mot de passe</h2>
@@ -103,20 +103,78 @@ export const auth = betterAuth({
 				enabled: true,
 				plans: [
 					{
-						name: "basic",
-						limits: {
-							recipes: 3,
-						},
-					},
-					{
 						name: "premium",
 						// biome-ignore lint/style/noNonNullAssertion: .env
 						priceId: process.env.STRIPE_PLAN_PREMIUM_ID!,
 						limits: {
 							recipes: 25,
+							exportPdt: 1,
 						},
 					},
 				],
+				onSubscriptionComplete: async ({ subscription }) => {
+					const user = await prisma.user.findFirst({
+						where: {
+							stripeCustomerId: subscription.stripeCustomerId,
+						},
+					});
+
+					if (user) {
+						await resend.emails.send({
+							from: "noreply@mybudget.ovh",
+							to: user.email,
+							subject: "Activation de votre abonnement Premium",
+							html: `
+								<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+								<h2>Activation dans votre abonnement Premium</h2>
+								<p>Bonjour ${user.name},</p>
+								<p>Votre abonnement <strong>Premium</strong> à Recipes Master est maintenant actif.</p>
+								<p>Vous pouvez désormais profiter de toutes les fonctionnalités réservées aux membres Premium.</p>
+								<p>Merci pour votre confiance,<br>L’équipe Recipes Master</p>
+								</div>
+							`,
+						});
+					}
+				},
+				onSubscriptionUpdate: async ({ subscription }) => {
+					const user = await prisma.user.findFirst({
+						where: {
+							stripeCustomerId: subscription.stripeCustomerId,
+						},
+					});
+
+					if (subscription.status === "active" && user) {
+						if (subscription.cancelAtPeriodEnd) {
+							await resend.emails.send({
+								from: "noreply@mybudget.ovh",
+								to: user.email,
+								subject: "Annulation de votre abonnement Premium",
+								html: `
+									<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+										<h2>Annulation de votre abonnement Premium</h2>
+										<p>Bonjour ${user.name},</p>
+										<p>Votre abonnement Premium à Recipes Master vient d'être annuler.</p>
+										<p>L’équipe Recipes Master.</p>
+									</div>
+								`,
+							});
+						} else {
+							await resend.emails.send({
+								from: "noreply@mybudget.ovh",
+								to: user.email,
+								subject: "Restauration de votre abonnement Premium",
+								html: `
+									<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+										<h2>Restauration de votre abonnement Premium</h2>
+										<p>Bonjour ${user.name},</p>
+										<p>Votre abonnement Premium à Recipes Master vient d'être restaurer.</p>
+										<p>L’équipe Recipes Master.</p>
+									</div>
+								`,
+							});
+						}
+					}
+				},
 			},
 		}),
 		nextCookies(),

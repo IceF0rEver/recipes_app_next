@@ -3,9 +3,11 @@
 import { generateId } from "ai";
 import { APIError } from "better-auth/api";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { type Chat, Prisma } from "@/generated/prisma";
-import { getUser } from "@/lib/auth/server";
+import { auth } from "@/lib/auth/auth";
+import { getUser, getUserWithSubscription } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 import { recipeSchema } from "@/lib/zod/recipe-schemas";
 
@@ -216,7 +218,36 @@ export async function archiveActiveChat(
 	chatId: Chat["id"],
 ): Promise<ChatState> {
 	try {
-		const currentUser = await getUser();
+		const { user, subscription } = (await getUserWithSubscription()) ?? {};
+
+		const [subscriptions, recipesUserCount] = await Promise.all([
+			auth.api.listActiveSubscriptions({
+				query: {
+					referenceId: subscription?.referenceId,
+				},
+				headers: await headers(),
+			}),
+			prisma.recipe.count({
+				where: {
+					userId: user?.id,
+				},
+			}),
+		]);
+		const recipesLimit =
+			subscriptions.find((sub) => sub.status === "active")?.limits?.recipes ||
+			3;
+
+		if (recipesUserCount >= recipesLimit) {
+			const errorCode =
+				recipesLimit > 3 ? "LIMIT_REACHED_PREMIUM" : "LIMIT_REACHED_BASIC";
+			return {
+				success: false,
+				error: {
+					code: errorCode,
+					status: 403,
+				},
+			};
+		}
 
 		const validatedData = z
 			.object({
@@ -225,7 +256,7 @@ export async function archiveActiveChat(
 			})
 			.safeParse({
 				chatId: chatId,
-				userId: currentUser?.id,
+				userId: user?.id,
 			});
 
 		if (!validatedData.success) {

@@ -350,7 +350,13 @@
 			"instructions": "Instructions",
 			"tip": "Trucs et astuces",
 			"nullableInstructions": "Aucunes instructions renseignées.",
-			"nullableIngredients": "Aucuns ingrédients renseignés."
+			"nullableIngredients": "Aucuns ingrédients renseignés.",
+			"toast": {
+				"limit": {
+					"premium": "Vous avez atteint votre limite de recettes!",
+					"basic": "Vous avez atteint votre limite de recettes, Passer à Premium !"
+				}
+			}
 		},
 		"cardList": {
 			"pagination": {
