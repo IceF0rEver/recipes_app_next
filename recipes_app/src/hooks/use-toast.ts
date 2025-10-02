@@ -24,6 +24,7 @@ export function useToast(
 ) {
 	const toastRef = useRef<string | number | null>(null);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: options re-render
 	useEffect(() => {
 		if (state.success) {
 			if (toastRef.current) {
@@ -40,8 +41,9 @@ export function useToast(
 			toast.error(options.errorMessage);
 			options.onError?.();
 		}
-	}, [state, options]);
+	}, [state]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: options re-render
 	useEffect(() => {
 		if (isPending && options.loadingMessage !== undefined) {
 			toastRef.current = toast.loading(options.loadingMessage);
@@ -50,5 +52,5 @@ export function useToast(
 			toast.dismiss(toastRef.current);
 			toastRef.current = null;
 		}
-	}, [isPending, options]);
+	}, [isPending]);
 }
