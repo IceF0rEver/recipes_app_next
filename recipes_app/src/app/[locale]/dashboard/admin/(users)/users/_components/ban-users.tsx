@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import GenericField from "@/components/utils/form/generic-field";
 import GenericSheet from "@/components/utils/sheet/generic-sheet";
+import { useToast } from "@/hooks/use-toast";
 import { useSession } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
@@ -109,17 +110,13 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 		form.reset(getDefaultValues());
 	}, [form, getDefaultValues]);
 
-	useEffect(() => {
-		if (state.success === true) {
-			toast.success(
-				state.message || t("components.admin.users.toast.ban.success"),
-			);
+	useToast(state, isPending, {
+		successMessage: t("components.admin.users.toast.ban.success"),
+		errorMessage: t("components.admin.users.toast.error"),
+		onSuccess: () => {
 			onSheetOpen(false);
-		} else if (state.success === false && state.error) {
-			console.error(`${state.error.status} - ${state.error.code}`);
-			toast.error(t("components.admin.users.toast.error"));
-		}
-	}, [state, t, onSheetOpen]);
+		},
+	});
 
 	return (
 		<Form {...form}>
@@ -196,17 +193,13 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 		form.reset(getDefaultValues());
 	}, [form, getDefaultValues]);
 
-	useEffect(() => {
-		if (state.success === true) {
-			toast.success(
-				state.message || t("components.admin.users.toast.unban.success"),
-			);
+	useToast(state, isPending, {
+		successMessage: t("components.admin.users.toast.unban.success"),
+		errorMessage: t("components.admin.users.toast.error"),
+		onSuccess: () => {
 			onSheetOpen(false);
-		} else if (state.success === false && state.error) {
-			console.error(`${state.error.status} - ${state.error.code}`);
-			toast.error(t("components.admin.users.toast.error"));
-		}
-	}, [state, t, onSheetOpen]);
+		},
+	});
 
 	return (
 		<form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6 px-4">

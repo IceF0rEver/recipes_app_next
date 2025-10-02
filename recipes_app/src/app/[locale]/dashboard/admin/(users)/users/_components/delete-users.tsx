@@ -1,9 +1,10 @@
 "use client";
 
 import type { UserWithRole } from "better-auth/plugins";
-import { startTransition, useActionState, useCallback, useEffect } from "react";
+import { startTransition, useActionState, useCallback } from "react";
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 import { useSession } from "@/lib/auth/auth-client";
 import { useI18n } from "@/locales/client";
 import { deleteUser } from "./_serveractions/actions";
@@ -37,17 +38,13 @@ export default function DeleteUsers({
 		}
 	}, [currentUser, deleteUserAction, t, userData]);
 
-	useEffect(() => {
-		if (state.success === true) {
-			toast.success(
-				state.message || t("components.admin.users.toast.delete.success"),
-			);
+	useToast(state, isPending, {
+		successMessage: t("components.admin.users.toast.delete.success"),
+		errorMessage: t("components.admin.users.toast.error"),
+		onSuccess: () => {
 			onAlertDialogOpen(false);
-		} else if (state.success === false && state.error) {
-			console.error(`${state.error.status} - ${state.error.code}`);
-			toast.error(t("components.admin.users.toast.error"));
-		}
-	}, [state, t, onAlertDialogOpen]);
+		},
+	});
 
 	return (
 		<GenericAlertDialog
