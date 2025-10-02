@@ -1,7 +1,7 @@
 "use client";
 
 import type { UserWithRole } from "better-auth/plugins";
-import { startTransition, useActionState, useCallback, useEffect } from "react";
+import { startTransition, useActionState, useCallback } from "react";
 import { toast } from "sonner";
 import GenericAlertDialog from "@/components/utils/alert-dialog/generic-alert-dialog";
 import { useToast } from "@/hooks/use-toast";
