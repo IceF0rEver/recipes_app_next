@@ -16,11 +16,7 @@ const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export const auth = betterAuth({
-	trustedOrigins: [
-		"http://localhost:3000",
-		"http://192.168.0.11:3000",
-		"https://recipes-app-next-ten.vercel.app/",
-	],
+	trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL!],
 	databaseHooks: {
 		user: {
 			create: {
