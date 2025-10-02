@@ -1,8 +1,6 @@
 import { z } from "zod";
-export const authSchemas = (
-	// biome-ignore lint/suspicious/noExplicitAny: more complex
-	t: (...args: Parameters<(key: string, ...params: any[]) => string>) => string,
-) => ({
+import type { useI18n } from "@/locales/client";
+export const authSchemas = (t: ReturnType<typeof useI18n>) => ({
 	signIn: z.object({
 		email: z.string().email(t("zod.email")),
 		password: z.string().min(6, t("zod.min.password")),
@@ -13,16 +11,8 @@ export const authSchemas = (
 			email: z.string().email(t("zod.email")),
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
-			firstName: z
-				.string()
-				.min(1, t("zod.min.firstName"))
-				.trim()
-				.regex(/^\S+$/, t("zod.space")),
-			lastName: z
-				.string()
-				.min(1, t("zod.min.lastName"))
-				.trim()
-				.regex(/^\S+$/, t("zod.space")),
+			firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
+			lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
 			image: z.string(),
 		})
 		.refine((data) => data.password === data.passwordConfirmation, {
@@ -57,16 +47,8 @@ export const authSchemas = (
 
 	updateUser: z.object({
 		email: z.string().email(t("zod.email")),
-		firstName: z
-			.string()
-			.min(1, t("zod.min.firstName"))
-			.trim()
-			.regex(/^\S+$/, t("zod.space")),
-		lastName: z
-			.string()
-			.min(1, t("zod.min.lastName"))
-			.trim()
-			.regex(/^\S+$/, t("zod.space")),
+		firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
+		lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
 		image: z.string(),
 	}),
 	deleteUser: z.object({
