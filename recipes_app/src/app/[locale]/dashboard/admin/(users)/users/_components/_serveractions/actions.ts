@@ -9,8 +9,7 @@ import { auth } from "@/lib/auth/auth";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 import { createLog } from "@/lib/service/logs-service";
-import { authSchemas, authTableSchema } from "@/lib/zod/auth-schemas";
-import { getI18n } from "@/locales/server";
+import { authTableSchema } from "@/lib/zod/auth-schemas";
 
 interface UserWithRoleAndStripe extends UserWithRole {
 	stripeCustomerId?: string | null;
