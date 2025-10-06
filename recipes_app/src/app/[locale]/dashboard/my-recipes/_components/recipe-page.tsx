@@ -55,12 +55,16 @@ export default function RecipePage({ recipeList }: RecipePageProps) {
 
 	const toggleFavorite = useCallback(
 		(recipeId: Recipe["id"]) => {
+			const formData = new FormData();
+			const datas = {
+				id: recipeId,
+				isFavorite: !optimisticFavorites[recipeId],
+			};
+			formData.append("favoriteRecipeData", JSON.stringify(datas));
+
 			startTransition(() => {
 				setOptimisticFavorites(recipeId);
-				toggleFavoriteAction({
-					recipeId,
-					isFavorite: !optimisticFavorites[recipeId],
-				});
+				toggleFavoriteAction(formData);
 			});
 		},
 		[optimisticFavorites, setOptimisticFavorites, toggleFavoriteAction],
@@ -68,9 +72,15 @@ export default function RecipePage({ recipeList }: RecipePageProps) {
 
 	const handleDelete = useCallback(
 		(recipeId: Recipe["id"]) => {
+			const formData = new FormData();
+			const datas = {
+				id: recipeId,
+			};
+			formData.append("deleteRecipeData", JSON.stringify(datas));
+
 			startTransition(() => {
 				setOptimisticRecipes(recipeId);
-				deleteRecipeAction(recipeId);
+				deleteRecipeAction(formData);
 			});
 		},
 		[setOptimisticRecipes, deleteRecipeAction],

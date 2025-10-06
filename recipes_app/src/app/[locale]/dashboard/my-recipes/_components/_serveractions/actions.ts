@@ -5,6 +5,7 @@ import z from "zod";
 import type { Chat, Recipe } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
+import { recipeSchemas } from "@/lib/zod/recipe-schemas";
 
 type RecipeWithChat = Recipe & {
 	chat: Chat | null;
@@ -14,29 +15,33 @@ export async function getRecipesListWithChat(): Promise<{
 	recipesWithChat: RecipeWithChat[];
 }> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				userId: currentUser?.id,
-			});
+		const { recipeTableSchema } = recipeSchemas();
+		const recipeSchema = recipeTableSchema.pick({
+			userId: true,
+		});
+		const validatedData = recipeSchema.safeParse({ userId: user?.id });
+
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { userId } = validatedData.data;
 		const recipesWithChat = await prisma.recipe.findMany({
 			where: {
-				userId: currentUser?.id,
+				userId: userId,
 			},
 			include: {
 				chat: true,
 			},
 		});
+
 		return { recipesWithChat: recipesWithChat ?? [] };
 	} catch (error) {
+		if (error instanceof z.ZodError) {
+			throw new Error("400 - BAD_REQUEST");
+		}
 		if (error instanceof Error && error.message.includes("network")) {
 			throw new Error("503 - SERVICE_UNAVAILABLE");
 		}
@@ -52,37 +57,35 @@ interface RecipeState {
 
 export async function setFavoriteRecipe(
 	_prevState: RecipeState,
-	{
-		recipeId,
-		isFavorite,
-	}: { recipeId: Recipe["id"]; isFavorite: Recipe["isFavorite"] },
+	formData: FormData,
 ): Promise<RecipeState> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-				chatId: z.string().min(1),
-				isFavorite: z.boolean(),
-			})
-			.safeParse({
-				userId: currentUser?.id,
-				chatId: recipeId,
-				isFavorite: isFavorite,
-			});
+		const { recipeTableSchema } = recipeSchemas();
+		const recipeSchema = recipeTableSchema.pick({
+			userId: true,
+			id: true,
+			isFavorite: true,
+		});
+		const parsedData = JSON.parse(formData.get("favoriteRecipeData") as string);
+		const validatedData = recipeSchema.safeParse({
+			...parsedData,
+			userId: user?.id,
+		});
 
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { id, isFavorite, userId } = validatedData.data;
 		const result = await prisma.recipe.update({
 			data: {
 				isFavorite: isFavorite,
 			},
 			where: {
-				id: recipeId,
-				userId: currentUser?.id,
+				id: id,
+				userId: userId,
 			},
 		});
 
@@ -113,29 +116,31 @@ export async function setFavoriteRecipe(
 
 export async function deleteRecipeById(
 	_prevState: RecipeState,
-	recipeId: Recipe["id"],
+	formData: FormData,
 ): Promise<RecipeState> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-				chatId: z.string().min(1),
-			})
-			.safeParse({
-				userId: currentUser?.id,
-				chatId: recipeId,
-			});
+		const { recipeTableSchema } = recipeSchemas();
+		const recipeSchema = recipeTableSchema.pick({
+			userId: true,
+			id: true,
+		});
+		const parsedData = JSON.parse(formData.get("deleteRecipeData") as string);
+		const validatedData = recipeSchema.safeParse({
+			...parsedData,
+			userId: user?.id,
+		});
 
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { userId, id } = validatedData.data;
 		const result = await prisma.recipe.delete({
 			where: {
-				id: recipeId,
-				userId: currentUser?.id,
+				id: id,
+				userId: userId,
 			},
 		});
 
