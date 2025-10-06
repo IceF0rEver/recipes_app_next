@@ -1,30 +1,38 @@
 import { z } from "zod";
 import type { useI18n } from "@/locales/client";
-export const authSchemas = (t: ReturnType<typeof useI18n>) => ({
-	signIn: z.object({
+export const authSchemas = (t: ReturnType<typeof useI18n>) => {
+	const signIn = z.object({
 		email: z.string().email(t("zod.email")),
 		password: z.string().min(6, t("zod.min.password")),
-	}),
+	});
 
-	signUp: z
+	const signUp = z
 		.object({
 			email: z.string().email(t("zod.email")),
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
-			firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-			lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+			firstName: z
+				.string()
+				.min(1, t("zod.min.firstName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
+			lastName: z
+				.string()
+				.min(1, t("zod.min.lastName"))
+				.trim()
+				.regex(/^\S+$/, t("zod.space")),
 			image: z.string(),
 		})
 		.refine((data) => data.password === data.passwordConfirmation, {
 			message: t("zod.password.mismatch"),
 			path: ["passwordConfirmation"],
-		}),
+		});
 
-	forgotPassword: z.object({
+	const forgotPassword = z.object({
 		email: z.string().email(t("zod.email")),
-	}),
+	});
 
-	resetPassword: z
+	const resetPassword = z
 		.object({
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
@@ -32,9 +40,9 @@ export const authSchemas = (t: ReturnType<typeof useI18n>) => ({
 		.refine((data) => data.password === data.passwordConfirmation, {
 			message: t("zod.password.mismatch"),
 			path: ["passwordConfirmation"],
-		}),
+		});
 
-	updatePassword: z
+	const updatePassword = z
 		.object({
 			password: z.string().min(6, t("zod.min.password")),
 			passwordConfirmation: z.string(),
@@ -43,27 +51,50 @@ export const authSchemas = (t: ReturnType<typeof useI18n>) => ({
 		.refine((data) => data.password === data.passwordConfirmation, {
 			message: t("zod.password.mismatch"),
 			path: ["passwordConfirmation"],
-		}),
+		});
 
-	updateUser: z.object({
+	const updateUser = z.object({
 		email: z.string().email(t("zod.email")),
-		firstName: z.string().min(1, t("zod.min.firstName")).trim().regex(/^\S+$/, t("zod.space")),
-		lastName: z.string().min(1, t("zod.min.lastName")).trim().regex(/^\S+$/, t("zod.space")),
+		firstName: z
+			.string()
+			.min(1, t("zod.min.firstName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
+		lastName: z
+			.string()
+			.min(1, t("zod.min.lastName"))
+			.trim()
+			.regex(/^\S+$/, t("zod.space")),
 		image: z.string(),
-	}),
-	deleteUser: z.object({
-		userId: z.string().min(1),
-	}),
-	roleUser: z.object({
-		userId: z.string().min(1),
-		role: z.enum(["user", "admin"]),
-	}),
-	banUser: z.object({
-		userId: z.string().min(1),
+	});
+
+	const banUser = z.object({
+		id: authTableSchema.shape.id,
 		banReason: z.string().min(1, t("zod.min.banReason")),
 		banExpires: z.string().min(1, t("zod.min.banExpires")),
-	}),
-	unBanUser: z.object({
-		userId: z.string().min(1),
-	}),
+	});
+
+	return {
+		signIn,
+		signUp,
+		forgotPassword,
+		resetPassword,
+		updatePassword,
+		updateUser,
+		banUser,
+	};
+};
+export const authTableSchema = z.object({
+	id: z.string().uuid(),
+	name: z.string(),
+	email: z.string().email(),
+	emailVerified: z.boolean(),
+	image: z.string().nullable().optional(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+	role: z.enum(["user", "admin"]),
+	banned: z.boolean().nullable().optional(),
+	banReason: z.string().nullable().optional(),
+	banExpires: z.string().nullable().optional(),
+	stripeCustomerId: z.string().nullable().optional(),
 });

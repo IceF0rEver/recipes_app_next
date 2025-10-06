@@ -9,6 +9,8 @@ import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
 import { getSession, getUser } from "@/lib/auth/server";
 import { createLog } from "@/lib/service/logs-service";
+import { authTableSchema } from "@/lib/zod/auth-schemas";
+import { sessionTableSchema } from "@/lib/zod/session-schemas";
 
 export async function getUserSessionsList(
 	headers: Headers,
@@ -19,21 +21,17 @@ export async function getUserSessionsList(
 	"use cache";
 
 	try {
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				userId: userId,
-			});
+		const authSchema = authTableSchema.pick({ id: true });
+		const validatedData = authSchema.safeParse({ id: userId });
 
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
+		const { id } = validatedData.data;
 		const userSessionsList = await auth.api.listUserSessions({
 			headers,
 			body: {
-				userId: userId,
+				userId: id,
 			},
 		});
 		return userSessionsList;
@@ -59,16 +57,17 @@ export async function deleteSession(
 	token: Session["token"],
 ): Promise<SessionState> {
 	const currentSession = await getSession();
-	const currentUser = await getUser();
+	const user = await getUser();
 
 	try {
-		const validatedData = z
-			.object({
-				token: z.string().min(1),
-			})
-			.safeParse({
-				token: token,
-			});
+		const sessionSchema = sessionTableSchema.pick({
+			token: true,
+			userId: true,
+		});
+		const validatedData = sessionSchema.safeParse({
+			token: token,
+			userId: user?.id,
+		});
 
 		if (!validatedData.success) {
 			return {
@@ -79,13 +78,13 @@ export async function deleteSession(
 				},
 			};
 		}
-
-		if (token === currentSession?.token) {
-			if (currentUser) {
+		const { token: validatedToken, userId } = validatedData.data;
+		if (validatedToken === currentSession?.token) {
+			if (user) {
 				const { success: logSuccess, error: logError } = await createLog({
-					userId: currentUser.id,
+					userId: userId,
 					action: "SESSION_REVOKE",
-					targetId: token,
+					targetId: validatedToken,
 					status: "FAILED",
 				});
 				if (!logSuccess) {
@@ -104,16 +103,16 @@ export async function deleteSession(
 		const result = await auth.api.revokeUserSession({
 			headers: await headers(),
 			body: {
-				sessionToken: token,
+				sessionToken: validatedToken,
 			},
 		});
 
 		if (result.success) {
-			if (currentUser) {
+			if (user) {
 				const { success: logSuccess, error: logError } = await createLog({
-					userId: currentUser.id,
+					userId: userId,
 					action: "SESSION_REVOKE",
-					targetId: token,
+					targetId: validatedToken,
 					status: "SUCCESS",
 				});
 				if (!logSuccess) {

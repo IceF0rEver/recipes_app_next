@@ -19,7 +19,7 @@ import GenericField from "@/components/utils/form/generic-field";
 import GenericSheet from "@/components/utils/sheet/generic-sheet";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "@/lib/auth/auth-client";
-import { authSchemas } from "@/lib/zod/auth-schemas";
+import { authSchemas, authTableSchema } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
 import { banUser, unBanUser } from "./_serveractions/actions";
 
@@ -71,7 +71,7 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 
 	const getDefaultValues = useCallback(
 		(banData?: BanUserType) => ({
-			userId: userData?.id,
+			id: userData?.id,
 			banExpires: banData?.banExpires || "",
 			banReason: banData?.banReason || "",
 		}),
@@ -87,24 +87,19 @@ function BanUser({ userData, onSheetOpen }: BanUsersProps) {
 		defaultValues: getDefaultValues(),
 	});
 
-	const onSubmit = useCallback(
-		(values: BanUserType) => {
-			if (userData?.id !== currentUser?.user.id) {
-				if (userData?.id) {
-					const formData = new FormData();
-					formData.append("userId", userData.id);
-					formData.append("banReason", values.banReason);
-					formData.append("banExpires", values.banExpires);
-					startTransition(() => {
-						banFormAction(formData);
-					});
-				}
-			} else {
-				toast.error(t("components.admin.users.toast.identicalIdError"));
+	const onSubmit = useCallback(() => {
+		if (userData?.id !== currentUser?.user.id) {
+			if (userData?.id) {
+				const formData = new FormData();
+				formData.append("banUserData", JSON.stringify(form.getValues()));
+				startTransition(() => {
+					banFormAction(formData);
+				});
 			}
-		},
-		[currentUser, t, banFormAction, userData],
-	);
+		} else {
+			toast.error(t("components.admin.users.toast.identicalIdError"));
+		}
+	}, [currentUser, banFormAction, userData, form, t]);
 
 	useEffect(() => {
 		form.reset(getDefaultValues());
@@ -158,12 +153,12 @@ function UnBanUser({ userData, onSheetOpen }: BanUsersProps) {
 	const t = useI18n();
 	const { data: currentUser } = useSession();
 
-	const unBanUserSchema = authSchemas(t).unBanUser;
+	const unBanUserSchema = authTableSchema.pick({ id: true });
 	type UnBanUserType = z.infer<typeof unBanUserSchema>;
 
 	const getDefaultValues = useCallback(
-		(_banData?: UnBanUserType) => ({
-			userId: userData?.id,
+		() => ({
+			id: userData?.id,
 		}),
 		[userData?.id],
 	);

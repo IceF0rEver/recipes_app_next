@@ -10,7 +10,8 @@ import z from "zod";
 import type { Chat, Prisma } from "@/generated/prisma";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
-import { recipeSchema } from "@/lib/zod/recipe-schemas";
+import { chatSchemas } from "@/lib/zod/chat-schemas";
+import { recipeSchemas } from "@/lib/zod/recipe-schemas";
 import { getCurrentLocale, getI18n } from "@/locales/server";
 
 export const maxDuration = 30;
@@ -24,32 +25,35 @@ async function updateChatById(
 }> {
 	"use server";
 	try {
-		const currentUser = await getUser();
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				messages: z.string(),
-				userId: z.string().min(1),
-				metadata: recipeSchema,
-			})
-			.safeParse({
-				chatId: chatId,
-				messages: messages,
-				userId: currentUser?.id,
-				metadata: metadata,
-			});
+		const user = await getUser();
+
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			id: true,
+			userId: true,
+			messages: true,
+			metadata: true,
+		});
+		const validatedData = chatSchema.safeParse({
+			id: chatId,
+			messages: messages,
+			userId: user?.id,
+			metadata: metadata,
+		});
+
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { id, userId, metadata : validatedMetadata, messages: validatedMessages } = validatedData.data;
 		await prisma.chat.update({
 			data: {
-				messages: messages,
-				metadata: metadata as Prisma.InputJsonValue,
+				messages: validatedMessages,
+				metadata: validatedMetadata as Prisma.InputJsonValue,
 			},
 			where: {
-				id: chatId,
-				userId: currentUser?.id,
+				id: id,
+				userId: userId,
 			},
 		});
 
@@ -107,10 +111,11 @@ export async function POST(req: Request) {
 			size: 16,
 		}),
 		onFinish: async ({ messages }) => {
+			const { recipeBaseSchema } = recipeSchemas();
 			const content = JSON.stringify(messages, null, 2);
 			const { object } = await generateObject({
 				model: mistral("ministral-3b-latest"),
-				schema: recipeSchema,
+				schema: recipeBaseSchema,
 				system:
 					`You will reply in ${locale === "fr" ? "French" : "English"} only.` +
 					"Strictly follow the schema below (respect key names, use camelCase, no extra fields, no spaces in keys)" +

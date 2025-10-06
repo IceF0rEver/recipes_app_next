@@ -1,6 +1,6 @@
 "use server";
 
-import { generateId } from "ai";
+import { randomUUID } from "node:crypto";
 import { APIError } from "better-auth/api";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -9,29 +9,29 @@ import { type Chat, Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth/auth";
 import { getUser, getUserWithSubscription } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
-import { recipeSchema } from "@/lib/zod/recipe-schemas";
+import { chatSchemas } from "@/lib/zod/chat-schemas";
 
 export async function getActiveChat(): Promise<{
 	chat?: Chat | null;
 }> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				userId: currentUser?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+		});
+		const validatedData = chatSchema.safeParse({ userId: user?.id });
+
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { userId } = validatedData.data;
 		const activeChat = await prisma.chat.findFirst({
 			where: {
 				isActive: true,
-				userId: currentUser?.id,
+				userId: userId,
 			},
 		});
 
@@ -51,26 +51,25 @@ export async function setActiveChat(): Promise<{
 	id?: string;
 }> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				userId: currentUser?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+		});
+		const validatedData = chatSchema.safeParse({ userId: user?.id });
 
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
-		if (currentUser?.id) {
-			const id = generateId();
+		const { userId } = validatedData.data;
+		if (userId) {
+			const id = randomUUID();
 			const activeChat = await prisma.chat.create({
 				data: {
 					id: id,
-					userId: currentUser.id,
+					userId: userId,
 					isActive: true,
 				},
 			});
@@ -98,25 +97,27 @@ export async function getChatById(chatId: Chat["id"]): Promise<{
 	chat?: Chat | null;
 }> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				chatId: chatId,
-				userId: currentUser?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+			id: true,
+		});
+		const validatedData = chatSchema.safeParse({
+			userId: user?.id,
+			id: chatId,
+		});
+
 		if (!validatedData.success) {
 			throw new Error("400 - BAD_REQUEST");
 		}
 
+		const { userId, id } = validatedData.data;
 		const activeChat = await prisma.chat.findFirst({
 			where: {
-				id: chatId,
-				userId: currentUser?.id,
+				id: id,
+				userId: userId,
 			},
 		});
 
@@ -143,36 +144,30 @@ export async function resetActiveChat(
 	chatId: Chat["id"],
 ): Promise<ChatState> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				chatId: chatId,
-				userId: currentUser?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+			id: true,
+		});
+		const validatedData = chatSchema.safeParse({
+			userId: user?.id,
+			id: chatId,
+		});
 
 		if (!validatedData.success) {
-			return {
-				success: false,
-				error: {
-					code: "BAD_REQUEST",
-					status: 400,
-				},
-			};
+			throw new Error("400 - BAD_REQUEST");
 		}
-		const { userId } = validatedData.data;
 
+		const { userId, id } = validatedData.data;
 		const result = await prisma.chat.update({
 			data: {
 				messages: null,
 				metadata: Prisma.DbNull,
 			},
 			where: {
-				id: chatId,
+				id: id,
 				userId: userId,
 				isActive: true,
 			},
@@ -218,46 +213,17 @@ export async function archiveActiveChat(
 	chatId: Chat["id"],
 ): Promise<ChatState> {
 	try {
-		const { user, subscription } = (await getUserWithSubscription()) ?? {};
+		const user = await getUser();
 
-		const [subscriptions, recipesUserCount] = await Promise.all([
-			auth.api.listActiveSubscriptions({
-				query: {
-					referenceId: subscription?.referenceId,
-				},
-				headers: await headers(),
-			}),
-			prisma.recipe.count({
-				where: {
-					userId: user?.id,
-				},
-			}),
-		]);
-		const recipesLimit =
-			subscriptions.find((sub) => sub.status === "active")?.limits?.recipes ||
-			3;
-
-		if (recipesUserCount >= recipesLimit) {
-			const errorCode =
-				recipesLimit > 3 ? "LIMIT_REACHED_PREMIUM" : "LIMIT_REACHED_BASIC";
-			return {
-				success: false,
-				error: {
-					code: errorCode,
-					status: 403,
-				},
-			};
-		}
-
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				chatId: chatId,
-				userId: user?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+			id: true,
+		});
+		const validatedData = chatSchema.safeParse({
+			userId: user?.id,
+			id: chatId,
+		});
 
 		if (!validatedData.success) {
 			return {
@@ -268,9 +234,37 @@ export async function archiveActiveChat(
 				},
 			};
 		}
-		const { userId } = validatedData.data;
 
-		const { chat } = await getChatById(chatId);
+		const { userId, id } = validatedData.data;
+		const [subscriptions, recipesUserCount] = await Promise.all([
+			auth.api.listActiveSubscriptions({
+				query: {
+					referenceId: userId,
+				},
+				headers: await headers(),
+			}),
+			prisma.recipe.count({
+				where: {
+					userId: userId,
+				},
+			}),
+		]);
+		const recipesLimit =
+			subscriptions.find((sub) => sub.status === "active")?.limits?.recipes ||
+			3;
+
+		if (recipesUserCount >= recipesLimit) {
+			return {
+				success: false,
+				error: {
+					code:
+						recipesLimit > 3 ? "LIMIT_REACHED_PREMIUM" : "LIMIT_REACHED_BASIC",
+					status: 403,
+				},
+			};
+		}
+
+		const { chat } = await getChatById(id);
 		if (!chat) {
 			return {
 				success: false,
@@ -279,8 +273,14 @@ export async function archiveActiveChat(
 		}
 
 		if (chat?.isActive && chat?.metadata) {
-			const metadata = recipeSchema.parse(chat.metadata);
-			const recipeId = generateId();
+			const chatMetadataSchema = chatTableSchema.pick({
+				metadata: true,
+			});
+
+			const { metadata } = chatMetadataSchema.parse({
+				metadata: chat.metadata,
+			});
+			const recipeId = randomUUID();
 
 			const createRecipe = await prisma.recipe.create({
 				data: {
@@ -315,7 +315,7 @@ export async function archiveActiveChat(
 						metadata: Prisma.DbNull,
 					},
 					where: {
-						id: chatId,
+						id: id,
 						userId: userId,
 						isActive: true,
 					},
@@ -363,17 +363,17 @@ export async function updateArchiveChat(
 	chatId: Chat["id"],
 ): Promise<ChatState> {
 	try {
-		const currentUser = await getUser();
+		const user = await getUser();
 
-		const validatedData = z
-			.object({
-				chatId: z.string().min(1),
-				userId: z.string().min(1),
-			})
-			.safeParse({
-				chatId: chatId,
-				userId: currentUser?.id,
-			});
+		const { chatTableSchema } = chatSchemas();
+		const chatSchema = chatTableSchema.pick({
+			userId: true,
+			id: true,
+		});
+		const validatedData = chatSchema.safeParse({
+			userId: user?.id,
+			id: chatId,
+		});
 
 		if (!validatedData.success) {
 			return {
@@ -384,9 +384,10 @@ export async function updateArchiveChat(
 				},
 			};
 		}
-		const { userId } = validatedData.data;
 
-		const { chat } = await getChatById(chatId);
+		const { userId, id } = validatedData.data;
+
+		const { chat } = await getChatById(id);
 		if (!chat) {
 			return {
 				success: false,
@@ -395,7 +396,15 @@ export async function updateArchiveChat(
 		}
 
 		if (!chat?.isActive && chat?.metadata) {
-			const metadata = recipeSchema.parse(chat.metadata);
+			const chatMetadataSchema = chatTableSchema.pick({
+				metadata: true,
+				recipeId: true,
+			});
+
+			const { metadata, recipeId } = chatMetadataSchema.parse({
+				metadata: chat.metadata,
+				recipeId: chat.recipeId,
+			});
 
 			const result = await prisma.recipe.update({
 				data: {
@@ -412,7 +421,7 @@ export async function updateArchiveChat(
 				},
 				where: {
 					userId: userId,
-					id: chat.recipeId ?? "",
+					id: recipeId ?? "",
 				},
 			});
 
