@@ -9,7 +9,7 @@ import { auth } from "@/lib/auth/auth";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 import { createLog } from "@/lib/service/logs-service";
-import { authSchemas } from "@/lib/zod/auth-schemas";
+import { authSchemas, authTableSchema } from "@/lib/zod/auth-schemas";
 import { getI18n } from "@/locales/server";
 
 interface UserWithRoleAndStripe extends UserWithRole {
@@ -48,16 +48,14 @@ export async function deleteUser(
 	_prevState: UserState,
 	userId: User["id"],
 ): Promise<UserState> {
-	const t = await getI18n();
-	const deleteUserSchema = authSchemas(t).deleteUser;
-	const currentUser = await getUser();
-
 	try {
-		const validatedData = deleteUserSchema.safeParse({
-			userId: userId,
-		});
+		const user = await getUser();
 
-		if (!validatedData.success) {
+		const authSchema = authTableSchema.pick({ id: true });
+		const validatedTargetIdData = authSchema.safeParse({ id: userId });
+		const validatedUserIdData = authSchema.safeParse({ id: user?.id });
+
+		if (!validatedTargetIdData.success || !validatedUserIdData.success) {
 			return {
 				success: false,
 				error: {
@@ -67,19 +65,22 @@ export async function deleteUser(
 			};
 		}
 
-		if (userId !== currentUser?.id) {
+		const { id: validatedTargetId } = validatedTargetIdData.data;
+		const { id: validatedUserId } = validatedUserIdData.data;
+
+		if (validatedTargetId !== validatedUserId) {
 			const result = await auth.api.removeUser({
 				headers: await headers(),
 				body: {
-					userId: userId,
+					userId: validatedTargetId,
 				},
 			});
 			if (result) {
-				if (currentUser) {
+				if (validatedUserId) {
 					const { success: logSuccess, error: logError } = await createLog({
-						userId: currentUser.id,
+						userId: validatedUserId,
 						action: "USER_DELETE",
-						targetId: userId,
+						targetId: validatedTargetId,
 						status: "SUCCESS",
 					});
 					if (!logSuccess) {
@@ -100,11 +101,11 @@ export async function deleteUser(
 				},
 			};
 		}
-		if (currentUser) {
+		if (validatedUserId) {
 			const { success: logSuccess, error: logError } = await createLog({
-				userId: currentUser.id,
+				userId: validatedUserId,
 				action: "USER_DELETE",
-				targetId: userId,
+				targetId: validatedTargetId,
 				status: "FAILED",
 			});
 			if (!logSuccess) {
@@ -144,17 +145,18 @@ export async function updateRoleUser(
 	_prevState: UserState,
 	{ userId, role }: { userId: User["id"]; role: User["role"] },
 ): Promise<UserState> {
-	const t = await getI18n();
-	const roleUserSchema = authSchemas(t).roleUser;
-	const currentUser = await getUser();
-
 	try {
-		const validatedData = roleUserSchema.safeParse({
-			userId: userId,
+		const user = await getUser();
+
+		const authSchemaRole = authTableSchema.pick({ id: true, role: true });
+		const authSchema = authTableSchema.pick({ id: true });
+		const validatedRoleData = authSchemaRole.safeParse({
+			id: userId,
 			role: role,
 		});
+		const validatedUserIdData = authSchema.safeParse({ id: user?.id });
 
-		if (!validatedData.success) {
+		if (!validatedUserIdData.success || !validatedRoleData.success) {
 			return {
 				success: false,
 				error: {
@@ -163,22 +165,25 @@ export async function updateRoleUser(
 				},
 			};
 		}
-		if (userId !== currentUser?.id) {
+
+		const { id: validatedIdRole, role: validatedRole } = validatedRoleData.data;
+		const { id: validatedUserId } = validatedUserIdData.data;
+		if (validatedIdRole !== validatedUserId) {
 			const result = await auth.api.setRole({
 				headers: await headers(),
 				body: {
-					userId: userId,
+					userId: validatedIdRole,
 					role: role as "admin" | "user",
 				},
 			});
 			if (result) {
-				if (currentUser) {
+				if (validatedUserId) {
 					const { success: logSuccess, error: logError } = await createLog({
-						userId: currentUser.id,
+						userId: validatedUserId,
 						action: "ROLE_CHANGE",
-						targetId: userId,
+						targetId: validatedIdRole,
 						metadata: {
-							newRole: role,
+							newRole: validatedRole,
 						},
 						status: "SUCCESS",
 					});
@@ -200,14 +205,14 @@ export async function updateRoleUser(
 				},
 			};
 		}
-		if (currentUser) {
+		if (validatedUserId) {
 			await prisma.log.create({
 				data: {
-					userId: currentUser.id,
+					userId: validatedUserId,
 					action: "ROLE_CHANGE",
-					targetId: userId,
+					targetId: validatedIdRole,
 					metadata: {
-						newRole: role,
+						newRole: validatedRole,
 					},
 					status: "FAILED",
 				},
@@ -247,18 +252,19 @@ export async function banUser(
 	_prevState: UserState,
 	formData: FormData,
 ): Promise<UserState> {
-	const t = await getI18n();
-	const banUserSchema = authSchemas(t).banUser;
-	const currentUser = await getUser();
-
 	try {
-		const validatedData = banUserSchema.safeParse({
-			userId: formData.get("userId"),
-			banReason: formData.get("banReason"),
-			banExpires: formData.get("banExpires"),
-		});
+		const user = await getUser();
 
-		if (!validatedData.success) {
+		const authSchemaBan = authTableSchema.pick({
+			id: true,
+			banExpires: true,
+			banReason: true,
+		});
+		const authSchema = authTableSchema.pick({ id: true });
+		const parsedData = JSON.parse(formData.get("banUserData") as string);
+		const validatedBanData = authSchemaBan.safeParse(parsedData);
+		const validatedUserIdData = authSchema.safeParse({ id: user?.id });
+		if (!validatedBanData.success || !validatedUserIdData.success) {
 			return {
 				success: false,
 				error: {
@@ -267,27 +273,29 @@ export async function banUser(
 				},
 			};
 		}
-		const { userId, banReason, banExpires } = validatedData.data;
-		if (userId !== currentUser?.id) {
+
+		const { id, banReason, banExpires } = validatedBanData.data;
+		const { id: userId } = validatedUserIdData.data;
+		if (id !== userId) {
 			const result = await auth.api.banUser({
 				headers: await headers(),
 				body: {
-					userId: userId,
-					banReason: banReason,
-					banExpiresIn: banExpires === "-1" ? undefined : Number(banExpires),
+					userId: id,
+					banReason: banReason ?? "",
+					banExpiresIn: Number(banExpires),
 				},
 			});
 			if (result) {
-				if (currentUser) {
+				if (userId) {
 					const { success: logSuccess, error: logError } = await createLog({
-						userId: currentUser.id,
+						userId: userId,
 						action: "USER_SUSPEND",
-						targetId: userId,
+						targetId: id,
 						status: "SUCCESS",
-						metadata: {
-							banReason: banReason,
+						metadata: JSON.stringify({
+							banReason: banReason ?? "",
 							banExpires: banExpires,
-						},
+						}),
 					});
 					if (!logSuccess) {
 						console.warn(logError);
@@ -307,11 +315,11 @@ export async function banUser(
 				},
 			};
 		}
-		if (currentUser) {
+		if (userId) {
 			const { success: logSuccess, error: logError } = await createLog({
-				userId: currentUser.id,
+				userId: userId,
 				action: "USER_SUSPEND",
-				targetId: userId,
+				targetId: id,
 				status: "FAILED",
 			});
 			if (!logSuccess) {
@@ -351,16 +359,14 @@ export async function unBanUser(
 	_prevState: UserState,
 	userId: User["id"],
 ): Promise<UserState> {
-	const t = await getI18n();
-	const unBanUserSchema = authSchemas(t).unBanUser;
-	const currentUser = await getUser();
-
 	try {
-		const validatedData = unBanUserSchema.safeParse({
-			userId: userId,
-		});
+		const user = await getUser();
 
-		if (!validatedData.success) {
+		const authSchema = authTableSchema.pick({ id: true });
+		const validatedTargetIdData = authSchema.safeParse({ id: userId });
+		const validatedUserIdData = authSchema.safeParse({ id: user?.id });
+
+		if (!validatedTargetIdData.success || !validatedUserIdData.success) {
 			return {
 				success: false,
 				error: {
@@ -369,19 +375,22 @@ export async function unBanUser(
 				},
 			};
 		}
-		if (userId !== currentUser?.id) {
+
+		const { id: validatedTargetId } = validatedTargetIdData.data;
+		const { id: validatedUserId } = validatedUserIdData.data;
+		if (validatedTargetId !== validatedUserId) {
 			const result = await auth.api.unbanUser({
 				headers: await headers(),
 				body: {
-					userId: userId,
+					userId: validatedTargetId,
 				},
 			});
 			if (result) {
-				if (currentUser) {
+				if (validatedUserId) {
 					const { success: logSuccess, error: logError } = await createLog({
-						userId: currentUser.id,
+						userId: validatedUserId,
 						action: "USER_ACTIVATE",
-						targetId: userId,
+						targetId: validatedTargetId,
 						status: "SUCCESS",
 					});
 					if (!logSuccess) {
@@ -402,11 +411,11 @@ export async function unBanUser(
 				},
 			};
 		}
-		if (currentUser) {
+		if (validatedUserId) {
 			const { success: logSuccess, error: logError } = await createLog({
-				userId: currentUser.id,
+				userId: validatedUserId,
 				action: "USER_ACTIVATE",
-				targetId: userId,
+				targetId: validatedTargetId,
 				status: "FAILED",
 			});
 			if (!logSuccess) {

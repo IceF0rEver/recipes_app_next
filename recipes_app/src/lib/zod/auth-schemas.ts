@@ -69,7 +69,7 @@ export const authSchemas = (t: ReturnType<typeof useI18n>) => {
 	});
 
 	const banUser = z.object({
-		userId: authTableSchema.pick({ id: true }),
+		id: authTableSchema.shape.id,
 		banReason: z.string().min(1, t("zod.min.banReason")),
 		banExpires: z.string().min(1, t("zod.min.banExpires")),
 	});
@@ -95,6 +95,6 @@ export const authTableSchema = z.object({
 	role: z.enum(["user", "admin"]),
 	banned: z.boolean().nullable().optional(),
 	banReason: z.string().nullable().optional(),
-	banExpires: z.date().nullable().optional(),
+	banExpires: z.string().nullable().optional(),
 	stripeCustomerId: z.string().nullable().optional(),
 });
