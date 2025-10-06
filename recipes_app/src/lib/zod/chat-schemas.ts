@@ -1,10 +1,9 @@
 import { z } from "zod";
-import type { useI18n } from "@/locales/client";
 import { recipeSchemas } from "./recipe-schemas";
 
 const { recipeBaseSchema } = recipeSchemas();
 
-export const chatSchemas = (_t?: ReturnType<typeof useI18n>) => {
+export const chatSchemas = () => {
 	const chatBaseSchema = z.object({
 		title: z.string().nullable().optional(),
 		messages: z.string().nullable().optional(),

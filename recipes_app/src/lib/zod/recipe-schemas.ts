@@ -1,7 +1,6 @@
 import { z } from "zod";
-import type { useI18n } from "@/locales/client";
 
-export const recipeSchemas = (_t?: ReturnType<typeof useI18n>) => {
+export const recipeSchemas = () => {
 	const recipeBaseSchema = z.object({
 		title: z.string(),
 		description: z.string(),
