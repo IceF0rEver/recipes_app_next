@@ -3,7 +3,6 @@ import type {
 	Control,
 	FieldPath,
 	FieldValues,
-	SubmitHandler,
 	UseFormReturn,
 } from "react-hook-form";
 import type { buttonVariants } from "@/components/ui/button";
@@ -12,7 +11,7 @@ import type { signIn } from "@/lib/auth/auth-client";
 export interface AuthFormProps<T extends FieldValues> {
 	children: React.ReactNode;
 	form: UseFormReturn<T>;
-	onSubmit: SubmitHandler<T>;
+	onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 	className?: string;
 }
 
