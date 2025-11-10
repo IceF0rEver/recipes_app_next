@@ -56,7 +56,7 @@ export async function deleteSession(
 	_prevState: SessionState,
 	token: Session["token"],
 ): Promise<SessionState> {
-	const currentSession = await getSession();
+	const session = await getSession();
 	const user = await getUser();
 
 	try {
@@ -79,7 +79,7 @@ export async function deleteSession(
 			};
 		}
 		const { token: validatedToken, userId } = validatedData.data;
-		if (validatedToken === currentSession?.token) {
+		if (validatedToken === session?.token) {
 			if (user) {
 				const { success: logSuccess, error: logError } = await createLog({
 					userId: userId,

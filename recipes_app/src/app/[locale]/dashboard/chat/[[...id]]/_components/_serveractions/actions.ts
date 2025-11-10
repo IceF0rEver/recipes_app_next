@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { type Chat, Prisma } from "@/generated/prisma";
 import { auth } from "@/lib/auth/auth";
-import { getUser, getUserWithSubscription } from "@/lib/auth/server";
+import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 import { chatSchemas } from "@/lib/zod/chat-schemas";
 
@@ -17,8 +17,7 @@ export async function getActiveChat(): Promise<{
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 		});
 		const validatedData = chatSchema.safeParse({ userId: user?.id });
@@ -53,8 +52,7 @@ export async function setActiveChat(): Promise<{
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 		});
 		const validatedData = chatSchema.safeParse({ userId: user?.id });
@@ -99,8 +97,7 @@ export async function getChatById(chatId: Chat["id"]): Promise<{
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 			id: true,
 		});
@@ -146,8 +143,7 @@ export async function resetActiveChat(
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 			id: true,
 		});
@@ -215,8 +211,7 @@ export async function archiveActiveChat(
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 			id: true,
 		});
@@ -273,7 +268,7 @@ export async function archiveActiveChat(
 		}
 
 		if (chat?.isActive && chat?.metadata) {
-			const chatMetadataSchema = chatTableSchema.pick({
+			const chatMetadataSchema = chatSchemas().chatTableSchema.pick({
 				metadata: true,
 			});
 
@@ -365,8 +360,7 @@ export async function updateArchiveChat(
 	try {
 		const user = await getUser();
 
-		const { chatTableSchema } = chatSchemas();
-		const chatSchema = chatTableSchema.pick({
+		const chatSchema = chatSchemas().chatTableSchema.pick({
 			userId: true,
 			id: true,
 		});
@@ -396,7 +390,7 @@ export async function updateArchiveChat(
 		}
 
 		if (!chat?.isActive && chat?.metadata) {
-			const chatMetadataSchema = chatTableSchema.pick({
+			const chatMetadataSchema = chatSchemas().chatTableSchema.pick({
 				metadata: true,
 				recipeId: true,
 			});

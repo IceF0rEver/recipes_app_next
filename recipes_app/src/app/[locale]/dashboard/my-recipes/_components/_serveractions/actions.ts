@@ -17,8 +17,7 @@ export async function getRecipesListWithChat(): Promise<{
 	try {
 		const user = await getUser();
 
-		const { recipeTableSchema } = recipeSchemas();
-		const recipeSchema = recipeTableSchema.pick({
+		const recipeSchema = recipeSchemas().recipeTableSchema.pick({
 			userId: true,
 		});
 		const validatedData = recipeSchema.safeParse({ userId: user?.id });
@@ -62,8 +61,7 @@ export async function setFavoriteRecipe(
 	try {
 		const user = await getUser();
 
-		const { recipeTableSchema } = recipeSchemas();
-		const recipeSchema = recipeTableSchema.pick({
+		const recipeSchema = recipeSchemas().recipeTableSchema.pick({
 			userId: true,
 			id: true,
 			isFavorite: true,
@@ -121,8 +119,7 @@ export async function deleteRecipeById(
 	try {
 		const user = await getUser();
 
-		const { recipeTableSchema } = recipeSchemas();
-		const recipeSchema = recipeTableSchema.pick({
+		const recipeSchema = recipeSchemas().recipeTableSchema.pick({
 			userId: true,
 			id: true,
 		});
