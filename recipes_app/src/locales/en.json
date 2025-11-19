@@ -28,7 +28,8 @@
     "plan": "Plan",
     "cancelPlan": "Cancel my subscription",
     "restorePlan": "Restore my subscription",
-    "cancelEdit": "Undo change"
+    "cancelEdit": "Undo change",
+    "search": "Search"
   },
   "heroPage": {
     "title": {

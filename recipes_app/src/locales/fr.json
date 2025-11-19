@@ -28,7 +28,8 @@
     "plan": "Plan",
     "cancelPlan": "Annuler mon abonnement",
     "restorePlan": "Restaurer mon abonnement",
-    "cancelEdit": "Annuler la modification"
+    "cancelEdit": "Annuler la modification",
+    "search": "Rechercher"
   },
   "heroPage": {
     "title": {
