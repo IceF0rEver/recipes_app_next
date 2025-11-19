@@ -46,3 +46,5 @@ src/generated/prisma
 
 # vscode
 .vscode
+
+certificates
