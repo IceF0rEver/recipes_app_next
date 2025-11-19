@@ -132,6 +132,7 @@ export default function AiPromptInput({ ...props }: AiPromptInputProps) {
 		setInput,
 		setCurrentBranchId,
 		setEditingMessageId,
+		chatId,
 	} = useChatContext();
 	const t = useI18n();
 
@@ -169,6 +170,7 @@ export default function AiPromptInput({ ...props }: AiPromptInputProps) {
 				body: {
 					model: model,
 					webSearch: webSearch,
+					chatId: chatId,
 				},
 			},
 		);

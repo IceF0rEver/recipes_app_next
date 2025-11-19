@@ -1,10 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import {
-	DefaultChatTransport,
-	lastAssistantMessageIsCompleteWithToolCalls,
-} from "ai";
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { createContext, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import type { MyUIMessage } from "@/components/utils/ai/_types/types";
@@ -30,6 +27,7 @@ interface ChatProviderProps {
 	suggestions?: Suggestion[];
 	initialMessages?: MyUIMessage[];
 	placeholder?: string;
+	chatId?: string;
 }
 
 interface ChatContextValue {
@@ -65,6 +63,9 @@ interface ChatContextValue {
 	currentBranchId: string;
 	setCurrentBranchId: (val: string) => void;
 
+	chatId: string;
+	setChatId: (val: string) => void;
+
 	suggestions: Suggestion[];
 	setSuggestions: (val: Suggestion[]) => void;
 }
@@ -73,23 +74,16 @@ const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
 export const ChatProvider = ({ ...props }: ChatProviderProps) => {
 	const [input, setInput] = useState<string>("");
-	const [suggestions, setSuggestions] = useState<Suggestion[]>(
-		props.suggestions ?? [],
-	);
-	const [initialMessages, _setInitialMessages] = useState<MyUIMessage[]>(
-		props.initialMessages ?? [],
-	);
+	const [suggestions, setSuggestions] = useState<Suggestion[]>(props.suggestions ?? []);
+	const [initialMessages, _setInitialMessages] = useState<MyUIMessage[]>(props.initialMessages ?? []);
 	const [models, setModels] = useState<Model[]>(props.models);
 	const [model, setModel] = useState<string>(props.models[0]?.id);
 	const [webSearch, setWebSearch] = useState<boolean>(false);
-	const [placeholder, setPlaceholder] = useState<string>(
-		props.placeholder ?? "",
-	);
-
+	const [placeholder, setPlaceholder] = useState<string>(props.placeholder ?? "");
+	const [chatId, setChatId] = useState<string>(props.chatId ?? "");
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
 	const [currentBranchId, setCurrentBranchId] = useState<string>(
-		initialMessages[initialMessages.length - 1]?.metadata?.branchId ??
-			(() => uuidv4()),
+		initialMessages[initialMessages.length - 1]?.metadata?.branchId ?? (() => uuidv4()),
 	);
 
 	const {
@@ -108,7 +102,7 @@ export const ChatProvider = ({ ...props }: ChatProviderProps) => {
 		sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
 		messages: initialMessages,
 		transport: new DefaultChatTransport({
-			api: "/api/chat/v2",
+			api: "/api/chat",
 			body: {
 				model: model,
 			},
@@ -118,6 +112,16 @@ export const ChatProvider = ({ ...props }: ChatProviderProps) => {
 				return;
 			}
 			switch (toolCall.toolName) {
+				case "getCurrentChatId": {
+					addToolResult({
+						tool: "getCurrentChatId",
+						toolCallId: toolCall.toolCallId,
+						output: {
+							chatId: chatId,
+						},
+					});
+					break;
+				}
 				default:
 					break;
 			}
@@ -153,6 +157,8 @@ export const ChatProvider = ({ ...props }: ChatProviderProps) => {
 				setSuggestions,
 				placeholder,
 				setPlaceholder,
+				chatId,
+				setChatId,
 			}}
 		>
 			{props.children}
