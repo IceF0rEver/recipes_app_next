@@ -1,7 +1,10 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
+import {
+	DefaultChatTransport,
+	lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai";
 import { createContext, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import type { MyUIMessage } from "@/components/utils/ai/_types/types";
@@ -74,16 +77,23 @@ const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
 export const ChatProvider = ({ ...props }: ChatProviderProps) => {
 	const [input, setInput] = useState<string>("");
-	const [suggestions, setSuggestions] = useState<Suggestion[]>(props.suggestions ?? []);
-	const [initialMessages, _setInitialMessages] = useState<MyUIMessage[]>(props.initialMessages ?? []);
+	const [suggestions, setSuggestions] = useState<Suggestion[]>(
+		props.suggestions ?? [],
+	);
+	const [initialMessages, _setInitialMessages] = useState<MyUIMessage[]>(
+		props.initialMessages ?? [],
+	);
 	const [models, setModels] = useState<Model[]>(props.models);
 	const [model, setModel] = useState<string>(props.models[0]?.id);
 	const [webSearch, setWebSearch] = useState<boolean>(false);
-	const [placeholder, setPlaceholder] = useState<string>(props.placeholder ?? "");
+	const [placeholder, setPlaceholder] = useState<string>(
+		props.placeholder ?? "",
+	);
 	const [chatId, setChatId] = useState<string>(props.chatId ?? "");
 	const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
 	const [currentBranchId, setCurrentBranchId] = useState<string>(
-		initialMessages[initialMessages.length - 1]?.metadata?.branchId ?? (() => uuidv4()),
+		initialMessages[initialMessages.length - 1]?.metadata?.branchId ??
+			(() => uuidv4()),
 	);
 
 	const {
