@@ -52,7 +52,7 @@ export default function RecipeCard({
 				onDialogOpen={setDialogOpen}
 			/>
 			<Card
-				className="relative group hover:shadow-lg transition-shadow duration-200 flex-shrink-0 w-80 gap-0"
+				className="relative group hover:shadow-lg transition-shadow duration-200 shrink-0 w-80 gap-0"
 				onClick={() => setDialogOpen(true)}
 			>
 				<Badge
@@ -93,9 +93,7 @@ export default function RecipeCard({
 					<div className="flex items-center justify-between mb-4 p-3 bg- rounded-xl backdrop-blur-sm border ">
 						<div className="flex items-center gap-1.5 ">
 							<Clock className="h-4 w-4 text-blue-500" />
-							<span className="text-sm font-medium">
-								{recipe.cookingTime}min
-							</span>
+							<span className="text-sm font-medium">{recipe.cookingTime}</span>
 						</div>
 						<div className="flex items-center gap-1.5 ">
 							<Users className="h-4 w-4 text-green-500" />

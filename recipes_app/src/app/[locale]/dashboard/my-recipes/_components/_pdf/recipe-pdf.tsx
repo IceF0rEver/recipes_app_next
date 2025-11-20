@@ -59,11 +59,11 @@ export default function RecipePdf({
 					</Text>
 					<Text>
 						<Text style={styles.label}>{labels.preparationTime} </Text>
-						{recipe.preparationTime}min
+						{recipe.preparationTime}
 					</Text>
 					<Text>
 						<Text style={styles.label}>{labels.cookingTime} </Text>
-						{recipe.cookingTime}min
+						{recipe.cookingTime}
 					</Text>
 					<Text>
 						<Text style={styles.label}>{labels.difficulty} </Text>

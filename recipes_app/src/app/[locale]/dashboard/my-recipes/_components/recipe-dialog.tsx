@@ -1,8 +1,7 @@
 "use client";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { Download, Pen } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -40,7 +39,6 @@ export default function RecipeDialog({
 	onDialogOpen,
 }: RecipeDialogProps) {
 	const t = useI18n();
-	const router = useRouter();
 	const ingredients: Ingredient[] = Array.isArray(recipe.ingredients)
 		? (recipe.ingredients as Ingredient[])
 		: [];
@@ -67,11 +65,11 @@ export default function RecipeDialog({
 						</p>
 						<p>
 							<strong>{t("components.myrecipes.preparationTime")}</strong>
-							{recipe.preparationTime}min
+							{recipe.preparationTime}
 						</p>
 						<p>
 							<strong>{t("components.myrecipes.cookingTime")}</strong>
-							{recipe.cookingTime}min
+							{recipe.cookingTime}
 						</p>
 						<p>
 							<strong>{t("components.myRecipes.difficulty.label")}</strong>
@@ -164,13 +162,6 @@ export default function RecipeDialog({
 								<Download className="size-4" />
 							</Button>
 						</PDFDownloadLink>
-						<Button
-							type="button"
-							variant={"outline"}
-							onClick={() => router.push(`/dashboard/chat/${recipe.chat?.id}`)}
-						>
-							<Pen className="size-4" />
-						</Button>
 					</div>
 				</div>
 			</DialogContent>
