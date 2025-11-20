@@ -1,72 +1,16 @@
 import { ChefHat, Clock, Sparkles, Users } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Suspense, use } from "react";
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { ChatProvider } from "@/components/utils/ai/_providers/chat-provider";
-import type { MyUIMessage } from "@/components/utils/ai/_types/types";
-import AiChat from "@/components/utils/ai/ai-chat";
-import type { Chat } from "@/generated/prisma";
 import { getI18n } from "@/locales/server";
-import {
-	getActiveChat,
-	getChatById,
-	setActiveChat,
-} from "./_components/_serveractions/actions";
+import ChatAi from "./_components/_chat/chat-page";
+import { getActiveChat, getChatById, setActiveChat } from "./_components/_serveractions/actions";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: Error name
 import Error from "./error";
 import Loading from "./loading";
 
 interface PageProps {
 	params: Promise<{ id?: string }>;
-}
-
-interface Model {
-	id: string;
-	name: string;
-	chef: string;
-	chefSlug: string;
-	providers: string[];
-}
-
-interface Suggestion {
-	name: string;
-	prompt: string;
-	description?: string;
-	icon?: React.ReactNode;
-}
-
-interface ChatAiProps {
-	models: Model[];
-	suggestions: Suggestion[];
-	chat: Promise<{
-		chat?: Chat | null;
-		error?: {
-			message?: string;
-			status?: number;
-		};
-	}>;
-	placeholder?: string;
-}
-
-export function ChatAi({ ...props }: ChatAiProps) {
-	"use client";
-	const currentChat = use(props.chat);
-	const currentMessages: MyUIMessage[] = currentChat.chat?.messages
-		? (JSON.parse(
-				JSON.stringify(currentChat.chat.messages, null, 2),
-			) as MyUIMessage[])
-		: [];
-	return (
-		<ChatProvider
-			models={props.models}
-			suggestions={props.suggestions}
-			initialMessages={currentMessages}
-			placeholder={props.placeholder}
-			chatId={currentChat.chat?.id ?? ""}
-		>
-			<AiChat disabledFile disabledModelSelect disabledwebSearch />
-		</ChatProvider>
-	);
 }
 
 export default async function Page({ params }: PageProps) {
@@ -129,12 +73,7 @@ export default async function Page({ params }: PageProps) {
 	return (
 		<ErrorBoundary fallback={<Error />}>
 			<Suspense fallback={<Loading />}>
-				<ChatAi
-					models={models}
-					suggestions={suggestions}
-					chat={chat}
-					placeholder={placeholder}
-				/>
+				<ChatAi models={models} suggestions={suggestions} chat={chat} placeholder={placeholder} />
 			</Suspense>
 		</ErrorBoundary>
 	);
