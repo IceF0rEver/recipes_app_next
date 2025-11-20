@@ -12,7 +12,8 @@
 			"!node_modules",
 			"!.next",
 			"!src/generated/**",
-			"!src/components/ui/**"
+			"!src/components/ui/**",
+			"!src/components/ai-elements/**"
 		]
 	},
 	"formatter": {
