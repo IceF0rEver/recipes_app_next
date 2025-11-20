@@ -14,7 +14,7 @@ import { tools } from "@/lib/ai/tools";
 import { getUser } from "@/lib/auth/server";
 import prisma from "@/lib/prisma";
 import { chatSchemas } from "@/lib/zod/chat-schemas";
-import { getCurrentLocale, getI18n } from "@/locales/server";
+import { getCurrentLocale } from "@/locales/server";
 
 export const maxDuration = 30;
 
@@ -81,7 +81,6 @@ export async function POST(req: Request) {
 	} = await req.json();
 
 	const locale = await getCurrentLocale();
-	const t = await getI18n();
 	const startTime = performance.now();
 
 	const result = streamText({
@@ -99,16 +98,6 @@ export async function POST(req: Request) {
 			"You are an expert and creative culinary assistant specializing in creating cooking recipes. You respond only to questions related to cooking, recipes, culinary techniques, and food advice. " +
 			"If the user asks a question that is not related to cooking, politely inform them that you can only assist with culinary questions and suggest they ask a cooking-related question instead. " +
 			"Before providing a recipe, always rephrase the user's request to confirm your understanding, then propose the recipe. " +
-			"*Mandatory structure for each recipe:* " +
-			`*${t("components.recipe.title")}*: A catchy and descriptive name. ` +
-			`*${t("components.recipe.description")}*: A brief, appetizing description (2-3 sentences). ` +
-			`*${t("components.recipe.preparationTime")}*: Always in the format "X min" (never "X minutes" or other variations). ` +
-			`*${t("components.recipe.cookingTime")}*: Always in the format "X min". ` +
-			`*${t("components.recipe.serving")}*: Exact number of people served. ` +
-			`*${t("components.recipe.difficulty")}*: Easy, Standard, or Difficult only. ` +
-			`*${t("components.recipe.ingredientsList")}*: Format as "quantity + unit + ingredient name" (e.g., "200g flour", "2 tablespoons olive oil"). Always use metric units (grams, ml, etc.) and be precise with quantities. ` +
-			`*${t("components.recipe.instructions")}*: Detailed instructions suitable for beginners but concise, clearly numbered. ` +
-			`*${t("components.recipe.tips")}*: At least one practical tip to successfully prepare the recipe. ` +
 			"*Important constraints:*" +
 			"Use only ingredients easily found in supermarkets. " +
 			"Provide realistic and achievable recipes, never vague or fanciful. " +
@@ -118,6 +107,10 @@ export async function POST(req: Request) {
 			"Always end with an encouraging sentence and offer your help for other culinary questions. " +
 			"You have access to tools. " +
 			"Use tool-createRecipeByMessages from create a recipe" +
+			"You must never reuse an ID obtained earlier." +
+			"Whenever any tool or operation requires an ID, you must always call the dedicated tool to retrieve a fresh, up-to-date ID." +
+			"Do not rely on any ID that appears in the context or previous messages, even if it seems valid." +
+			"You must always call the ID tool immediately before performing any action that depends on that ID." +
 			"Use them in priority when appropriate to provide accurate information. " +
 			"If you use a tool, generate a concise sentence summarizing the data returned by the tool.",
 	});
@@ -130,9 +123,7 @@ export async function POST(req: Request) {
 		messageMetadata: ({ part }) => {
 			switch (part.type) {
 				case "start": {
-					const lastUserMessage = [...messages]
-						.reverse()
-						.find((m) => m.role === "user");
+					const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
 					const branchId = lastUserMessage?.metadata?.branchId ?? randomUUID();
 					const parentMessageId = lastUserMessage?.id ?? null;
 					const createdAt = Date.now();
@@ -144,9 +135,7 @@ export async function POST(req: Request) {
 					};
 				}
 				case "reasoning-end": {
-					const reasoningDuration = Math.ceil(
-						(performance.now() - startTime) / 1000,
-					);
+					const reasoningDuration = Math.ceil((performance.now() - startTime) / 1000);
 					return { reasoningDuration };
 				}
 			}
