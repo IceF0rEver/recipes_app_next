@@ -156,7 +156,7 @@ export function AiMessageFooterPartAction({
 			icon: <CopyIcon />,
 			label: "Copy",
 			onClick: () => handleCopy(props.message),
-			visibleTo: ["user", "assistant"],
+			visibleTo: ["user"],
 		},
 		{
 			icon: <EditIcon />,
