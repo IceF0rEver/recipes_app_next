@@ -1,10 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 import { type string, z } from "zod";
 import { Separator } from "@/components/ui/separator";
 import AuthButton from "@/components/utils/auth/auth-button";
@@ -12,6 +10,7 @@ import AuthCard from "@/components/utils/auth/auth-card";
 import AuthField from "@/components/utils/auth/auth-field";
 import AuthFooter from "@/components/utils/auth/auth-footer";
 import AuthForm from "@/components/utils/auth/auth-form";
+import { useGenericForm } from "@/hooks/use-form";
 import { signIn } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
@@ -66,55 +65,46 @@ const GoogleLabel = () => {
 export default function Page() {
 	const t = useI18n();
 	const router = useRouter();
-
-	const [loading, setLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<Record<string, string>>({});
 
 	const signInSchema = authSchemas(t).signIn;
-	type SignInType = z.infer<typeof signInSchema>;
-	const form = useForm<SignInType>({
-		resolver: zodResolver(signInSchema),
+
+	const { form, onSubmit, isPending } = useGenericForm<
+		z.infer<typeof signInSchema>
+	>({
+		schema: signInSchema,
 		defaultValues: {
 			email: "",
 			password: "",
 		},
-	});
-
-	const onSubmit = useCallback(
-		async (values: SignInType) => {
-			try {
-				const validatedData = signInSchema.parse({
-					email: values.email,
-					password: values.password,
-				});
-
-				await signIn.email(validatedData, {
-					onRequest: () => {
-						setLoading(true);
-					},
-					onResponse: () => {
-						setLoading(false);
-					},
-					onError: (ctx) => {
-						setErrorMessage({
-							betterError: t(
-								`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-							),
-						});
-					},
-					onSuccess: async () => {
-						router.push("/dashboard/chat");
-					},
-				});
-			} catch (error) {
-				if (error instanceof z.ZodError) {
-					console.error(error);
+		onSubmit: useCallback(
+			async (values: z.infer<typeof signInSchema>) => {
+				try {
+					const validatedData = signInSchema.parse({
+						email: values.email,
+						password: values.password,
+					});
+					await signIn.email(validatedData, {
+						onError: (ctx) => {
+							setErrorMessage({
+								betterError: t(
+									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+								),
+							});
+						},
+						onSuccess: async () => {
+							router.push("/dashboard");
+						},
+					});
+				} catch (error) {
+					if (error instanceof z.ZodError) {
+						console.error(error);
+					}
 				}
-				setLoading(false);
-			}
-		},
-		[t, signInSchema, router],
-	);
+			},
+			[t, signInSchema, router],
+		),
+	});
 
 	return (
 		<AuthCard
@@ -159,7 +149,7 @@ export default function Page() {
 				>
 					{t("components.auth.link.forgotPassword")}
 				</Link>
-				<AuthButton isLoading={loading} label={t("button.login")} />
+				<AuthButton isLoading={isPending} label={t("button.login")} />
 				<div className="flex items-center gap-2 px-2 pb-1">
 					<Separator className="flex-1" />
 					<span className="text-xs text-muted-foreground">

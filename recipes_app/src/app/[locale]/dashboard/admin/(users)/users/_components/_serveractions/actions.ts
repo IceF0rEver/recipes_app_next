@@ -167,6 +167,7 @@ export async function updateRoleUser(
 
 		const { id: validatedIdRole, role: validatedRole } = validatedRoleData.data;
 		const { id: validatedUserId } = validatedUserIdData.data;
+
 		if (validatedIdRole !== validatedUserId) {
 			const result = await auth.api.setRole({
 				headers: await headers(),
@@ -263,6 +264,7 @@ export async function banUser(
 		const parsedData = JSON.parse(formData.get("banUserData") as string);
 		const validatedBanData = authSchemaBan.safeParse(parsedData);
 		const validatedUserIdData = authSchema.safeParse({ id: user?.id });
+
 		if (!validatedBanData.success || !validatedUserIdData.success) {
 			return {
 				success: false,
@@ -275,6 +277,7 @@ export async function banUser(
 
 		const { id, banReason, banExpires } = validatedBanData.data;
 		const { id: userId } = validatedUserIdData.data;
+
 		if (id !== userId) {
 			const result = await auth.api.banUser({
 				headers: await headers(),
@@ -377,6 +380,7 @@ export async function unBanUser(
 
 		const { id: validatedTargetId } = validatedTargetIdData.data;
 		const { id: validatedUserId } = validatedUserIdData.data;
+
 		if (validatedTargetId !== validatedUserId) {
 			const result = await auth.api.unbanUser({
 				headers: await headers(),

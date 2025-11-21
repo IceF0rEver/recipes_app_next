@@ -1,15 +1,14 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
 import AuthButton from "@/components/utils/auth/auth-button";
 import AuthCard from "@/components/utils/auth/auth-card";
 import AuthField from "@/components/utils/auth/auth-field";
 import AuthForm from "@/components/utils/auth/auth-form";
+import { useGenericForm } from "@/hooks/use-form";
 import { authClient } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
@@ -19,58 +18,51 @@ export default function Page() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
-	const [loading, setLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<Record<string, string>>({});
 	const token = searchParams.get("token");
 
 	const resetPasswordSchema = authSchemas(t).resetPassword;
-	type ResetPasswordType = z.infer<typeof resetPasswordSchema>;
-	const form = useForm<ResetPasswordType>({
-		resolver: zodResolver(resetPasswordSchema),
+
+	const { form, onSubmit, isPending } = useGenericForm<
+		z.infer<typeof resetPasswordSchema>
+	>({
+		schema: resetPasswordSchema,
 		defaultValues: {
 			password: "",
 			passwordConfirmation: "",
 		},
-	});
-
-	const onSubmit = useCallback(
-		async (values: ResetPasswordType) => {
-			try {
-				const validatedData = resetPasswordSchema.parse({
-					password: values.password,
-					passwordConfirmation: values.passwordConfirmation,
-				});
-				await authClient.resetPassword(
-					{ newPassword: validatedData.password, token: token as string },
-					{
-						onRequest: () => {
-							setLoading(true);
+		onSubmit: useCallback(
+			async (values: z.infer<typeof resetPasswordSchema>) => {
+				try {
+					const validatedData = resetPasswordSchema.parse({
+						password: values.password,
+						passwordConfirmation: values.passwordConfirmation,
+					});
+					await authClient.resetPassword(
+						{ newPassword: validatedData.password, token: token as string },
+						{
+							onError: (ctx) => {
+								setErrorMessage({
+									betterError: t(
+										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+									),
+								});
+							},
+							onSuccess: async () => {
+								toast.success(t("components.auth.resetPassword.toast.success"));
+								router.push("/auth/login");
+							},
 						},
-						onResponse: () => {
-							setLoading(false);
-						},
-						onError: (ctx) => {
-							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
-							});
-						},
-						onSuccess: async () => {
-							toast.success(t("components.auth.resetPassword.toast.success"));
-							router.push("/auth/login");
-						},
-					},
-				);
-			} catch (error) {
-				if (error instanceof z.ZodError) {
-					console.error(error);
+					);
+				} catch (error) {
+					if (error instanceof z.ZodError) {
+						console.error(error);
+					}
 				}
-				setLoading(false);
-			}
-		},
-		[t, router, token, resetPasswordSchema],
-	);
+			},
+			[t, router, token, resetPasswordSchema],
+		),
+	});
 
 	return (
 		<AuthCard
@@ -102,7 +94,7 @@ export default function Page() {
 					name="passwordConfirmation"
 					type="password"
 				/>
-				<AuthButton isLoading={loading} label={t("button.update")} />
+				<AuthButton isLoading={isPending} label={t("button.update")} />
 			</AuthForm>
 		</AuthCard>
 	);

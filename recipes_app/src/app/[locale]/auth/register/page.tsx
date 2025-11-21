@@ -1,15 +1,14 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 import { type string, z } from "zod";
 import AuthButton from "@/components/utils/auth/auth-button";
 import AuthCard from "@/components/utils/auth/auth-card";
 import AuthField from "@/components/utils/auth/auth-field";
 import AuthFooter from "@/components/utils/auth/auth-footer";
 import AuthForm from "@/components/utils/auth/auth-form";
+import { useGenericForm } from "@/hooks/use-form";
 import { signUp } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
@@ -19,69 +18,61 @@ export default function Page() {
 	const router = useRouter();
 
 	const signUpSchema = authSchemas(t).signUp;
-	type SignUpType = z.infer<typeof signUpSchema>;
-
-	const [loading, setLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<Record<string, string>>({});
 
-	const form = useForm<SignUpType>({
-		resolver: zodResolver(signUpSchema),
+	const { form, onSubmit, isPending } = useGenericForm<
+		z.infer<typeof signUpSchema>
+	>({
+		schema: signUpSchema,
 		defaultValues: {
 			email: "",
 			password: "",
 			passwordConfirmation: "",
 			firstName: "",
 			lastName: "",
-			image: "",
+			image: undefined,
 		},
-	});
-	const onSubmit = useCallback(
-		async (values: SignUpType) => {
-			try {
-				const validatedData = signUpSchema.parse({
-					email: values.email,
-					password: values.password,
-					passwordConfirmation: values.passwordConfirmation,
-					firstName: values.firstName,
-					lastName: values.lastName,
-					image: values.image ?? "",
-				});
+		onSubmit: useCallback(
+			async (values: z.infer<typeof signUpSchema>) => {
+				try {
+					const validatedData = signUpSchema.parse({
+						email: values.email,
+						password: values.password,
+						passwordConfirmation: values.passwordConfirmation,
+						firstName: values.firstName,
+						lastName: values.lastName,
+						image: values.image,
+					});
 
-				await signUp.email(
-					{
-						email: validatedData.email,
-						name: `${validatedData.firstName} ${validatedData.lastName}`,
-						password: validatedData.password,
-						image: validatedData.image,
-					},
-					{
-						onRequest: () => {
-							setLoading(true);
+					await signUp.email(
+						{
+							email: validatedData.email,
+							name: `${validatedData.firstName} ${validatedData.lastName}`,
+							password: validatedData.password,
+							image: validatedData.image,
 						},
-						onResponse: () => {
-							setLoading(false);
+						{
+							onError: (ctx) => {
+								setErrorMessage({
+									betterError: t(
+										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+									),
+								});
+							},
+							onSuccess: async () => {
+								router.push("/dashboard");
+							},
 						},
-						onError: (ctx) => {
-							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
-							});
-						},
-						onSuccess: async () => {
-							router.push("/dashboard/chat");
-						},
-					},
-				);
-			} catch (error) {
-				if (error instanceof z.ZodError) {
-					console.error(error);
+					);
+				} catch (error) {
+					if (error instanceof z.ZodError) {
+						console.error(error);
+					}
 				}
-				setLoading(false);
-			}
-		},
-		[t, router, signUpSchema],
-	);
+			},
+			[t, router, signUpSchema],
+		),
+	});
 	return (
 		<AuthCard
 			title={t("components.auth.register.title")}
@@ -153,7 +144,7 @@ export default function Page() {
 					type="file"
 					fieldType="image"
 				/>
-				<AuthButton isLoading={loading} label={t("button.register")} />
+				<AuthButton isLoading={isPending} label={t("button.register")} />
 			</AuthForm>
 		</AuthCard>
 	);

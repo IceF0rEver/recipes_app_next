@@ -1,7 +1,6 @@
 import { DM_Sans, Fira_Code, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import type { Metadata } from "next";
-import type { ReactElement } from "react";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { I18nProviderClient } from "@/locales/client";
@@ -81,25 +80,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 interface RootLayoutProps {
 	params: Promise<{ locale: string }>;
-	children: ReactElement;
+	children: React.ReactNode;
 }
-export default async function RootLayout({
-	params,
-	children,
-}: RootLayoutProps) {
+export default async function RootLayout({ params, children }: RootLayoutProps) {
 	const { locale } = await params;
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
-			<body
-				className={`${dmSans.variable} ${playfairDisplay.variable} ${firaCode.variable} antialiased`}
-			>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
+			<body className={`${dmSans.variable} ${playfairDisplay.variable} ${firaCode.variable} antialiased`}>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					<I18nProviderClient locale={locale}>
 						{children}
 						<Toaster />

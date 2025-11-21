@@ -41,6 +41,7 @@ export default function RecipeDialog({
 }: RecipeDialogProps) {
 	const t = useI18n();
 	const router = useRouter();
+
 	const ingredients: Ingredient[] = Array.isArray(recipe.ingredients)
 		? (recipe.ingredients as Ingredient[])
 		: [];
@@ -67,11 +68,11 @@ export default function RecipeDialog({
 						</p>
 						<p>
 							<strong>{t("components.myrecipes.preparationTime")}</strong>
-							{recipe.preparationTime}min
+							{recipe.preparationTime}
 						</p>
 						<p>
 							<strong>{t("components.myrecipes.cookingTime")}</strong>
-							{recipe.cookingTime}min
+							{recipe.cookingTime}
 						</p>
 						<p>
 							<strong>{t("components.myRecipes.difficulty.label")}</strong>

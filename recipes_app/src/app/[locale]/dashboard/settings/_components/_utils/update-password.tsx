@@ -1,13 +1,12 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { type string, z } from "zod";
 import AuthButton from "@/components/utils/auth/auth-button";
 import AuthField from "@/components/utils/auth/auth-field";
 import AuthForm from "@/components/utils/auth/auth-form";
+import { useGenericForm } from "@/hooks/use-form";
 import { authClient } from "@/lib/auth/auth-client";
 import { authSchemas } from "@/lib/zod/auth-schemas";
 import { useI18n } from "@/locales/client";
@@ -18,64 +17,56 @@ interface UpdatePasswordProps {
 
 export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 	const t = useI18n();
-
-	const [loading, setLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<Record<string, string>>({});
 
 	const updatePasswordSchema = authSchemas(t).updatePassword;
-	type UpdatePasswordType = z.infer<typeof updatePasswordSchema>;
-	const form = useForm<UpdatePasswordType>({
-		resolver: zodResolver(updatePasswordSchema),
+
+	const { form, onSubmit, isPending } = useGenericForm<
+		z.infer<typeof updatePasswordSchema>
+	>({
+		schema: updatePasswordSchema,
 		defaultValues: {
 			password: "",
 			passwordConfirmation: "",
 			currentPassword: "",
 		},
-	});
-
-	const onSubmit = useCallback(
-		async (values: UpdatePasswordType) => {
-			try {
-				const validatedData = updatePasswordSchema.parse({
-					password: values.password,
-					currentPassword: values.currentPassword,
-					passwordConfirmation: values.passwordConfirmation,
-				});
-				await authClient.changePassword(
-					{
-						newPassword: validatedData.password,
-						currentPassword: validatedData.currentPassword,
-						revokeOtherSessions: true,
-					},
-					{
-						onRequest: () => {
-							setLoading(true);
+		onSubmit: useCallback(
+			async (values: z.infer<typeof updatePasswordSchema>) => {
+				try {
+					const validatedData = updatePasswordSchema.parse({
+						password: values.password,
+						currentPassword: values.currentPassword,
+						passwordConfirmation: values.passwordConfirmation,
+					});
+					await authClient.changePassword(
+						{
+							newPassword: validatedData.password,
+							currentPassword: validatedData.currentPassword,
+							revokeOtherSessions: true,
 						},
-						onResponse: () => {
-							setLoading(false);
+						{
+							onError: (ctx) => {
+								setErrorMessage({
+									betterError: t(
+										`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
+									),
+								});
+							},
+							onSuccess: async () => {
+								toast.success(t("components.auth.resetPassword.toast.success"));
+								onOpenChange?.(false);
+							},
 						},
-						onError: (ctx) => {
-							setErrorMessage({
-								betterError: t(
-									`BASE_ERROR_CODES.${ctx.error.code}` as keyof typeof string,
-								),
-							});
-						},
-						onSuccess: async () => {
-							toast.success(t("components.auth.resetPassword.toast.success"));
-							onOpenChange?.(false);
-						},
-					},
-				);
-			} catch (error) {
-				if (error instanceof z.ZodError) {
-					console.error(error);
+					);
+				} catch (error) {
+					if (error instanceof z.ZodError) {
+						console.error(error);
+					}
 				}
-				setLoading(false);
-			}
-		},
-		[t, onOpenChange, updatePasswordSchema],
-	);
+			},
+			[t, onOpenChange, updatePasswordSchema],
+		),
+	});
 	return (
 		<AuthForm form={form} onSubmit={onSubmit} className="grid gap-4">
 			{errorMessage.betterError && (
@@ -110,7 +101,7 @@ export default function UpdatePassword({ onOpenChange }: UpdatePasswordProps) {
 				name="passwordConfirmation"
 				type="password"
 			/>
-			<AuthButton isLoading={loading} label={t("button.update")} />
+			<AuthButton isLoading={isPending} label={t("button.update")} />
 		</AuthForm>
 	);
 }
