@@ -93,7 +93,7 @@ export const auth = betterAuth({
 			// biome-ignore lint/style/noNonNullAssertion: .env
 			stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
 			createCustomerOnSignUp: true,
-			getCustomerCreateParams: async ({ user }, _request) => {
+			getCustomerCreateParams: async (user, _request) => {
 				return {
 					metadata: {
 						userId: user.id,
